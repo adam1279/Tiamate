@@ -14,24 +14,8 @@ const props = defineProps<{
     currentPage: string
 }>();
 const settings = useSettingsStore();
-// const lang = ref("da");
-// const langLib: {
-//     [k:string]: string
-// } = {
-//     "da": "Dansk",
-//     "en": "English"
-// }
-// onMounted(async () => {
-//     lang.value = await window.electron.settings.get("language") as string;
-// });
-// interface LanguageOption {
-//     value: string,
-//     text: string
-// }
 function select(_lang: Language) {
     settings.all.language = _lang;
-    // window.electron.settings.set("language", lang.value);
-    
 }
 
 </script>
