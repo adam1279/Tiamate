@@ -19,7 +19,11 @@ export class Student {
             "Kvinde": "woman",
             "Ikke-binær": "non-binary"
         };
-        if (init?.gender in genderLang) init.gender = genderLang[init.gender as keyof typeof genderLang];
+        if (init?.gender in genderLang) {
+            init.gender = genderLang[init.gender as keyof typeof genderLang];
+        } else if (init?.gender) {
+            init.gender = init.gender.toLowerCase();
+        }
         // Object.keys(init).forEach((key: keyof typeof init) => {
         //     console.log(key);
         //     console.log(key in Student)

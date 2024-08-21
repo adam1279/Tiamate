@@ -12,7 +12,7 @@ export const useStudentsStore = defineStore("students", () => {
     const teams = useTeamsStore();
     const util = useUtilitiesStore();
     onMounted(async () => {
-        all.value = (await window.electron.data.get()).students.map(student => new Student(student));
+        all.value = util.xIfTrueThenY((await window.electron.data.get())?.students?.map(student => new Student(student)), []);
     });
     function get(...ids: string[]) {
         let students: Student[] = [];

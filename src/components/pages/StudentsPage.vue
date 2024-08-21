@@ -22,7 +22,7 @@ async function importTemplate() {
     students.add(...await window.electron.importTemplate(settings.all.language));
 }
 function downloadTemplate() {
-    window.electron.downloadTemplate();
+    window.electron.downloadTemplate(settings.all.language);
 }
 const editingOrAdding = computed(() => {
     return (students.query({adding: true}, {editing: true}).length > 0);

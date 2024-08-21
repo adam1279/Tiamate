@@ -11,9 +11,6 @@ const props = defineProps<{
     page: _Page,
     currentPage: string
 }>();
-function saveExcel() {
-    window.electron.downloadTemplate();
-}
 const students = useStudentsStore();
 const util = useUtilitiesStore();
 </script>

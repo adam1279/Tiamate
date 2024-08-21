@@ -9,6 +9,7 @@ import { IStudent, Student } from './classes/Student';
 import { Schema } from 'read-excel-file';
 import { Belbin } from './classes/Belbin';
 import { Language } from './stores/useSettings';
+import { schemas, XlsxStudent } from './xlsx';
 // import { IStudent, Student } from './stores/useStudents';
 // import * as cptable from 'xlsx/dist/cpexcel.full.mjs';
 // XLSX.set_cptable(cptable);
@@ -137,7 +138,7 @@ const ipcKeys: {
 		});
 		fs.promises.writeFile(saveDialog.filePath, data);
 	},
-	downloadTemplate: async () => {
+	downloadTemplate: async (e, language: Language) => {
 		// console.log(path.join(__dirname, "template_da.xlsx"));
 		const saveDialog = await dialog.showSaveDialog(mainWindow, {
 			title: "Download template",
@@ -150,7 +151,7 @@ const ipcKeys: {
 		});
 		// console.log(path.join(__dirname, "template_da.xlsx"));
 		if (!saveDialog.canceled) {
-			fs.promises.copyFile("src/template_da.xlsx", saveDialog.filePath);
+			fs.promises.copyFile(`src/template_${language}.xlsx`, saveDialog.filePath);
 		}
 	},
 	importTemplate: async (e, language: Language) => {
@@ -213,7 +214,7 @@ const ipcKeys: {
 	globalUpdate: async (e, jsonData: string) => {
 		dataString = jsonData;
 		// data = JSON.parse(dataString);
-		console.log(dataString);
+		// console.log(dataString);
 		const appData = app.getPath("appData");
 		fs.promises.writeFile(path.join(appData, "data.json"), dataString);
 		// data = JSON.parse((await fs.promises.readFile(path.join(app.getPath("appData"), "data.json"))).toString("utf-8"));
@@ -223,7 +224,10 @@ app.on('ready', async () => {
 	// if (!fs.existsSync(path.join(app.getPath("userData"), "settings.json"))) setSetting("language", "da");
 	if (fs.existsSync(path.join(app.getPath("appData"), "data.json"))) {
 		console.log(path.join(app.getPath("appData"), "data.json"));
-		data = JSON.parse((await fs.promises.readFile(path.join(app.getPath("appData"), "data.json"))).toString("utf-8"));
+		const fileString = (await fs.promises.readFile(path.join(app.getPath("appData"), "data.json"))).toString("utf-8");
+		if (fileString[0] == "{" && fileString[fileString.length - 1] == "}") {
+			data = JSON.parse(fileString);
+		}
 	}
 	for (let ipcKey of Object.keys(ipcKeys)) {
 		ipcMain.handle(ipcKey, ipcKeys[ipcKey]);
@@ -253,158 +257,7 @@ app.on('activate', () => {
 
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and import them here.
-interface XlsxStudent {
-	name: string,
-	gender: "Mand" | "Kvinde" | "Ikke-binær",
-	initialPreviousTeams: string,
-	previousTeams?: string[]
-	initialRoles: {
-		[k: string]: number
-	}
-	roles?: Belbin[]
-};
-const daSchema = {
-	"NAVN": {
-		prop: "name",
-		type: String
-	},
-	"KØN": {
-		prop: "gender",
-		type: String,
-		oneOf: [
-			"Mand",
-			"Kvinde",
-			"Ikke-binær"
-		]
-	},
-	"TIDL. GRUPPER": {
-		prop: "initialPreviousTeams",
-		type: String
-	},
-	"BELBIN ROLES": {
-		prop: "initialRoles",
-		type: {
-			"KOORDINATOR": {
-				prop: "Co-ordinator",
-				type: Number,
-				format: "0%"
-			},
-			"FORMIDLER": {
-				prop: "Teamworker",
-				type: Number,
-				format: "0%"
-			},
-			"KONTAKTSKABER": {
-				prop: "Resource Investigator",
-				type: Number,
-				format: "0%"
-			},
-			"OPSTARTER": {
-				prop: "Shaper",
-				type: Number,
-				format: "0%"
-			},
-			"AFSLUTTER": {
-				prop: "Completer Finisher",
-				type: Number,
-				format: "0%"
-			},
-			"SPECIALIST": {
-				prop: "Specialist",
-				type: Number,
-				format: "0%"
-			},
-			"IDÉMAND": {
-				prop: "Plant",
-				type: Number,
-				format: "0%"
-			},
-			"ANALYSATOR": {
-				prop: "Monitor Evaluator",
-				type: Number,
-				format: "0%"
-			},
-			"ORGANISATOR": {
-				prop: "Implementer",
-				type: Number,
-				format: "0%"
-			}
-		}
-	}
-};
-const enSchema = {
-	"NAME": {
-		prop: "name",
-		type: String
-	},
-	"GENDER": {
-		prop: "gender",
-		type: String,
-		oneOf: [
-			"Mand",
-			"Kvinde",
-			"Ikke-binær"
-		]
-	},
-	"PREV. TEAMS": {
-		prop: "initialPreviousTeams",
-		type: String
-	},
-	"BELBIN ROLES": {
-		prop: "initialRoles",
-		type: {
-			"CO-ORDINATOR": {
-				prop: "Co-ordinator",
-				type: Number,
-				format: "0%"
-			},
-			"TEAMWORKER": {
-				prop: "Teamworker",
-				type: Number,
-				format: "0%"
-			},
-			"RESOURCE INVESTIGATOR": {
-				prop: "Resource Investigator",
-				type: Number,
-				format: "0%"
-			},
-			"SHAPER": {
-				prop: "Shaper",
-				type: Number,
-				format: "0%"
-			},
-			"COMPLETER FINISHER": {
-				prop: "Completer Finisher",
-				type: Number,
-				format: "0%"
-			},
-			"SPECIALIST": {
-				prop: "Specialist",
-				type: Number,
-				format: "0%"
-			},
-			"PLANT": {
-				prop: "Plant",
-				type: Number,
-				format: "0%"
-			},
-			"MONITOR EVALUATOR": {
-				prop: "Monitor Evaluator",
-				type: Number,
-				format: "0%"
-			},
-			"IMPLEMENTER": {
-				prop: "Implementer",
-				type: Number,
-				format: "0%"
-			}
-		}
-	}
-};
-const schemas: Record<Language, Schema> = {
-	"da": daSchema,
-	"en": enSchema
-}
+
 // const schema = [
 //   {
 //     column: "NAVN",

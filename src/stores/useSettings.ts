@@ -9,7 +9,7 @@ export interface ISetting<T> {
 export const languages = ["da", "en"] as const;
 export type Language = typeof languages[number];
 export const defaultSettings = {
-    memberLimit: 6,
+    memberLimit: 5,
     language: "da" as Language,
     lockOnMemberLimitReached: false,
     tabsLinked: true,
@@ -18,17 +18,20 @@ export const defaultSettings = {
         trialLimit: 1000,
         maxUnfilledRoles: 2
     },
-    resetOnPackaging: false
+    resetOnPackaging: true
 };
 export type ISettings = typeof defaultSettings;
 export const useSettingsStore = defineStore("settings", () => {
     const { t, locale } = useI18n();
-    const all = ref(defaultSettings);
+    const all = ref({...defaultSettings});
+    const allDefault = ref(defaultSettings);
     const util = useUtilitiesStore();
     onMounted(async () => {
-        let savedSettings = (await window.electron.data.get()).settings;
-        savedSettings.automation = Object.assign(all.value.automation, savedSettings.automation);
-        Object.assign(all.value, savedSettings);
+        let savedSettings = (await window.electron.data.get())?.settings;
+        if (savedSettings) {
+            savedSettings.automation = Object.assign(all.value.automation, savedSettings.automation);
+            Object.assign(all.value, savedSettings);
+        }
         locale.value = all.value.language;
     });
     watch(() => all.value.language, (newLanguage, oldLanguage) => {
@@ -47,6 +50,7 @@ export const useSettingsStore = defineStore("settings", () => {
     //     language
     // };
     return {
-        all
+        all,
+        allDefault
     };
 });

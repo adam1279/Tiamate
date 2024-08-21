@@ -176,13 +176,13 @@ function runAlgorithm() {
                         v-model="settings.all.memberLimit"
                         :title="`${$t('member limit')}`"
                         type="number"
-                        :default-value="5"
+                        :default-value="settings.allDefault.memberLimit"
                         input-width="w-60"
                         class=" shadow-sm"
                     ></SettingComponent>
                     <SettingComponent
                         v-model="settings.all.resetOnPackaging"
-                        :title="`${$t('reset')} ${$t('on')} ${$t('packaging')}`"
+                        :title="`${$t('reset')} ${$t('student', 2)} ${$t('on')} ${$t('packaging')}`"
                         class=" shadow-sm"
                     >
 
@@ -231,15 +231,15 @@ function runAlgorithm() {
                         :title="`${$t('trial')}${$t('connectingSpace2')}${$t('limit')}`"
                         class=""
                         type="number"
-                        :default-value="1000"
+                        :default-value="settings.allDefault.automation.trialLimit"
                         horizontal
                     >
                     </SettingComponent>
                     <SettingComponent
                         v-model.number="settings.all.automation.maxUnfilledRoles"
-                        :title="`${$t('max')}. # ${$t('unfilled', 2)} ${$t('role', 2)}`"
+                        :title="`${$t('max')}. # ${$t('unfilled', 2)} ${$t('role', 2)} (ikke færdig)`"
                         type="number"
-                        :default-value="2"
+                        :default-value="settings.allDefault.automation.maxUnfilledRoles"
                         horizontal
                     >
 

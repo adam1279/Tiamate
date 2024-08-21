@@ -18,7 +18,7 @@ export const useTeamsStore = defineStore("teams", () => {
     const settings = useSettingsStore();
     const packages = usePackagesStore();
     onMounted(async () => {
-        all.value = (await window.electron.data.get()).teams.map(team => new Team(team));
+        all.value = util.xIfTrueThenY((await window.electron.data.get())?.teams?.map(team => new Team(team)), []);
     });
     function add(init: Partial<Team> = {}) {
         const team = new Team(init);
@@ -57,7 +57,7 @@ export const useTeamsStore = defineStore("teams", () => {
     }
     function deleteTeam(...teams: Team[]) {
         teams.forEach(team => {
-            students.get(...team.members).forEach(student => {
+            students.ofTeam(team).forEach(student => {
                 student.state = "unassigned";
                 // student.currentTeam = undefined;
             });

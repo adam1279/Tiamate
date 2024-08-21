@@ -1,12 +1,9 @@
 import { ipcRenderer } from "electron";
-// import { CogIcon, CrosshairIcon, HeartHandshakeIcon, LightbulbIcon, MegaphoneIcon, PhoneIcon, RocketIcon, SearchIcon, WrenchIcon } from "lucide-vue-next";
-import { LanguageVariant } from "typescript";
 import { Component } from "vue";
-import { Translations } from "vue3-gettext";
-import { IPackage } from "./stores/usePackages";
 import { ISettings, Language } from "./stores/useSettings";
 import { IStudent } from "./classes/Student";
 import { ITeam } from "./classes/Team";
+import { IPackage } from "./classes/Package";
 
 export interface IPage {
     title: string,
@@ -45,7 +42,7 @@ export const ipcKeys: IpcType = {
         // assign: (type: DataKey, ids: string[] | string, destination?: string) => ipcRenderer.invoke("data:assign", type, ids, destination)
     },
     printToPDF: () => ipcRenderer.invoke("printToPDF"),
-    downloadTemplate: () => ipcRenderer.invoke("downloadTemplate"),
+    downloadTemplate: (language: Language) => ipcRenderer.invoke("downloadTemplate", language),
     importTemplate: (language: Language) => ipcRenderer.invoke("importTemplate", language),
     globalUpdate: (jsonData: string) => ipcRenderer.invoke("globalUpdate", jsonData)
     // BelbinIcons: () => BelbinIcons
@@ -69,7 +66,7 @@ export interface ipcInterface {
         // assign: (type: DataKey, ids: string[] | string, destination?: string) => Promise<void>
     },
     printToPDF: () => Promise<void>,
-    downloadTemplate: () => Promise<void>,
+    downloadTemplate: (language: Language) => Promise<void>,
     importTemplate: (language: Language) => Promise<IStudent[]>,
     globalUpdate: (jsonData: string) => Promise<void>
 }
