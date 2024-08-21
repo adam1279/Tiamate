@@ -2,6 +2,7 @@
 import { IPage } from 'src/classes';
 import { languages, useSettingsStore } from '../stores/useSettings';
 import { computed } from 'vue';
+import { GlobeIcon } from 'lucide-vue-next';
 const props = defineProps<{
     deployed: boolean,
     pages: IPage[],
@@ -39,6 +40,17 @@ const mainPages = computed(() => {
                 </div>
 
             <!-- </Transition> -->
+        </div>
+        
+        <div v-if="deployed" class="flex items-center cursor-pointer p-2 border border-white rounded-full text-xs mx-auto mt-auto mb-3 hover:bg-white/10 transition-colors" @click="settings.all.language = settings.all.language == 'da' ? 'en' : 'da'">
+            <GlobeIcon class="size-4 stroke-white"></GlobeIcon>
+            <div class=" flex items-center h-full divide-white divide-x">
+                <span :data-current="settings.all.language == lang" v-for="lang of languages"
+                    class=" text-gray data-[current=true]:text-white transition-colors font-mono px-1"
+                >
+                    {{ lang }}
+                </span>
+            </div>
         </div>
     </div>
 </template>

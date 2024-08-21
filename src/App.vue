@@ -2,13 +2,10 @@
 import { computed, onMounted, ref } from 'vue';
 import Sidebar from './components/Sidebar.vue';
 import { IPage } from './classes';
-import LabPage_ from './components/pages/LabPage_.vue'
 import LabPage from './components/pages/LabPage.vue'
 import HomePage from './components/pages/HomePage.vue';
 import TitleBarButton from './components/TitleBarButton.vue';
-import { HomeIcon, PencilRulerIcon, SidebarCloseIcon, SidebarOpenIcon, GraduationCapIcon, MinusIcon, SquareIcon, XIcon, UsersIcon, SettingsIcon, CopyIcon, MegaphoneIcon, HeartHandshakeIcon, PhoneIcon, RocketIcon, WrenchIcon, CrosshairIcon, LightbulbIcon, SearchIcon, CogIcon, InfoIcon } from 'lucide-vue-next';
-import StudentsPage_ from './components/pages/StudentsPage_.vue';
-import TeamsPage_ from './components/pages/TeamsPage_.vue';
+import { HomeIcon, PencilRulerIcon, SidebarCloseIcon, SidebarOpenIcon, GraduationCapIcon, MinusIcon, SquareIcon, XIcon, UsersIcon, SettingsIcon, CopyIcon, MegaphoneIcon, HeartHandshakeIcon, PhoneIcon, RocketIcon, WrenchIcon, CrosshairIcon, LightbulbIcon, SearchIcon, CogIcon, InfoIcon, LanguagesIcon, GlobeIcon } from 'lucide-vue-next';
 import TeamsPage from './components/pages/TeamsPage.vue';
 import SettingsPage from './components/pages/SettingsPage.vue';
 import InfoPage from './components/pages/InfoPage.vue';
@@ -135,14 +132,6 @@ document.addEventListener('mousedown', function(event) {
             <component v-for="page of pages" :is="page.component" :page="page" :current-page="currentPage" :key="page.id"></component>
         </div>
         <div class="flex flex-row bg-gray-dark select-none gap-2 px-2 text-xs text-white font-mono items-center">
-            
-            <div class=" flex cursor-pointer items-center h-full" @click="settings.all.language = settings.all.language == 'da' ? 'en' : 'da'">
-                <span :data-current="settings.all.language == lang" v-for="lang of languages"
-                    class=" text-white uppercase data-[current=true]:font-bold data-[current=true]:bg-white data-[current=true]:text-gray-dark transition-colors font-mono px-1 rounded-sm"
-                >
-                    {{ lang }}
-                </span>
-            </div>
             <div class=" p-1" >
                 Info: <span class=" first-letter:uppercase inline-block">{{ $t(util.tooltip) }}</span>
             </div>
