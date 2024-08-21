@@ -22,7 +22,7 @@ const util = useUtilitiesStore();
             <!-- <Widget>
                 <IconButton :icon="Squircle" tooltip="Love"></IconButton>
             </Widget> -->
-            {{ util.mergeDeep({a: 1, b: 2, c: 4}, {a: 2, b: 3}) }}
+            <!-- {{ util.mergeDeep({a: 1, b: 2, c: 4}, {a: 2, b: 3}) }}
             <div v-for="student of students.all">
                 <Widget>
                     <table>
@@ -32,7 +32,8 @@ const util = useUtilitiesStore();
                         </tr>
                     </table>
                 </Widget>
-            </div>
+            </div> -->
+            <span>Hey!</span>
         </PageSection>
         <!-- <button @click="saveExcel">Save Excel</button> -->
     </Page>
