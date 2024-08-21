@@ -106,13 +106,12 @@ function runAlgorithm() {
 <template>
     <Page :page="page" :current-page="currentPage">
 
-        <!-- Students -->
-        <!-- max-h-[25%] -->
+        <!-- Students ################################################################################################## -->
         <PageSection :icon="GraduationCapIcon" :title="$t('student', 2)" class="max-h-[25%]" custom>
             <template #options>
-                <IconButton :icon="RotateCwIcon" :tooltip="`${$t('reload')} ${$t('student', 2)}`" @click="reload"></IconButton>
+                <IconButton :icon="RotateCwIcon" :tooltip="`${$t('reset')} ${$t('student', 2)}`" @click="reload"></IconButton>
             </template>
-            <div class=" flex grow flex-wrap gap-1 overflow-y-auto select-none drag-none snap-y snap-mandatory" @dragover="e => e.preventDefault()" @drop="util.dropStudentBack">
+            <div class=" flex grow flex-wrap gap-1 overflow-y-auto select-none drag-none snap-y snap-mandatory min-h-5" @dragover="e => e.preventDefault()" @drop="util.dropStudentBack">
                 <!-- <TransitionTemplate fade group
                     :transition="{
                         leaveFrom: 'max-w-10',
@@ -123,6 +122,7 @@ function runAlgorithm() {
                         class=" snap-start snap-always"
                         :student="student"
                         :key="student.id"
+                        state="unassigned"
                     >
                     </StudentWidget>
                 <!-- </TransitionTemplate> -->
@@ -133,10 +133,12 @@ function runAlgorithm() {
             </div>
         </PageSection>
 
-        <!-- Teams -->
+        <!-- Teams ###################################################################################################### -->
         <PageSection :icon="UsersIcon" :title="$t('team', 2)" class=" overflow-y-hidden">
             <template #options>
-                <IconButton :icon="PackagePlusIcon" :tooltip="`${$t('package_2')} ${$t('team', 2)}`"></IconButton>
+                <IconButton :icon="PackagePlusIcon" :tooltip="`${$t('package_2')} ${$t('team', 2)}`"
+                    @click="teams.packageProposed"
+                ></IconButton>
                 
                 <IconButton :icon="PlusCircleIcon" :tooltip="`${$t('new')} ${$t('team')}`" @click="teams.add" ></IconButton>
                 <!-- <OptionsDropdown :options="[
@@ -205,13 +207,13 @@ function runAlgorithm() {
                         
                     </TeamWidget>
                 </TransitionTemplate>
-                <div v-if="teams.all?.length == 0" class="italic text-gray">
+                <div v-if="teams.query({state: 'proposed'}).length == 0" class="italic text-gray">
                     {{ $t("letsbegin", {msg: $t("team", 2)}) }}
                 </div>
             </div>
         </PageSection>
 
-        <!-- Automation -->
+        <!-- Automation ################################################################################################### -->
         <PageSection :icon="BotIcon" :title="`${$t('automatic')} ${$t('team creation')}`">
             <template #options>
                 <span>{{ trialCount }}</span>
@@ -224,12 +226,14 @@ function runAlgorithm() {
                         :title="`${$t('trial')}${$t('connectingSpace2')}${$t('limit')}`"
                         class=""
                         type="number"
+                        :default-value="1000"
                     >
                     </SettingComponent>
                     <SettingComponent
                         v-model.number="settings.all.automation.maxUnfilledRoles"
-                        :title="`${$t('max')}. ${$t('unfilled', 2)} ${$t('role', 2)}`"
+                        :title="`${$t('max')}. # ${$t('unfilled', 2)} ${$t('role', 2)}`"
                         type="number"
+                        :default-value="2"
                     >
 
                     </SettingComponent>

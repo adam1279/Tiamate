@@ -149,8 +149,8 @@ const defaultTitle = computed(() => util.capitalizeFirstLetter(`${t('team', 1)} 
             <template #members>
                 <div class="flex flex-col gap-1">
                     <TransitionTemplate group fade>
-                        <StudentWidget state="assigned" v-for="student of assignedStudents" :student="student" :data-key="student?.id" :key="student.id" :other-students="allStudents"></StudentWidget>
-                        <StudentWidget state="previewed" v-for="student of previewedStudents" :student="student" :key="team?.id + student?.id" :other-students="allStudents"></StudentWidget>
+                        <StudentWidget :state="team.state != 'packaged' ? 'assigned' : 'packaged'" v-for="student of assignedStudents" :student="student" :data-key="student?.id" :key="student.id" :other-students="allStudents"></StudentWidget>
+                        <StudentWidget v-if="team.state == 'proposed'" state="previewed" v-for="student of previewedStudents" :student="student" :key="team?.id + student?.id" :other-students="allStudents"></StudentWidget>
                     </TransitionTemplate>
                     
                 </div>

@@ -7,6 +7,8 @@ import { useSettingsStore } from "./useSettings";
 import { ITeam, Team } from "../classes/Team";
 import { Student } from "../classes/Student";
 import { Belbin } from "../classes/Belbin";
+import { Package } from "../classes/Package";
+import { usePackagesStore } from "./usePackages";
 
 
 export const useTeamsStore = defineStore("teams", () => {
@@ -14,11 +16,14 @@ export const useTeamsStore = defineStore("teams", () => {
     const students = useStudentsStore();
     const util = useUtilitiesStore();
     const settings = useSettingsStore();
+    const packages = usePackagesStore();
     onMounted(async () => {
         all.value = (await window.electron.data.get()).teams.map(team => new Team(team));
     });
-    function add() {
-        all.value.push(new Team());
+    function add(init: Partial<Team> = {}) {
+        const team = new Team(init);
+        all.value.push(team);
+        return team;
     }
     // function removeStudent(team: ITeam, ...students: IStudent[]) {
 
@@ -157,6 +162,25 @@ export const useTeamsStore = defineStore("teams", () => {
         // return util.evaluateTeamBalance(students.ofTeam(team).map(student => student.roles));
         // return belbinSums;
     }
+    function ofPackage(...packages: Package[]) {
+        const teams: Team[] = [];
+        if (all.value) {
+            packages.forEach(pack => {
+                teams.push(...pack.teams.map(id => all.value.find(team => team.id == id)));
+            });
+        }
+        return teams;
+    }
+    function packageProposed() {
+        const teams = query({state: 'proposed'});
+        packages.add(teams);
+        teams.forEach(team => {
+            const replacementTeam = add(team);
+            replacementTeam.members = [];
+            team.state = "packaged";
+        });
+        students.all.forEach(student => student.state = "unassigned");
+    }
     return {
         all,
         // removeStudent,
@@ -169,6 +193,8 @@ export const useTeamsStore = defineStore("teams", () => {
         checkFull,
         teamOf,
         limitOf,
-        evaluateBelbin
+        evaluateBelbin,
+        ofPackage,
+        packageProposed
     };
 });

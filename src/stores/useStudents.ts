@@ -47,13 +47,13 @@ export const useStudentsStore = defineStore("students", () => {
         util.removeArrayItem(all.value, ...students);
     }
     function ofTeam(...teams: Team[]) {
+        const students: Student[] = [];
         if (all.value) {
-            const students: Student[] = [];
             teams.forEach(team => {
-                students.push(...team.members.map(id => all.value.find(student => student.id == id), []));
+                students.push(...team.members.map(id => all.value.find(student => student.id == id)));
             });
-            return students;
-        } else return [] as Student[];
+        }
+        return students;
     }
     function unassign(...students: Student[]) {
         students.forEach(student => {

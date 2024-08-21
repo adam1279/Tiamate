@@ -78,7 +78,7 @@ const da = {
     CSV_file: "CSV-fil",
     unpackaged: "upakket | upakkede",
     member: "medlem | medlemmer",
-    reload: "gendan",
+    reset: "gendan",
     forward: "videresend",
     tab: "fane | faner",
     link_2: "sammenkæd",
@@ -202,7 +202,8 @@ export const language: Record<Language, Partial<LangData>> = {
         max: "max",
         unfilled: "unfilled",
         role: "role | roles",
-        run: "run"
+        run: "run",
+        reset: "reset"
     }
     
 }

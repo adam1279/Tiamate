@@ -9,6 +9,7 @@ import Widget from "../Widget.vue";
 import { computed, onMounted, ref } from "vue";
 import { useTeamsStore } from "../../stores/useTeams";
 import { usePackagesStore } from "../../stores/usePackages";
+import PackageWidget from "../PackageWidget.vue";
 const props = defineProps<{
     page: IPage,
     currentPage: string
@@ -48,8 +49,12 @@ const unpackagedTeams = computed(() => {
                     </IconButton>
                 </OptionsDropdown>
             </template>
-            <Widget v-for="pckge of packages.all">
-            </Widget>
+            <!-- <Widget v-for="pckge of packages.all">
+            </Widget> -->
+            <div class="flex flex-col grow">
+                <PackageWidget v-for="(pckge, index) of packages.all" :package="pckge" :index="index"></PackageWidget>
+                <!-- <PackageWidget :index="1"></PackageWidget> -->
+            </div>
         </PageSection>
     </Page>
 </template>

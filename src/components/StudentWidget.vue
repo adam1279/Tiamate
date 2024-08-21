@@ -11,7 +11,7 @@ import { computed } from 'vue';
 
 const props = defineProps<{
     student: Student,
-    state?: "assigned" | "previewed" | "unassigned",
+    state?: "assigned" | "previewed" | "unassigned" | "packaged",
     otherStudents?: Student[]
 }>();
 const util = useUtilitiesStore();
@@ -24,19 +24,19 @@ function removeFromTeam() {
 const previousTeamCount = computed(() => (props.otherStudents) ? students.previousTeamsInCommon(props.student, ...props.otherStudents) : 0);
 </script>
 <template>
-    <div :draggable="state != 'previewed'" :data-state="state" class=" flex p-1 bg-white rounded shadow text-gray select-none items-center border border-gray gap-1 data-[state=previewed]:shadow-none data-[state=previewed]:pointer-events-none data-[state=previewed]:bg-gray-light/80 shrink max-w-64" data-broken="broken" 
+    <div :draggable="state != 'previewed' && state != 'packaged'" :data-state="state" class=" flex p-1 bg-white rounded shadow text-gray select-none items-center border border-gray gap-1 data-[state=previewed]:shadow-none data-[state=packaged]:shadow-none data-[state=previewed]:bg-gray-light/80 shrink max-w-64" data-broken="broken" 
         @dragstart="util.dragStudent(student)"
         @dragend="util.dragStudentEnd"
     >
-        <EyeIcon v-if="state == 'previewed'" :size="20" class=" cursor-move shrink-0" ></EyeIcon>
-        <TooltipItem v-else :text="$t('move')">
+        <TooltipItem v-if="state == 'assigned'" :text="$t('move')">
             <GripVerticalIcon :size="20" class=" cursor-move shrink-0" ></GripVerticalIcon>
         </TooltipItem>
-        <TooltipItem :text="student.name+(otherStudents ? ` - ${previousTeamCount} ${$t('previous')} ${$t('team')+$t('connectingSpace')+$t('member', previousTeamCount > 1 ? 2 : 1)}` : '')" class=" flex overflow-hidden grow items-baseline gap-1" >
+        <EyeIcon v-else :size="20" class=" shrink-0" ></EyeIcon>
+        <TooltipItem :text="student.name+(otherStudents ? ` - ${previousTeamCount} ${$t('previous')} ${$t('team')+$t('connectingSpace')+$t('member', previousTeamCount > 1 ? 2 : 1)}` : '')" class=" flex overflow-hidden grow items-center gap-1" >
             <span class=" text-black text-ellipsis overflow-hidden text-nowrap grow">
                 {{ student.name }}
             </span>
-            <span class=" font-mono text-xs" v-if="state != 'unassigned'">{{ previousTeamCount }}</span>
+            <span class=" font-mono text-xs px-1" v-if="state != 'unassigned'">{{ previousTeamCount }}</span>
         </TooltipItem>
         <IconToggle v-if="!state || state == 'unassigned'"
             v-model="student.previewing"
