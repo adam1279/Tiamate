@@ -34,15 +34,17 @@ export const useTeamsStore = defineStore("teams", () => {
     /**Clears student(s) from all teams. */
     function clearStudent(...students: Student[]) {
         students.forEach(student => {
-            all.value.forEach(team => {
-                [team.members, team.previewMembers].forEach(list => {
-                    // const index = list.indexOf(student.id);
-                    // if (index <= 0) {
-                    //     list.splice(index, 1);
-                    // }
-                    // console.log(student);
-                    util.removeArrayItem(list, student.id);
-                });
+            console.log(query({state: "proposed"}).map(team => team.id));
+            query({state: "proposed"}).forEach(team => {
+                // [team.members, team.previewMembers].forEach(list => {
+                //     // const index = list.indexOf(student.id);
+                //     // if (index <= 0) {
+                //     //     list.splice(index, 1);
+                //     // }
+                //     // console.log(student);
+                //     util.removeArrayItem(list, student.id);
+                // });
+                util.removeArrayItem(team.members, student.id);
             });
         });
     }
@@ -172,14 +174,15 @@ export const useTeamsStore = defineStore("teams", () => {
         return teams;
     }
     function packageProposed() {
-        const teams = query({state: 'proposed'});
-        packages.add(teams);
-        teams.forEach(team => {
-            const replacementTeam = add(team);
-            replacementTeam.members = [];
-            team.state = "packaged";
+        const originalTeams = query({state: 'proposed'});
+        const packageTeams: Team[] = [];
+        originalTeams.forEach(originalTeam => {
+            const {id, previewMembers, locked, state, members, ...rest} = originalTeam;
+            packageTeams.push(add({state: "packaged", members: [...members], ...rest}));
+            if (settings.all.resetOnPackaging) originalTeam.members = [];
         });
-        students.all.forEach(student => student.state = "unassigned");
+        if (settings.all.resetOnPackaging) students.all.forEach(student => student.state = "unassigned");
+        packages.add(packageTeams);
     }
     return {
         all,

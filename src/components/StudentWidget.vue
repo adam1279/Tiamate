@@ -24,11 +24,11 @@ function removeFromTeam() {
 const previousTeamCount = computed(() => (props.otherStudents) ? students.previousTeamsInCommon(props.student, ...props.otherStudents) : 0);
 </script>
 <template>
-    <div :draggable="state != 'previewed' && state != 'packaged'" :data-state="state" class=" flex p-1 bg-white rounded shadow text-gray select-none items-center border border-gray gap-1 data-[state=previewed]:shadow-none data-[state=packaged]:shadow-none data-[state=previewed]:bg-gray-light/80 shrink max-w-64" data-broken="broken" 
+    <div :draggable="state != 'previewed' && state != 'packaged'" :data-state="state" class=" flex p-1 bg-white rounded shadow text-gray select-none items-center border border-gray gap-1 data-[state=previewed]:shadow-none data-[state=packaged]:shadow-none data-[state=previewed]:bg-gray-light/80 shrink max-w-64 h-fit" data-broken="broken" 
         @dragstart="util.dragStudent(student)"
         @dragend="util.dragStudentEnd"
     >
-        <TooltipItem v-if="state == 'assigned'" :text="$t('move')">
+        <TooltipItem v-if="state == 'assigned' || state == 'unassigned'" :text="$t('move')">
             <GripVerticalIcon :size="20" class=" cursor-move shrink-0" ></GripVerticalIcon>
         </TooltipItem>
         <EyeIcon v-else :size="20" class=" shrink-0" ></EyeIcon>

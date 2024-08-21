@@ -32,5 +32,5 @@ function performAction() {
 }
 </script>
 <template>
-    <IconButton :size="size" :icon="util.xIfTrueThenY(states[currentStateLocal ? 1 : 0].icon, SquareIcon)" :tooltip="states[currentStateLocal ? 1 : 0].tooltip" @click="performAction" :extend-class="extendClass"></IconButton>
+    <IconButton :size="size" :icon="util.xIfTrueThenY(states[currentStateLocal ? 1 : 0].icon, SquareIcon)" :tooltip="util.xIfTrueThenY(states[currentStateLocal ? 1 : 0].tooltip, '')" @click="performAction" :extend-class="extendClass"></IconButton>
 </template>

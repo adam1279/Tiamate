@@ -98,15 +98,7 @@ function toCoordinatesRole(role: Belbin): [
     const p = round(role.percentage * 100, 20, 0).toString() + "%";
     return toCoordinates(Belbin.data[role.role].angle as number, Belbin.data[role.role].add, role.percentage, points.value[role.role][p], role);
 }
-const allStudents = computed(() => {
-    const _allStudents = props.students.concat(props.previewedStudents);
-    // if (topStudent.value == null) topStudent.value = _allStudents[_allStudents.length - 1];
-    // else {
-    //     _allStudents.splice(_allStudents.indexOf(topStudent.value), 1);
-    //     _allStudents.push(topStudent.value);
-    // }
-    return _allStudents;
-});
+const allStudents = computed(() => props.students.concat(props.previewedStudents));
 const points = computed(() => {
     let obj: {
         [k:string]: {
@@ -145,7 +137,7 @@ const topStudent = ref<Student>(null);
         <TransitionGroup leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-125" leave-active-class="transition-all" enter-to-class="opacity-100 scale-100" enter-from-class="opacity-0 scale-0" enter-active-class="transition-all" >
             <g v-for="student of allStudents" class=" group" :key="student.id" :id="'id' + ((teamId) ? teamId : '') + student.id" @mouseover="topStudent = student" @mouseleave="topStudent = null" :data-hover="topStudent == student">
                 <TooltipItem v-for="role of student.roles" :text="`${student.name} - ${$t(role.role)} ${Math.round(role.percentage * 100)}%`" svg>
-                    <circle :data-preview="student.previewing" :cx="toCoordinatesRole(role)[0] + ''" :cy="toCoordinatesRole(role)[1] + ''" r="4%" class=" hover:stroke-[2%] group-hover:stroke-white z-10 stroke-[0.7%] group-hover:z-30 fill-gray-dark stroke-gray-dark data-[preview=true]:fill-gray-dark/50 transition-all data-[nohover=true]:pointer-events-none" :data-nohover="topStudent != student && topStudent != null"/>
+                    <circle :data-preview="previewedStudents.includes(student)" :cx="toCoordinatesRole(role)[0] + ''" :cy="toCoordinatesRole(role)[1] + ''" r="4%" class=" hover:stroke-[2%] group-hover:stroke-white z-10 stroke-[0.7%] group-hover:z-30 fill-gray-dark stroke-gray-dark data-[preview=true]:fill-gray-dark/50 transition-all data-[nohover=true]:pointer-events-none" :data-nohover="topStudent != student && topStudent != null"/>
                 </TooltipItem>
             </g>
         </TransitionGroup>

@@ -51,6 +51,14 @@
         src: url("./src/fonts/NotoSansMono-VariableFont_wdth,wght.ttf");
         font-style: normal;
     }
+    div.team-container {
+        @apply grid;
+        @apply gap-3;
+        @apply md:grid-cols-2;
+        @apply 2xl:grid-cols-5;
+        @apply xl:grid-cols-4;
+        @apply lg:grid-cols-3;
+    }
 }
 @tailwind components;
 @tailwind utilities;

@@ -33,7 +33,7 @@ const students = useStudentsStore();
 const util = useUtilitiesStore();
 const settings = useSettingsStore();
 const assignedStudents = computed(() => students.ofTeam(props.team));
-const previewedStudents = computed(() => students.query({previewing: true}));
+const previewedStudents = computed(() => props.team.state != "packaged" ? students.query({previewing: true}) : []);
 const allStudents = computed(() => assignedStudents.value.concat(previewedStudents.value));
 const inactive = ref(false);
 const genderMakeup = computed(() => {
@@ -99,7 +99,7 @@ const defaultTitle = computed(() => util.capitalizeFirstLetter(`${t('team', 1)} 
                 <TooltipItem :text="`${$t('member limit')} ${$t('exceeded')}`">
                     <CircleAlertIcon v-if="team.members.length > teams.limitOf(team)" class=" stroke-tiamate-red size-4"></CircleAlertIcon>
                 </TooltipItem>
-                <IconToggle  v-model="team.locked" :states="[
+                <IconToggle v-if="team.state != 'packaged'" v-model="team.locked" :states="[
                     {
                         icon: LockOpenIcon,
                         tooltip: `${$t('lock')}`,
@@ -109,7 +109,7 @@ const defaultTitle = computed(() => util.capitalizeFirstLetter(`${t('team', 1)} 
                         tooltip: `${$t('unlock')}`,
                     }
                 ]"></IconToggle>
-                <IconButton :icon="TrashIcon" tooltip="delete" color="red" @click="teams.deleteTeam(team)"></IconButton>
+                <IconButton v-if="team.state != 'packaged'" :icon="TrashIcon" tooltip="delete" color="red" @click="teams.deleteTeam(team)"></IconButton>
             </div>
         </div>
         <!-- <PercentageBar :sections="genderMakeup" :limit="6" :amount="allStudents.length"></PercentageBar> -->
@@ -150,7 +150,7 @@ const defaultTitle = computed(() => util.capitalizeFirstLetter(`${t('team', 1)} 
                 <div class="flex flex-col gap-1">
                     <TransitionTemplate group fade>
                         <StudentWidget :state="team.state != 'packaged' ? 'assigned' : 'packaged'" v-for="student of assignedStudents" :student="student" :data-key="student?.id" :key="student.id" :other-students="allStudents"></StudentWidget>
-                        <StudentWidget v-if="team.state == 'proposed'" state="previewed" v-for="student of previewedStudents" :student="student" :key="team?.id + student?.id" :other-students="allStudents"></StudentWidget>
+                        <StudentWidget state="previewed" v-for="student of previewedStudents" :student="student" :key="team?.id + student?.id" :other-students="allStudents"></StudentWidget>
                     </TransitionTemplate>
                     
                 </div>
@@ -170,6 +170,7 @@ const defaultTitle = computed(() => util.capitalizeFirstLetter(`${t('team', 1)} 
 
             </template>
             <template #pie>
+                {{ team.members }}
                 <!-- {{ (Math.round(teams.evaluateBelbin(team).eval * 1000) / 10) }}% -->
                 <!-- {{ teams.evaluateBelbin(allStudents).eval }}
                 {{ teams.evaluateBelbin(allStudents).belbinSums }} -->
@@ -204,7 +205,7 @@ const defaultTitle = computed(() => util.capitalizeFirstLetter(`${t('team', 1)} 
                     >
 
                     </SettingComponent>
-                    <SettingComponent v-model.number="team.customLimit" type="number" horizontal :title="`${$t('custom')} ${$t('member limit')}`"
+                    <SettingComponent v-if="team.state != 'packaged'" v-model.number="team.customLimit" type="number" horizontal :title="`${$t('custom')} ${$t('member limit')}`"
                         class="w-full"
                         :placeholder="settings.all.memberLimit.toString()"
                     ></SettingComponent>

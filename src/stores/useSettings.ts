@@ -17,7 +17,8 @@ export const defaultSettings = {
         minBalance: 0.65,
         trialLimit: 1000,
         maxUnfilledRoles: 2
-    }
+    },
+    resetOnPackaging: false
 };
 export type ISettings = typeof defaultSettings;
 export const useSettingsStore = defineStore("settings", () => {

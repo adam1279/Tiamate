@@ -74,6 +74,7 @@ const da = {
     package: "pakke | pakker",
     package_2: "pak",
     export: "eksporter",
+    export2: "eksport | eksporter",
     as: "som",
     CSV_file: "CSV-fil",
     unpackaged: "upakket | upakkede",
@@ -111,7 +112,9 @@ const da = {
     max: "maks",
     unfilled: "ikke-udfuldt | ikke-udfyldte",
     role: "rolle | roller",
-    run: "kør"
+    run: "kør",
+    on: "ved | på",
+    packaging: "pakning | pakninger"
 };
 type LangData = typeof da;
 export const language: Record<Language, Partial<LangData>> = {
@@ -203,7 +206,11 @@ export const language: Record<Language, Partial<LangData>> = {
         unfilled: "unfilled",
         role: "role | roles",
         run: "run",
-        reset: "reset"
+        reset: "reset",
+        on: "on",
+        packaging: "packaging | packagings",
+        export: "export",
+        export2: "export | exports"
     }
     
 }

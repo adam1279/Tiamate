@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import OptionsDropdown, { Option } from './OptionsDropdown.vue';
-import { ChevronDownIcon, RotateCcwIcon } from 'lucide-vue-next';
+import { CheckSquareIcon, ChevronDownIcon, RotateCcwIcon, SquareIcon } from 'lucide-vue-next';
 import IconToggle, { State } from './IconToggle.vue';
 import IconButton from './IconButton.vue';
 type AcceptableType = string | number | boolean;
@@ -22,6 +22,17 @@ const props = defineProps<{
     inputWidth?: string,
     defaultValue?: any
 }>();
+const _states = computed(() => {
+    if (props.states) return props.states;
+    return [
+        {
+            icon: SquareIcon,
+        },
+        {
+            icon: CheckSquareIcon
+        }
+    ] as [State, State];
+})
 </script>
 <template>
 
@@ -39,7 +50,7 @@ const props = defineProps<{
             <div class="flex bg-gray-light bg-opacity-50 rounded-r hover:bg-opacity-100 transition-colors" v-else-if="typeof value =='boolean'">
                 <IconToggle 
                     v-model="value"
-                    :states="states"
+                    :states="_states"
                     class=" p-1"
                 >
                 
