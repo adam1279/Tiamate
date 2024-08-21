@@ -37,17 +37,12 @@ export const ipcKeys: IpcType = {
     onMaximize: (callback: Function) => ipcRenderer.on("onMaximize", (e, bool: boolean) => callback(bool)),
     updateTooltip: (text: string) => ipcRenderer.invoke("updateTooltip", text),
     onTooltipUpdate: (callback: Function) => ipcRenderer.on("onTooltipUpdate", (e, text: string) => callback(text)),
-    lang: () => ipcRenderer.invoke("lang"),
-    settings: {
-        set: (key: string, value: any) => ipcRenderer.invoke("settings:set", key, value),
-        get: (key: string) => ipcRenderer.invoke("settings:get", key)
-    },
     data: {
-        set: (key: DataKey, value: string) => ipcRenderer.invoke("data:set", key, value),
+        // set: (key: DataKey, value: string) => ipcRenderer.invoke("data:set", key, value),
         get: () => ipcRenderer.invoke("data:get"),
-        onUpdate: (callback: Function) => ipcRenderer.on("data:update", (e, data: Data, changedKey: string) => callback(data, changedKey)),
-        new: (type: DataKey) => ipcRenderer.invoke("data:new", type),
-        assign: (type: DataKey, ids: string[] | string, destination?: string) => ipcRenderer.invoke("data:assign", type, ids, destination)
+        // onUpdate: (callback: Function) => ipcRenderer.on("data:update", (e, data: Data, changedKey: string) => callback(data, changedKey)),
+        // new: (type: DataKey) => ipcRenderer.invoke("data:new", type),
+        // assign: (type: DataKey, ids: string[] | string, destination?: string) => ipcRenderer.invoke("data:assign", type, ids, destination)
     },
     printToPDF: () => ipcRenderer.invoke("printToPDF"),
     downloadTemplate: () => ipcRenderer.invoke("downloadTemplate"),
@@ -66,18 +61,12 @@ export interface ipcInterface {
     onMaximize: (callback: Function) => boolean,
     updateTooltip: (text: string) => Promise<void>,
     onTooltipUpdate: (callback: Function) => string,
-    lang: () => Promise<Translations>,
-    // BelbinIcons: () => typeof BelbinIcons
-    settings: {
-        set: (key: string, value: string) => Promise<void>,
-        get: (key: string) => Promise<any>
-    },
     data: {
-        set: (key: DataKey, value: string) => Promise<void>
+        // set: (key: DataKey, value: string) => Promise<void>
         get: () => Promise<Data>,
-        onUpdate: (callback: (data: Data, changedKey: string) => void) => Data,
-        new: (type: DataKey) => Promise<number>,
-        assign: (type: DataKey, ids: string[] | string, destination?: string) => Promise<void>
+        // onUpdate: (callback: (data: Data, changedKey: string) => void) => Data,
+        // new: (type: DataKey) => Promise<number>,
+        // assign: (type: DataKey, ids: string[] | string, destination?: string) => Promise<void>
     },
     printToPDF: () => Promise<void>,
     downloadTemplate: () => Promise<void>,

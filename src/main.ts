@@ -59,11 +59,6 @@ const createWindow = () => {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-const settings: {
-	[k: string]: any
-} = {
-	language: "da"
-};
 
 let data: Partial<Data>;
 let dataString: string = "";
@@ -87,21 +82,6 @@ const ipcKeys: {
 	},
 	updateTooltip: (e, text: string) => {
 		mainWindow.webContents.send("onTooltipUpdate", text);
-	},
-	lang: async () => {
-		// console.log(text);
-		// let res = langLib[text]["da"];
-		// console.log((res) ? res : text);
-		// return res;
-		// let jsonPath = path.join(__dirname, "../../src/language/translations.json")
-		// let translations = JSON.parse(await fs.promises.readFile(jsonPath, {encoding: "ascii"}))
-		// return translations;
-	},
-	// "settings:set": (e, key: string, value: any) => {
-	// 	setSetting(key, value);
-	// },
-	"settings:get": (e, key: string) => {
-		return getSetting(key);
 	},
 	// "data:set": (e, key: DataKey, value: string) => {
 	// 	console.log(key);
@@ -157,76 +137,6 @@ const ipcKeys: {
 		});
 		fs.promises.writeFile(saveDialog.filePath, data);
 	},
-	// "data:delete": (e, type: DataKey, ids: string[] | string) => {
-	// 	if (!Array.isArray(ids)) ids = [ids];
-	// 	for (let id of ids) {
-	// 		const item = data[type].find((item) => item.id == id);
-	// 		if (item) {
-	// 			const index = data[type].indexOf(item);
-	// 			if (index > -1) data[type].splice(index, 1);
-	// 			switch (type) {
-	// 				case "students":
-
-	// 					break;
-	// 			}
-	// 		}
-	// 	}
-	// },
-	// "data:assign": (e, type: DataKey, ids: string[] | string, destination?: string) => {
-	// 	if (type == "students") {
-	// 		const student = data.students.find(student => student.id == ids);
-	// 		data.teams.forEach(t => {
-	// 			const index = t.members.indexOf(student.id);
-	// 			if (index > -1) t.members.splice(index, 1);
-	// 		});
-	// 		if (destination != undefined) {
-	// 			const team = data.teams.find(team => team.id == destination);
-	// 			student.currentTeam = team.id;
-	// 			student.state = "assigned";
-	// 			team.members.push(student.id);
-	// 		} else {
-	// 			student.currentTeam = undefined;
-	// 			student.state = "unassigned";
-	// 		}
-	// 	} else if (type == "teams") {
-	// 		const team = data.teams.find(team => team.id == ids);
-	// 		data.packages.forEach(t => {
-	// 			const index = t.teams.indexOf(team.id);
-	// 			if (index > -1) t.teams.splice(index, 1);
-	// 		});
-	// 		if (destination != undefined) {
-	// 			const _package = data.packages.find(_package => _package.id == destination);
-	// 			team.currentPackage = _package.id;
-	// 			team.state = "packaged";
-	// 		} else {
-	// 			team.currentPackage = undefined;
-	// 			team.state = "proposed";
-	// 		}
-	// 	}
-	// 	mainWindow.webContents.send("data:update", data, "all");
-	// },
-	// createXlsx: async () => {
-	//   const saveDialog = await dialog.showSaveDialog(mainWindow, {
-	//     title: "Save to Excel file",
-	//     filters: [
-	//       {
-	//         extensions: ["xlsx"],
-	//         name: "Excel file"
-	//       }
-	//     ]
-	//   });
-	//   if (!saveDialog.canceled) {
-	//     await writeXlsxFile([{
-	//       gender: "Mand",
-	//       name: "Adam Markvardsen Golan",
-	//       implementer: 0.7,
-	//       previousTeams: ""
-	//     }], {
-	//       schema,
-	//       fileName: saveDialog.filePath
-	//     });
-	//   }
-	// },
 	downloadTemplate: async () => {
 		// console.log(path.join(__dirname, "template_da.xlsx"));
 		const saveDialog = await dialog.showSaveDialog(mainWindow, {
@@ -321,17 +231,6 @@ app.on('ready', async () => {
 	createWindow();
 
 });
-function setSetting(key: string, value: any) {
-	let userData = app.getPath("userData");
-	settings[key] = value;
-	let str = JSON.stringify(settings);
-	fs.promises.writeFile(path.join(userData, "settings.json"), str);
-}
-async function getSetting(key: string): Promise<any> {
-	let userData = app.getPath("userData");
-	let file = await fs.promises.readFile(path.join(userData, "settings.json"), "utf-8");
-	return JSON.parse(file)[key];
-}
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.

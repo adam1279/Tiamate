@@ -36,34 +36,6 @@ const unassignedStudents = computed(() => {
     // return students.all?.filter(student => student.state == "unassigned");
     return students.query({state: "unassigned"});
 });
-// const students = computed(() => {
-//     return data.value ? data.value.students : [];
-// });
-// const teams = computed(() => {
-//     return data.value ? data.value.teams : [];
-// });
-// const previewedStudents = computed(() => {
-//     return data.value ? data.value.students.filter(student => student.previewing) : [];
-// })
-// onMounted(async () => {
-//     data.value = (await window.electron.data.get());
-//     console.log(data.value);
-// });
-// window.electron.data.onUpdate((_data) => {
-//     data.value = _data;
-//     console.log(data.value);
-// });
-// function teamStudents(team: ITeam): IStudent[] {
-//     // return data.value.students.filter((student) => team.members.includes(student.id));
-//     return team.members.map(id => data.value.students.find(student => student.id == id));
-// }
-// function updateStudents() {
-//     // console.log(students.value);
-//     window.electron.data.set("students", JSON.stringify(students.all));
-// }
-// function updateTeams() {
-//     window.electron.data.set("teams", JSON.stringify(teams.value));
-// }
 function print() {
     const clone = root.value.cloneNode(true) as HTMLDivElement;
     computedStyleToInlineStyle(clone, {
@@ -72,12 +44,6 @@ function print() {
     console.log(clone);
     // window.electron.printToPDF();
 }
-// function deleteTeam(team: ITeam) {
-//     // const _team = data.value.proposedTeams.filter((t, i) => t.id == team.id)[0];
-//     const index = data.value.teams.indexOf(team)
-//     data.value.teams.splice(index, 1);
-//     // updateTeams();
-// }
 const currentTab = ref('members');
 const tabsLinked = ref(true);
 
