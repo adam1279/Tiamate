@@ -14,10 +14,6 @@ const props = defineProps<{
     currentPage: string
 }>();
 const settings = useSettingsStore();
-function select(_lang: Language) {
-    settings.all.language = _lang;
-}
-
 </script>
 <template>
     <Page :page="page" :current-page="currentPage">

@@ -38,11 +38,11 @@ export const ipcKeys: IpcType = {
     updateTooltip: (text: string) => ipcRenderer.invoke("updateTooltip", text),
     onTooltipUpdate: (callback: Function) => ipcRenderer.on("onTooltipUpdate", (e, text: string) => callback(text)),
     data: {
-        set: (key: DataKey, value: string) => ipcRenderer.invoke("data:set", key, value),
+        // set: (key: DataKey, value: string) => ipcRenderer.invoke("data:set", key, value),
         get: () => ipcRenderer.invoke("data:get"),
-        onUpdate: (callback: Function) => ipcRenderer.on("data:update", (e, data: Data, changedKey: string) => callback(data, changedKey)),
-        new: (type: DataKey) => ipcRenderer.invoke("data:new", type),
-        assign: (type: DataKey, ids: string[] | string, destination?: string) => ipcRenderer.invoke("data:assign", type, ids, destination)
+        // onUpdate: (callback: Function) => ipcRenderer.on("data:update", (e, data: Data, changedKey: string) => callback(data, changedKey)),
+        // new: (type: DataKey) => ipcRenderer.invoke("data:new", type),
+        // assign: (type: DataKey, ids: string[] | string, destination?: string) => ipcRenderer.invoke("data:assign", type, ids, destination)
     },
     printToPDF: () => ipcRenderer.invoke("printToPDF"),
     downloadTemplate: () => ipcRenderer.invoke("downloadTemplate"),
@@ -62,11 +62,11 @@ export interface ipcInterface {
     updateTooltip: (text: string) => Promise<void>,
     onTooltipUpdate: (callback: Function) => string,
     data: {
-        set: (key: DataKey, value: string) => Promise<void>
+        // set: (key: DataKey, value: string) => Promise<void>
         get: () => Promise<Data>,
-        onUpdate: (callback: (data: Data, changedKey: string) => void) => Data,
-        new: (type: DataKey) => Promise<number>,
-        assign: (type: DataKey, ids: string[] | string, destination?: string) => Promise<void>
+        // onUpdate: (callback: (data: Data, changedKey: string) => void) => Data,
+        // new: (type: DataKey) => Promise<number>,
+        // assign: (type: DataKey, ids: string[] | string, destination?: string) => Promise<void>
     },
     printToPDF: () => Promise<void>,
     downloadTemplate: () => Promise<void>,
