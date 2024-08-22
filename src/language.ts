@@ -114,7 +114,12 @@ const da = {
     role: "rolle | roller",
     run: "kør",
     on: "ved | på",
-    packaging: "pakning | pakninger"
+    packaging: "pakning | pakninger",
+    template: "skabelon | skabeloner",
+    analysis: "analyse | analyser",
+    select: "vælg",
+    to: "til",
+    seat: "plads | pladser"
 };
 type LangData = typeof da;
 export const language: Record<Language, Partial<LangData>> = {
@@ -210,7 +215,19 @@ export const language: Record<Language, Partial<LangData>> = {
         on: "on",
         packaging: "packaging | packagings",
         export: "export",
-        export2: "export | exports"
+        export2: "export | exports",
+        add: "add",
+        template: "template | templates",
+        "filled-out": "filled-out",
+        import: "import",
+        previous: "previous",
+        analysis: "analysis | analyses",
+        select: "select",
+        edit: "edit",
+        delete: "delete",
+        "team creation": "team creation",
+        to: "to",
+        seat: "seat | seats"
     }
     
 }

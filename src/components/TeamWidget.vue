@@ -33,7 +33,7 @@ const students = useStudentsStore();
 const util = useUtilitiesStore();
 const settings = useSettingsStore();
 const assignedStudents = computed(() => students.ofTeam(props.team));
-const previewedStudents = computed(() => props.team.state != "packaged" ? students.query({previewing: true}) : []);
+const previewedStudents = computed(() => props.team?.state != "packaged" ? students.query({previewing: true}) : []);
 const allStudents = computed(() => assignedStudents.value.concat(previewedStudents.value));
 const inactive = ref(false);
 const genderMakeup = computed(() => {
@@ -127,11 +127,6 @@ const defaultTitle = computed(() => util.capitalizeFirstLetter(`${t('team', 1)} 
                     id: 'compass'
                 },
                 {
-                    title: 'Pie',
-                    icon: PieChartIcon,
-                    id: 'pie'
-                },
-                {
                     title: `${$t('previous', 2)} ${$t('team', 2)}`,
                     icon: HistoryIcon,
                     id: 'previousTeams'
@@ -169,17 +164,17 @@ const defaultTitle = computed(() => util.capitalizeFirstLetter(`${t('team', 1)} 
                 </EvalLabel>
 
             </template>
-            <template #pie>
-                {{ team.members }}
+            <!-- <template #pie>
+                {{ team.members }} -->
                 <!-- {{ (Math.round(teams.evaluateBelbin(team).eval * 1000) / 10) }}% -->
                 <!-- {{ teams.evaluateBelbin(allStudents).eval }}
                 {{ teams.evaluateBelbin(allStudents).belbinSums }} -->
                 <!-- {{ teams.evaluateBelbin(team) }} -->
                 <!-- <PieChart :sections="[{color: 'red', percentage: 0.2}, {color: 'green', percentage: 0.2}, {color: 'blue', percentage: 0.6}]"></PieChart> -->
                 <!-- <PieChart :sections="genderMakeup"></PieChart> -->
-            </template>
+            <!-- </template> -->
             <template #previousTeams>
-                <div class="flex flex-col gap-1 mb-8">
+                <div class="flex flex-col gap-1">
                     <div v-for="[title, amount] of previousTeamsTallySorted"
                         class=" flex pl-1 rounded bg-gray-light items-end border border-gray"
                     >
@@ -187,9 +182,9 @@ const defaultTitle = computed(() => util.capitalizeFirstLetter(`${t('team', 1)} 
                         <span class=" self-end px-1 rounded-r border-l border-gray bg-white font-mono">{{ amount }}</span>
                     </div>
                 </div>
-                <EvalLabel :tooltip="`${$t('average')} ${$t('')}`" :icon="CircleSlash2Icon">
+                <!-- <EvalLabel :tooltip="`${$t('average')} ${$t('')}`" :icon="CircleSlash2Icon"> -->
                     <!-- {{ (previousTeamsTally) ? util.average(Object.values(previousTeamsTally)).toString().replace(".", $t("decimalPoint")) : "" }} -->
-                </EvalLabel>
+                <!-- </EvalLabel> -->
             </template>
             <template #settings>
                 <div class="flex flex-col gap-1">

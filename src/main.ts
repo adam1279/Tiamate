@@ -9,7 +9,7 @@ import { IStudent, Student } from './classes/Student';
 import { Schema } from 'read-excel-file';
 import { Belbin } from './classes/Belbin';
 import { Language } from './stores/useSettings';
-import { schemas, XlsxStudent } from './xlsx';
+import { mergedSchema, schemas, XlsxStudent } from './xlsx';
 // import { IStudent, Student } from './stores/useStudents';
 // import * as cptable from 'xlsx/dist/cpexcel.full.mjs';
 // XLSX.set_cptable(cptable);
@@ -63,6 +63,7 @@ const createWindow = () => {
 
 let data: Partial<Data>;
 let dataString: string = "";
+const dataFilePath = path.join(app.getPath("userData"), "data.json");
 const ipcKeys: {
 	[K: string]: (event: Electron.IpcMainInvokeEvent, ...args: any[]) => any
 } = {
@@ -169,7 +170,9 @@ const ipcKeys: {
 		});
 		if (!openDialog.canceled) {
 			// console.log(0);
-			const { rows, errors } = await readXlsxFile(Buffer.from(fs.readFileSync(openDialog.filePaths[0])), { schema: schemas[language] as Schema });
+			const { rows, errors } = await readXlsxFile(Buffer.from(fs.readFileSync(openDialog.filePaths[0])), { schema: schemas[language] });
+			// const { rows, errors } = await readXlsxFile(Buffer.from(fs.readFileSync(openDialog.filePaths[0])), { schema: mergedSchema as Schema });
+			console.log(rows);
 			// console.log(1);
 			const importedStudents = rows as unknown as XlsxStudent[];
 			// console.log(2);
@@ -215,16 +218,16 @@ const ipcKeys: {
 		dataString = jsonData;
 		// data = JSON.parse(dataString);
 		// console.log(dataString);
-		const appData = app.getPath("appData");
-		fs.promises.writeFile(path.join(appData, "data.json"), dataString);
+		// const appData = app.getPath("appData");
+		fs.promises.writeFile(dataFilePath, dataString);
 		// data = JSON.parse((await fs.promises.readFile(path.join(app.getPath("appData"), "data.json"))).toString("utf-8"));
 	}
 };
 app.on('ready', async () => {
 	// if (!fs.existsSync(path.join(app.getPath("userData"), "settings.json"))) setSetting("language", "da");
-	if (fs.existsSync(path.join(app.getPath("appData"), "data.json"))) {
-		console.log(path.join(app.getPath("appData"), "data.json"));
-		const fileString = (await fs.promises.readFile(path.join(app.getPath("appData"), "data.json"))).toString("utf-8");
+	console.log(dataFilePath);
+	if (fs.existsSync(dataFilePath)) {
+		const fileString = (await fs.promises.readFile(dataFilePath)).toString("utf-8");
 		if (fileString[0] == "{" && fileString[fileString.length - 1] == "}") {
 			data = JSON.parse(fileString);
 		}

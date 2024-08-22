@@ -2,7 +2,7 @@
 import { Data, IPage as _Page } from "src/classes";
 import Page from "../Page.vue";
 import IconButton from "../IconButton.vue";
-import { BotIcon, BotOffIcon, BrainCogIcon, FlaskConicalIcon, GraduationCapIcon, GripVerticalIcon, Import, Link2Icon, Link2OffIcon, PackageIcon, PackagePlusIcon, PlayIcon, PlusCircleIcon, PlusIcon, RotateCwIcon, SettingsIcon, SparklesIcon, SquareDotIcon, Unlink2Icon, UsersIcon, ViewIcon } from "lucide-vue-next";
+import { ArmchairIcon, BotIcon, BotOffIcon, BrainCogIcon, FlaskConicalIcon, GraduationCapIcon, GripVerticalIcon, Import, Link2Icon, Link2OffIcon, PackageIcon, PackagePlusIcon, PlayIcon, PlusCircleIcon, PlusIcon, RotateCwIcon, SettingsIcon, SparklesIcon, SquareDotIcon, Unlink2Icon, UsersIcon, ViewIcon } from "lucide-vue-next";
 import PageSection from "../PageSection.vue";
 import Widget from "../Widget.vue";
 import BelbinCompass from "../BelbinCompass.vue";
@@ -99,12 +99,13 @@ function runAlgorithm() {
         setTimeout(_runAlgorithm, 500);
     } else _runAlgorithm();
 }
+const seats = computed(() => teams.query({state: 'proposed'}).reduce((sum, team) => sum += teams.limitOf(team), 0));
 </script>
 <template>
     <Page :page="page" :current-page="currentPage">
 
         <!-- Students ################################################################################################## -->
-        <PageSection :icon="GraduationCapIcon" :title="$t('student', 2)" class="" :overflow-hidden="true" min-deployment-height="25%" custom @dragover="e => e.preventDefault()" @drop="util.dropStudentBack">
+        <PageSection :icon="GraduationCapIcon" :title="$t('student', 2)" class="" :overflow-hidden="true" custom @dragover="e => e.preventDefault()" @drop="util.dropStudentBack">
             <template #options>
                 <IconButton :icon="RotateCwIcon" :tooltip="`${$t('reset')} ${$t('student', 2)}`" @click="reload"></IconButton>
             </template>
@@ -134,6 +135,13 @@ function runAlgorithm() {
         <!-- Teams ###################################################################################################### -->
         <PageSection :icon="UsersIcon" :title="$t('team', 2)" class="" :overflow-hidden="true">
             <template #options>
+                <TooltipItem :text="`${students.all?.length} ${$t('student', 2)} / ${seats} ${$t('seat', 2)}`" class="flex text-xs font-bold items-center gap-1 rounded bg-white/80 p-1 border border-gray text-gray-dark font-mono">
+                    <GraduationCapIcon class=" size-4"></GraduationCapIcon>
+                    <span> {{ students.all?.length }}</span>
+                    <span>/</span>
+                    <ArmchairIcon class=" size-4"></ArmchairIcon>
+                    <span>{{ seats }}</span>
+                </TooltipItem>
                 <IconButton :icon="PackagePlusIcon" :tooltip="`${$t('package_2')} ${$t('team', 2)}`"
                     @click="teams.packageProposed"
                 ></IconButton>
@@ -150,7 +158,7 @@ function runAlgorithm() {
                 </OptionsDropdown> -->
             </template>
             <template #tray>
-                <div class="flex gap-1">
+                <div class="flex gap-1 flex-wrap">
                     <!-- <IconToggle v-model="settings.all.tabsLinked" :states="[
                         {
                             icon: Link2OffIcon,

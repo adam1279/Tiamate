@@ -23,7 +23,7 @@ export const defaultSettings = {
 export type ISettings = typeof defaultSettings;
 export const useSettingsStore = defineStore("settings", () => {
     const { t, locale } = useI18n();
-    const all = ref({...defaultSettings});
+    const all = ref({...defaultSettings, automation: {...defaultSettings.automation}});
     const allDefault = ref(defaultSettings);
     const util = useUtilitiesStore();
     onMounted(async () => {

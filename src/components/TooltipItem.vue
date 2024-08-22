@@ -18,10 +18,10 @@ function updateTooltip(clear?: boolean) {
     <!-- <component v-if="(wrapper)" :is="wrapper" @mouseenter="e => updateTooltip()" @mouseleave="e => updateTooltip(true)">
         <slot></slot>
     </component> -->
-    <g v-if="svg" @mouseenter="e => updateTooltip()" @mouseleave="e => updateTooltip(true)">
+    <g v-bind="$attrs" v-if="svg" @mouseenter="e => updateTooltip()" @mouseleave="e => updateTooltip(true)">
         <slot></slot>
     </g>
-    <div v-else @mouseenter="e => updateTooltip()" @mouseleave="e => updateTooltip(true)">
+    <div v-bind="$attrs" v-else @mouseenter="e => updateTooltip()" @mouseleave="e => updateTooltip(true)">
         <slot></slot>
     </div>
     <!-- <slot @mouseenter="e => updateTooltip()" @mouseleave="e => updateTooltip(true)"></slot> -->

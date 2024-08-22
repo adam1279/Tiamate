@@ -47,8 +47,8 @@ function addStudent() {
                     :tooltip="`${$t('add')} ${$t('student')}`"
                     @click="addStudent"
                 ></IconButton>
-                <IconButton :icon="ImportIcon" :tooltip="`${$t('import')} ${$t('filled-out')} ${$t('spreadsheet template')}`" @click="importTemplate"></IconButton>
-                <IconButton :icon="FileSpreadsheetIcon" :tooltip="`Download ${$t('spreadsheet template')}`" @click="downloadTemplate"></IconButton>
+                <IconButton :icon="ImportIcon" :tooltip="`${$t('import')} ${$t('filled-out')} spreadsheet${$t('connectingSpace3')}${$t('template')}`" @click="importTemplate"></IconButton>
+                <IconButton :icon="FileSpreadsheetIcon" :tooltip="`Download spreadsheet${$t('connectingSpace3')}${$t('template')}`" @click="downloadTemplate"></IconButton>
             </template>
             <div class="flex flex-col grow overflow-y-auto" ref="studentsSection">
                 <Widget class="flex grow">

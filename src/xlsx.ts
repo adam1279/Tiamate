@@ -152,5 +152,6 @@ const enSchema = {
 };
 export const schemas: Record<Language, Schema> = {
 	"da": daSchema,
-	"en": enSchema
+	"en": enSchema,
 }
+export const mergedSchema = {...daSchema, ...enSchema};

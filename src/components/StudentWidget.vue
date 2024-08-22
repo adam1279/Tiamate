@@ -32,7 +32,7 @@ const previousTeamCount = computed(() => (props.otherStudents) ? students.previo
             <GripVerticalIcon :size="20" class=" cursor-move shrink-0" ></GripVerticalIcon>
         </TooltipItem>
         <EyeIcon v-else :size="20" class=" shrink-0" ></EyeIcon>
-        <TooltipItem :text="student.name+(otherStudents ? ` - ${previousTeamCount} ${$t('previous')} ${$t('team')+$t('connectingSpace')+$t('member', previousTeamCount > 1 ? 2 : 1)}` : '')" class=" flex overflow-hidden grow items-center gap-1" >
+        <TooltipItem :text="student.name+(otherStudents ? ` - ${previousTeamCount} ${$t('previous')} ${$t('team')+$t('connectingSpace')+$t('member', previousTeamCount == 1 ? 1 : 2)}` : '')" class=" flex overflow-hidden grow items-center gap-1" >
             <span class=" text-black text-ellipsis overflow-hidden text-nowrap grow">
                 {{ student.name }}
             </span>

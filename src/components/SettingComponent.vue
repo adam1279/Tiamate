@@ -4,6 +4,7 @@ import OptionsDropdown, { Option } from './OptionsDropdown.vue';
 import { CheckSquareIcon, ChevronDownIcon, RotateCcwIcon, SquareIcon } from 'lucide-vue-next';
 import IconToggle, { State } from './IconToggle.vue';
 import IconButton from './IconButton.vue';
+import { useUtilitiesStore } from '../stores/useUtilities';
 type AcceptableType = string | number | boolean;
 const value = defineModel<AcceptableType>();
 // const inputType = computed(() => {
@@ -12,6 +13,7 @@ const value = defineModel<AcceptableType>();
 //             return 
 //     }
 // });
+const util = useUtilitiesStore();
 const props = defineProps<{
     options?: Option[],
     title: string,
@@ -58,7 +60,7 @@ const _states = computed(() => {
             </div>
             <div class="flex min-h-full w-full items-center" v-else>
                 <input :data-horizontal="horizontal" :type="type" v-model="value" class=" rounded data-[horizontal=false]:rounded-l-none w-full min-h-full min-w-10 bg-transparent grow flex" :placeholder="placeholder">
-                <IconButton v-if="value != defaultValue" :tooltip="$t('reset')" :icon="RotateCcwIcon" size="size-4" class="px-1 text-gray" @click="value = defaultValue"></IconButton>
+                <IconButton v-if="value != defaultValue" :tooltip="`${$t('reset')} ${$t('to')} ${util.xIfTrueThenY(defaultValue, placeholder)}`" :icon="RotateCcwIcon" size="size-4" class="px-1 text-gray" @click="value = defaultValue"></IconButton>
             </div>
         </div>
     </div>
