@@ -2,9 +2,9 @@
 import { onMounted, ref, watch } from 'vue';
 import IconButton from './IconButton.vue';
 import { useUtilitiesStore } from '../stores/useUtilities';
-import { SquareIcon } from 'lucide-vue-next';
+import { LucideIcon, SquareIcon } from 'lucide-vue-next';
 export interface State {
-    icon?: Object,
+    icon?: LucideIcon,
     click?: Function,
     tooltip?: string
     value?: any
@@ -32,5 +32,5 @@ function performAction() {
 }
 </script>
 <template>
-    <IconButton :size="size" :icon="util.xIfTrueThenY(states[currentStateLocal ? 1 : 0].icon, SquareIcon)" :tooltip="util.xIfTrueThenY(states[currentStateLocal ? 1 : 0].tooltip, '')" @click="performAction" :extend-class="extendClass"></IconButton>
+    <IconButton :size="size" :icon="states[currentStateLocal ? 1 : 0].icon || SquareIcon" :tooltip="states[currentStateLocal ? 1 : 0].tooltip || ''" @click="performAction" :extend-class="extendClass"></IconButton>
 </template>

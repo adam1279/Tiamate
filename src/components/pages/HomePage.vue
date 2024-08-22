@@ -13,6 +13,7 @@ const props = defineProps<{
 }>();
 const students = useStudentsStore();
 const util = useUtilitiesStore();
+// const { t } = util;
 </script>
 <template>
     <Page :page="page" :current-page="currentPage">
@@ -34,6 +35,7 @@ const util = useUtilitiesStore();
                 </Widget>
             </div> -->
             <span>Hey!</span>
+            <span>{{ $t("member", 2) }}</span>
         </PageSection>
         <!-- <button @click="saveExcel">Save Excel</button> -->
     </Page>

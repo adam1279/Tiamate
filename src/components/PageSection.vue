@@ -1,15 +1,15 @@
 <script setup lang="ts">
-import { ChevronDownIcon, ChevronRightIcon, CornerDownLeftIcon, SettingsIcon } from 'lucide-vue-next';
+import { ChevronDownIcon, ChevronRightIcon, CornerDownLeftIcon, LucideIcon, SettingsIcon } from 'lucide-vue-next';
 import { useUtilitiesStore } from '../stores/useUtilities';
 import { computed, ref } from 'vue';
 import IconButton from './IconButton.vue';
 import { Panel, PanelGroup, PanelResizeHandle } from "vue-resizable-panels";
 const props = defineProps<{
     title: string,
-    icon: Object,
+    icon: LucideIcon,
     closed?: boolean,
     custom?: boolean,
-    trayIcon?: Object,
+    trayIcon?: LucideIcon,
     trayTooltip?: string,
     overflowHidden?: boolean,
     nonCollapsible?: boolean
@@ -42,7 +42,7 @@ const checkScroll = (e: Event) => {
             </div>
             <div class="flex flex-row gap-2 items-center pl-5">
                 <slot name="options"></slot>
-                <IconButton v-if="$slots.tray" :icon="util.xIfTrueThenY(trayIcon, SettingsIcon)" @click="trayOpen = !trayOpen" :tooltip="util.xIfTrueThenY(trayTooltip, $t('setting', 2))"></IconButton>
+                <IconButton v-if="$slots.tray" :icon="trayIcon || SettingsIcon" @click="trayOpen = !trayOpen" :tooltip="trayTooltip || $t('setting', 2)"></IconButton>
             </div>
         </div>
         <Transition leave-from-class="opacity-100 max-h-96" leave-to-class="opacity-0 max-h-0 no-scrollbar" leave-active-class="transition-all no-scrollbar" enter-to-class="opacity-100 max-h-96" enter-active-class="transition-all no-scrollbar" enter-from-class="opacity-0 max-h-0 no-scrollbar">

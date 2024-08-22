@@ -22,6 +22,7 @@ import TooltipItem from './TooltipItem.vue';
 import gsap from 'gsap';
 import EvalLabel from './EvalLabel.vue';
 import SettingComponent from './SettingComponent.vue';
+import NumberAnimation from './NumberAnimation.vue';
 const { t } = useI18n();
 const props = defineProps<{
     team: Team,
@@ -42,7 +43,7 @@ const genderMakeup = computed(() => {
     console.log(array);
     const obj: {[k:string]: number} = {};
     array.forEach(gender => {
-        obj[gender] = util.xIfTrueThenY(obj[gender], 0) + 1;
+        obj[gender] = (obj[gender] || 0) + 1;
     });
     const colors = ["var(--color-tiamate-blue)", "var(--color-tiamate-red)", "var(--color-purple)"];
     return Object.keys(obj).map((key, index) => {
@@ -161,7 +162,11 @@ const defaultTitle = computed(() => util.capitalizeFirstLetter(`${t('team', 1)} 
                 </div> -->
                 <EvalLabel :tooltip="`${$t('team')} ${$t('balance')}`" :icon="ScaleIcon">
                     {{ balanceTweened.number.toString().slice(0, 4).replace(".", $t("decimalPoint")) }}%
+                    <!-- <NumberAnimation :number="balance"></NumberAnimation> -->
                 </EvalLabel>
+                <!-- <EvalLabel :tooltip="`${$t('team')} ${$t('balance')}`" :icon="ScaleIcon" :values="[teams.evaluateBelbin(allStudents)]">
+
+                </EvalLabel> -->
 
             </template>
             <!-- <template #pie>

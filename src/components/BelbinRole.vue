@@ -2,6 +2,9 @@
 import TooltipItem from "./TooltipItem.vue";
 import { computed } from "vue";
 import { Belbin } from "../classes/Belbin";
+import { useUtilitiesStore } from "../stores/useUtilities";
+const util = useUtilitiesStore();
+// const { t } = util;
 const props = defineProps<{
     role: Belbin
 }>();

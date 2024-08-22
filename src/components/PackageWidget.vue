@@ -14,6 +14,7 @@ const props = defineProps<{
     index: number
 }>();
 const util = useUtilitiesStore();
+// const { t, tm } = util;
 const teams = useTeamsStore();
 const packages = usePackagesStore();
 const packTeams = computed(() => teams.ofPackage(props.package));

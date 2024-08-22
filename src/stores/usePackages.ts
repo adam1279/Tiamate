@@ -11,7 +11,7 @@ export const usePackagesStore = defineStore("packages", () => {
     const util = useUtilitiesStore();
     const teams = useTeamsStore();
     onMounted(async () => {
-        all.value = util.xIfTrueThenY((await window.electron.data.get())?.packages?.map(pack => new Package(pack)), []);
+        all.value = (await window.electron.data.get())?.packages?.map(pack => new Package(pack)) || [];
     });
     function add(teams: Team[]) {
         all.value.push(new Package({teams: teams.map(team => team.id)}));

@@ -24,7 +24,7 @@ function select(option: Option) {
         </template>
         <ul class=" divide-y divide-gray">
             <OptionsItem v-for="option of options" :icon="option.icon" @click="select(option)" :red="option.red">
-                <span class=" first-letter:uppercase inline-block">{{ $t(option.text) }}</span>
+                <span class=" first-letter:uppercase inline-block">{{ option.text }}</span>
             </OptionsItem>
         </ul>
     </DropdownMenu>

@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import {IPage} from "../classes";
+import { useUtilitiesStore } from "../stores/useUtilities";
+const util = useUtilitiesStore();
+// const { t } = util;
 const props = defineProps<{
     page: IPage,
     currentPage: string

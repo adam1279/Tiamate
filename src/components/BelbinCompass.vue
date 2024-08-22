@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import TooltipItem from './TooltipItem.vue';
 import { CircleAlertIcon, CogIcon, CrosshairIcon, HeartHandshakeIcon, LightbulbIcon, MegaphoneIcon, MicroscopeIcon, PhoneIcon, RocketIcon, WrenchIcon } from 'lucide-vue-next';
-import { computed, ref } from 'vue';
+import { computed, markRaw, ref } from 'vue';
 import TransitionTemplate from './TransitionTemplate.vue';
 import { Student } from 'src/classes/Student';
 import { Belbin } from '../classes/Belbin';
+import { useUtilitiesStore } from '../stores/useUtilities';
 
 const props = defineProps<{
     students?: Student[],
@@ -15,6 +16,8 @@ const props = defineProps<{
 }>();
 const _3rd = 30;
 const _half = 45;
+const util = useUtilitiesStore();
+// const { t } = util;
 // const belbinLib = new Map<Belbin.Role, {angle: number, icon: Object, add?: number}>([
 //     ["Resource Investigator", {
 //         angle: _3rd,
