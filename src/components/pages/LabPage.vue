@@ -23,6 +23,7 @@ import { useSettingsStore } from "../../stores/useSettings";
 import gsap from "gsap";
 import SettingComponent from "../SettingComponent.vue";
 import TeamContainer from "../TeamContainer.vue";
+import { Panel, PanelGroup, PanelResizeHandle } from "vue-resizable-panels";
 const props = defineProps<{
     page: _Page,
     currentPage: string
@@ -105,160 +106,175 @@ const seats = computed(() => teams.query({state: 'proposed'}).reduce((sum, team)
     <Page :page="page" :current-page="currentPage">
 
         <!-- Students ################################################################################################## -->
-        <PageSection :icon="GraduationCapIcon" :title="$t('student', 2)" class="" :overflow-hidden="true" custom @dragover="e => e.preventDefault()" @drop="util.dropStudentBack">
-            <template #options>
-                <IconButton :icon="RotateCwIcon" :tooltip="`${$t('reset')} ${$t('student', 2)}`" @click="reload"></IconButton>
-            </template>
-            <div class=" flex grow flex-wrap gap-1 overflow-y-auto select-none drag-none snap-y snap-mandatory">
-                <!-- <TransitionTemplate fade group
-                    :transition="{
-                        leaveFrom: 'max-w-10',
-                        leaveTo: 'max-w-0'
-                    }"
-                > -->
-                    <StudentWidget v-for="student of unassignedStudents"
-                        class=" snap-start snap-always"
-                        :student="student"
-                        :key="student.id"
-                        state="unassigned"
-                    >
-                    </StudentWidget>
-                    <!-- <div v-if="students.query({state: 'unassigned'}).length == 0" class=""></div> -->
-                <!-- </TransitionTemplate> -->
-                
-                <div v-if="students.all?.length == 0" class=" italic text-gray">
-                    {{ $t("letsbegin", {msg: $t("student", 2)}) }}
+        <PanelGroup direction="vertical">
+            <Panel :default-size="30" :min-size="20">
+            <PageSection :icon="GraduationCapIcon" :title="$t('student', 2)" class=" h-full" :overflow-hidden="true" custom @dragover="e => e.preventDefault()" @drop="util.dropStudentBack" :non-collapsible="true">
+                <template #options>
+                    <IconButton :icon="RotateCwIcon" :tooltip="`${$t('reset')} ${$t('student', 2)}`" @click="reload"></IconButton>
+                </template>
+                <div class=" flex grow flex-wrap gap-1 overflow-y-auto select-none drag-none snap-y snap-mandatory">
+                    <!-- <TransitionTemplate fade group
+                        :transition="{
+                            leaveFrom: 'max-w-10',
+                            leaveTo: 'max-w-0'
+                        }"
+                    > -->
+                        <StudentWidget v-for="student of unassignedStudents"
+                            class=" snap-start snap-always"
+                            :student="student"
+                            :key="student.id"
+                            state="unassigned"
+                        >
+                        </StudentWidget>
+                        <!-- <div v-if="students.query({state: 'unassigned'}).length == 0" class=""></div> -->
+                    <!-- </TransitionTemplate> -->
+            
+                    <div v-if="students.all?.length == 0" class=" italic text-gray">
+                        {{ $t("letsbegin", {msg: $t("student", 2)}) }}
+                    </div>
                 </div>
-            </div>
-        </PageSection>
+            </PageSection></Panel>
+            <PanelResizeHandle class="h-[1px] w-full bg-gray transition-all items-center flex z-50 group">
+                <div class=" h-1 group-hover:w-32 group-hover:h-2 w-10 bg-white border border-gray mx-auto rounded-full transition-all"></div>
+            </PanelResizeHandle>
 
-        <!-- Teams ###################################################################################################### -->
-        <PageSection :icon="UsersIcon" :title="$t('team', 2)" class="" :overflow-hidden="true">
-            <template #options>
-                <TooltipItem :text="`${students.all?.length} ${$t('student', 2)} / ${seats} ${$t('seat', 2)}`" class="flex text-xs font-bold items-center gap-1 rounded bg-white/80 p-1 border border-gray text-gray-dark font-mono">
-                    <GraduationCapIcon class=" size-4"></GraduationCapIcon>
-                    <span> {{ students.all?.length }}</span>
-                    <span>/</span>
-                    <ArmchairIcon class=" size-4"></ArmchairIcon>
-                    <span>{{ seats }}</span>
-                </TooltipItem>
-                <IconButton :icon="PackagePlusIcon" :tooltip="`${$t('package_2')} ${$t('team', 2)}`"
-                    @click="teams.packageProposed"
-                ></IconButton>
-                
-                <IconButton :icon="PlusCircleIcon" :tooltip="`${$t('new')} ${$t('team')}`" @click="teams.add" ></IconButton>
-                <!-- <OptionsDropdown :options="[
-                    {
-                        icon: Link2Icon,
-                        text: `${$t('unlink')} ${$t('tab', 2)}`,
-                        click: () => {}
-                    }
-                ]">
-                    <IconButton :icon="SettingsIcon" :tooltip="$t('setting', 2)"></IconButton>
-                </OptionsDropdown> -->
-            </template>
-            <template #tray>
-                <div class="flex gap-1 flex-wrap">
-                    <!-- <IconToggle v-model="settings.all.tabsLinked" :states="[
-                        {
-                            icon: Link2OffIcon,
-                            tooltip: `${$t('link_2')} ${$t('tab', 2)}`,
-                        },
+            <!-- Teams ###################################################################################################### -->
+            <Panel class=" border-b border-gray">
+            <PageSection :icon="UsersIcon" :title="$t('team', 2)" class=" h-full" :overflow-hidden="true" :non-collapsible="true">
+                <template #options>
+                    <TooltipItem :text="`${students.all?.length} ${$t('student', 2)} / ${seats} ${$t('seat', 2)}`" class="flex text-xs font-bold items-center gap-1 rounded bg-white/80 p-1 border border-gray text-gray-dark font-mono">
+                        <GraduationCapIcon class=" size-4"></GraduationCapIcon>
+                        <span> {{ students.all?.length }}</span>
+                        <span>/</span>
+                        <ArmchairIcon class=" size-4"></ArmchairIcon>
+                        <span>{{ seats }}</span>
+                    </TooltipItem>
+                    <IconButton :icon="PackagePlusIcon" :tooltip="`${$t('package_2')} ${$t('team', 2)}`"
+                        @click="teams.packageProposed"
+                    ></IconButton>
+            
+                    <IconButton :icon="PlusCircleIcon" :tooltip="`${$t('new')} ${$t('team')}`" @click="teams.add" ></IconButton>
+                    <!-- <OptionsDropdown :options="[
                         {
                             icon: Link2Icon,
-                            tooltip: `${$t('unlink')} ${$t('tab', 2)}`,
-                        },
-                    ]"></IconToggle> -->
-                    <SettingComponent v-model="settings.all.tabsLinked" :title="`${$t('link_2')} ${$t('tab', 2)}`"
-                        :states="[
+                            text: `${$t('unlink')} ${$t('tab', 2)}`,
+                            click: () => {}
+                        }
+                    ]">
+                        <IconButton :icon="SettingsIcon" :tooltip="$t('setting', 2)"></IconButton>
+                    </OptionsDropdown> -->
+                </template>
+                <template #tray>
+                    <div class="flex gap-1 flex-wrap">
+                        <!-- <IconToggle v-model="settings.all.tabsLinked" :states="[
                             {
-                                icon: Unlink2Icon,
+                                icon: Link2OffIcon,
+                                tooltip: `${$t('link_2')} ${$t('tab', 2)}`,
                             },
                             {
                                 icon: Link2Icon,
+                                tooltip: `${$t('unlink')} ${$t('tab', 2)}`,
                             },
-                        ]"
-                        class=" shadow-sm"
-                    ></SettingComponent>
-                    <SettingComponent
-                        v-model="settings.all.memberLimit"
-                        :title="`${$t('member limit')}`"
-                        type="number"
-                        :default-value="settings.allDefault.memberLimit"
-                        input-width="w-60"
-                        class=" shadow-sm"
-                    ></SettingComponent>
-                    <SettingComponent
-                        v-model="settings.all.resetOnPackaging"
-                        :title="`${$t('reset')} ${$t('student', 2)} ${$t('on')} ${$t('packaging')}`"
-                        class=" shadow-sm"
-                    >
-
-                    </SettingComponent>
-                </div>
-            </template>
-            <!-- <TransitionGroup leave-from-class="opacity-100" leave-to-class="opacity-0" leave-active-class="transition-all" enter-to-class="opacity-100" enter-from-class="opacity-0" enter-active-class="transition-all">
-                <TeamWidget :index="index" :team="team" :assigned-students="teamStudents(team)" :previewed-students="previewedStudents" v-for="(team, index) of teams" :key="team.id" :current-tab="(tabsLinked) ?currentTab : undefined" @tab-change="tab => currentTab = tab" @delete="deleteTeams(team)">
-                    
-                </TeamWidget>
-            </TransitionGroup> -->
-            <!-- <div class=" min-h-72 flex-wrap flex flex-row gap-3"> -->
-            <TeamContainer class="">
-                <TransitionTemplate group fade>
-                    <TeamWidget :index="index"
-                        :team="team"
-                        v-for="(team, index) of teams.query({state: 'proposed'})"
-                        :key="team.id"
-                        :current-tab="(settings.all.tabsLinked) ? currentTab : undefined"
-                        @tab-change="tab => currentTab = tab"
-                        @delete="teams.deleteTeam(team)"
-                        @drop="util.dropStudent(team)"
-                        @dragover="e => e.preventDefault()"
-                        :data-full="team.full && util.draggedStudent != undefined"
-                        class=" data-[full=true]:cursor-no-drop"
-                    >
-                        
+                        ]"></IconToggle> -->
+                        <SettingComponent v-model="settings.all.tabsLinked" :title="`${$t('link_2')} ${$t('tab', 2)}`"
+                            :states="[
+                                {
+                                    icon: Unlink2Icon,
+                                },
+                                {
+                                    icon: Link2Icon,
+                                },
+                            ]"
+                            class=" shadow-sm"
+                        ></SettingComponent>
+                        <SettingComponent
+                            v-model="settings.all.memberLimit"
+                            :title="`${$t('member limit')}`"
+                            type="number"
+                            :default-value="settings.allDefault.memberLimit"
+                            input-width="w-60"
+                            class=" shadow-sm"
+                        ></SettingComponent>
+                        <SettingComponent
+                            v-model="settings.all.resetOnPackaging"
+                            :title="`${$t('reset')} ${$t('student', 2)} ${$t('on')} ${$t('packaging')}`"
+                            class=" shadow-sm"
+                        >
+                        </SettingComponent>
+                    </div>
+                </template>
+                <!-- <TransitionGroup leave-from-class="opacity-100" leave-to-class="opacity-0" leave-active-class="transition-all" enter-to-class="opacity-100" enter-from-class="opacity-0" enter-active-class="transition-all">
+                    <TeamWidget :index="index" :team="team" :assigned-students="teamStudents(team)" :previewed-students="previewedStudents" v-for="(team, index) of teams" :key="team.id" :current-tab="(tabsLinked) ?currentTab : undefined" @tab-change="tab => currentTab = tab" @delete="deleteTeams(team)">
+            
                     </TeamWidget>
-                </TransitionTemplate>
-                <div v-if="teams.query({state: 'proposed'}).length == 0" class="italic text-gray">
-                    {{ $t("letsbegin", {msg: $t("team", 2)}) }}
+                </TransitionGroup> -->
+                <!-- <div class=" min-h-72 flex-wrap flex flex-row gap-3"> -->
+                <TeamContainer class="">
+                    <TransitionTemplate group fade>
+                        <TeamWidget :index="index"
+                            :team="team"
+                            v-for="(team, index) of teams.query({state: 'proposed'})"
+                            :key="team.id"
+                            :current-tab="(settings.all.tabsLinked) ? currentTab : undefined"
+                            @tab-change="tab => currentTab = tab"
+                            @delete="teams.deleteTeam(team)"
+                            @drop="util.dropStudent(team)"
+                            @dragover="e => e.preventDefault()"
+                            :data-full="team.full && util.draggedStudent != undefined"
+                            class=" data-[full=true]:cursor-no-drop"
+                        >
+            
+                        </TeamWidget>
+                    </TransitionTemplate>
+                    <div v-if="teams.query({state: 'proposed'}).length == 0" class="italic text-gray">
+                        {{ $t("letsbegin", {msg: $t("team", 2)}) }}
+                    </div>
+                </TeamContainer>
+            </PageSection></Panel>
+            <!-- <PanelResizeHandle class="h-1 w-full bg-gray"/> -->
+
+            <!-- Automation ################################################################################################### -->
+            <PageSection :icon="SparklesIcon" :title="`${$t('automatic')} ${$t('team creation')}`">
+                <template #options>
+                    <span>{{ trialCount }}</span>
+                    <IconButton :icon="PlayIcon" :tooltip="`${$t('run')} ${$t('automatic')} ${$t('team creation')}`" @click="runAlgorithm"></IconButton>
+                </template>
+                <div class="flex flex-col grow">
+                    <Widget class=" grow items-start grid lg:grid-cols-3 gap-1">
+                        <SettingComponent
+                            v-model.number="settings.all.automation.trialLimit"
+                            :title="`${$t('trial')}${$t('connectingSpace2')}${$t('limit')}`"
+                            class=""
+                            type="number"
+                            :default-value="settings.allDefault.automation.trialLimit"
+                            horizontal
+                        >
+                        </SettingComponent>
+                        <SettingComponent
+                            v-model.number="settings.all.automation.maxUnfilledRoles"
+                            :title="`${$t('max')}. # ${$t('unfilled', 2)} ${$t('role', 2)} (ikke færdig)`"
+                            type="number"
+                            :default-value="settings.allDefault.automation.maxUnfilledRoles"
+                            horizontal
+                        >
+                        </SettingComponent>
+                        <!-- <input type="number" v-model.number="settings.all.automation.trialLimit">
+                        <input type="number" v-model.number="settings.all.automation.maxUnfilledRoles"> -->
+                        <!-- <div class="flex p-1 rounded bg-gray-light">
+                            <IconButton :icon="PlayIcon" :tooltip="$t('play')" @click="runAlgorithm"></IconButton>
+                        </div> -->
+                    </Widget>
                 </div>
-            </TeamContainer>
-        </PageSection>
-
-        <!-- Automation ################################################################################################### -->
-        <PageSection :icon="SparklesIcon" :title="`${$t('automatic')} ${$t('team creation')}`">
-            <template #options>
-                <span>{{ trialCount }}</span>
-                <IconButton :icon="PlayIcon" :tooltip="`${$t('run')} ${$t('automatic')} ${$t('team creation')}`" @click="runAlgorithm"></IconButton>
-            </template>
-            <div class="flex flex-col grow">
-                <Widget class=" grow items-start grid lg:grid-cols-3 gap-1">
-                    <SettingComponent 
-                        v-model.number="settings.all.automation.trialLimit"
-                        :title="`${$t('trial')}${$t('connectingSpace2')}${$t('limit')}`"
-                        class=""
-                        type="number"
-                        :default-value="settings.allDefault.automation.trialLimit"
-                        horizontal
-                    >
-                    </SettingComponent>
-                    <SettingComponent
-                        v-model.number="settings.all.automation.maxUnfilledRoles"
-                        :title="`${$t('max')}. # ${$t('unfilled', 2)} ${$t('role', 2)} (ikke færdig)`"
-                        type="number"
-                        :default-value="settings.allDefault.automation.maxUnfilledRoles"
-                        horizontal
-                    >
-
-                    </SettingComponent>
-                    <!-- <input type="number" v-model.number="settings.all.automation.trialLimit">
-                    <input type="number" v-model.number="settings.all.automation.maxUnfilledRoles"> -->
-                    <!-- <div class="flex p-1 rounded bg-gray-light">
-                        <IconButton :icon="PlayIcon" :tooltip="$t('play')" @click="runAlgorithm"></IconButton>
-                    </div> -->
-                </Widget>
-            </div>
-        </PageSection>
+            </PageSection>
+            <!-- <PanelGroup direction="vertical">
+                <Panel>
+                    <Widget></Widget>
+                </Panel>
+                <PanelResizeHandle class=" bg-red-700 h-1 w-full"/>
+                <Panel>
+                    <Widget></Widget>
+                </Panel>
+            </PanelGroup> -->
+        </PanelGroup>
     </Page>
 </template>
