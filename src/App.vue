@@ -21,7 +21,7 @@ const pages = ref<IPage[]>([
         title: "Home",
         id: "home",
         icon: HomeIcon,
-        component: HomePage,
+        component: markRaw(HomePage),
         main: true
     },
     {
@@ -29,28 +29,28 @@ const pages = ref<IPage[]>([
         id: "students",
         icon: GraduationCapIcon,
         // component: StudentsPage,
-        component: StudentsPage,
+        component: markRaw(StudentsPage),
         main: true
     },
     {
         title: "Lab",
         id: "lab",
         icon: PencilRulerIcon,
-        component: LabPage,
+        component: markRaw(LabPage),
         main: true
     },
     {
         title: "Teams",
         id: "teams",
         icon: UsersIcon,
-        component: TeamsPage,
+        component: markRaw(TeamsPage),
         main: true
     },
     {
         title: "Info",
         id: "info",
         icon: InfoIcon,
-        component: InfoPage,
+        component: markRaw(InfoPage),
         main: true
     },
     // {

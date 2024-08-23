@@ -3,12 +3,15 @@ import { IPage } from 'src/classes';
 import { languages, useSettingsStore } from '../stores/useSettings';
 import { computed } from 'vue';
 import { GlobeIcon } from 'lucide-vue-next';
+import { useUtilitiesStore } from '../stores/useUtilities';
 const props = defineProps<{
     deployed: boolean,
     pages: IPage[],
     currentPage: string
 }>();
 const settings = useSettingsStore();
+const util = useUtilitiesStore();
+const { t } = util;
 const mainPages = computed(() => {
     return props.pages.filter(page => page.main);
 });
@@ -19,7 +22,7 @@ const mainPages = computed(() => {
             <img class=" h-24 mx-auto logo drag-none" src="/src/icons/Egg_logo_white.png">
             <span class="text-white font-bold mx-auto">Tiamate</span>
             <div class="flex-col flex">
-                <span class="text-white text-xs mx-auto italic">{{ $t("by") }}</span>
+                <span class="text-white text-xs mx-auto italic">{{ t("by") }}</span>
                 <span class="text-white italic text-xs mx-auto text-center">@adamthegolem</span>
             </div>
         </div>
@@ -31,12 +34,12 @@ const mainPages = computed(() => {
             </div> -->
             <!-- <Transition leave-from-class="opacity-100" leave-to-class="opacity-0" leave-active-class="transition-all" enter-to-class="opacity-100" enter-from-class="opacity-0" enter-active-class="transition-all"> -->
                 <div v-if="deployed" class="flex flex-row p-2 gap-2 border-transparent text-sm rounded data-[current=true]:bg-white data-[current=true]:text-gray-dark data-[current=true]:font-[550] data-[current=true]:shadow-sm hover:bg-white/20 transition-all grow capitalize cursor-pointer data-[current=true]:cursor-default" :data-current="currentPage == page.id">
-                    <component :is="page.icon" size="20"></component>
-                    <span>{{ $t('page.'+page.id) }}</span>
+                    <component :is="page.icon" :size="20"></component>
+                    <span>{{ t('page.'+page.id) }}</span>
 
                 </div>
                 <div v-else class=" hover:bg-white/20 p-2 transition-colors border-2 border-transparent data-[current=true]:border-l-white data-[current=true]:bg-white/5 cursor-pointer data-[current=true]:cursor-default" :data-current="currentPage == page.id">
-                    <component :is="page.icon" size="20"></component>
+                    <component :is="page.icon" :size="20"></component>
                 </div>
 
             <!-- </Transition> -->

@@ -90,7 +90,7 @@ const da = {
     gender_distribution: "kønsfordeling | kønsfordelinger",
     "unlock": "lås op",
     "lock": "lås",
-    "welcome": "velkommen",
+    welcome: "velkommen",
     "member limit": "medlemsgrænse | medlemsgrænser",
     da: "dansk",
     en: "english",
@@ -232,7 +232,7 @@ export const language: Record<Language, Partial<LangData>> = {
         remove: "remove",
         lock: "lock",
         unlock: "unlock",
-        
+        welcome: "welcome",
     }
     
 }

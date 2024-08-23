@@ -1,8 +1,11 @@
 <script setup lang="ts">
 import gsap from 'gsap';
+import { useUtilitiesStore } from '../stores/useUtilities';
 import { computed, onMounted, reactive, watch } from 'vue';
-import { useI18n } from 'vue-i18n';
-const { t } = useI18n();
+// import { useI18n } from 'vue-i18n';
+// const { t } = useI18n();
+const util = useUtilitiesStore();
+const { t } = util;
 const props = defineProps<{
     number: number,
     post?: (number: number) => string,

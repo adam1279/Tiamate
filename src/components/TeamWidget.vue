@@ -14,7 +14,7 @@ import { useTeamsStore } from '../stores/useTeams';
 import PieChart from './PieChart.vue';
 import PercentageBar from './PercentageBar.vue';
 import { useUtilitiesStore } from '../stores/useUtilities';
-import { useI18n } from 'vue-i18n';
+// import { useI18n } from 'vue-i18n';
 import MemberSlotBar from './MemberSlotBar.vue';
 import { useSettingsStore } from '../stores/useSettings';
 import { Team } from 'src/classes/Team';
@@ -23,7 +23,7 @@ import gsap from 'gsap';
 import EvalLabel from './EvalLabel.vue';
 import SettingComponent from './SettingComponent.vue';
 import NumberAnimation from './NumberAnimation.vue';
-const { t } = useI18n();
+// const { t } = useI18n();
 const props = defineProps<{
     team: Team,
     index: number,
@@ -32,6 +32,7 @@ const props = defineProps<{
 const teams = useTeamsStore();
 const students = useStudentsStore();
 const util = useUtilitiesStore();
+const { t } = util;
 const settings = useSettingsStore();
 const assignedStudents = computed(() => students.ofTeam(props.team));
 const previewedStudents = computed(() => props.team?.state != "packaged" ? students.query({previewing: true}) : []);
@@ -84,30 +85,30 @@ const defaultTitle = computed(() => util.capitalizeFirstLetter(`${t('team', 1)} 
                 <!-- <span class=" text-gray text-ellipsis shrink">#{{ team.id }}</span> -->
             </div>
             <div class="flex grow justify-end gap-1 items-center">
-                <!-- <IconButton :icon="EggIcon" :tooltip="`${$t('forward')} ${$tc('unpackaged', 1)}`"></IconButton> -->
+                <!-- <IconButton :icon="EggIcon" :tooltip="`${t('forward')} ${$tc('unpackaged', 1)}`"></IconButton> -->
                 <!-- <IconToggle :current-state="0" :states="[
                     {
                         icon: EggIcon,
-                        tooltip: `${$t('forward')} ${$tc('unpackaged', 1)}`,
+                        tooltip: `${t('forward')} ${$tc('unpackaged', 1)}`,
                         value: false
                     },
                     {
                         icon: EggOffIcon,
-                        tooltip: `${$t('undo')} ${$tc('forward_2', 1)}`,
+                        tooltip: `${t('undo')} ${$tc('forward_2', 1)}`,
                         value: true
                     }
                 ]" @update="state => {inactive = state; console.log(state)}"></IconToggle> -->
-                <TooltipItem :text="`${$t('member limit')} ${$t('exceeded')}`">
+                <TooltipItem :text="`${t('member limit')} ${t('exceeded')}`">
                     <CircleAlertIcon v-if="team.members.length > teams.limitOf(team)" class=" stroke-tiamate-red size-4"></CircleAlertIcon>
                 </TooltipItem>
                 <IconToggle v-if="team.state != 'packaged'" v-model="team.locked" :states="[
                     {
                         icon: LockOpenIcon,
-                        tooltip: `${$t('lock')}`,
+                        tooltip: `${t('lock')}`,
                     },
                     {
                         icon: LockIcon,
-                        tooltip: `${$t('unlock')}`,
+                        tooltip: `${t('unlock')}`,
                     }
                 ]"></IconToggle>
                 <IconButton v-if="team.state != 'packaged'" :icon="TrashIcon" tooltip="delete" color="red" @click="teams.deleteTeam(team)"></IconButton>
@@ -118,17 +119,17 @@ const defaultTitle = computed(() => util.capitalizeFirstLetter(`${t('team', 1)} 
         <TabNav :data-inactive="team.locked" class=" data-[inactive=true]:opacity-50 data-[inactive=true]:grayscale grow" :current-tab="currentTab" @tab-change="tab => $emit('tabChange', tab)"
             :tabs="[
                 {
-                    title: $t('member', 2),
+                    title: t('member', 2),
                     icon: CircleUserIcon,
                     id: 'members'
                 },
                 {
-                    title: $t('belbin_compass', 1),
+                    title: t('belbin_compass', 1),
                     icon: CompassIcon,
                     id: 'compass'
                 },
                 {
-                    title: `${$t('previous', 2)} ${$t('team', 2)}`,
+                    title: `${t('previous', 2)} ${t('team', 2)}`,
                     icon: HistoryIcon,
                     id: 'previousTeams'
                 }
@@ -136,7 +137,7 @@ const defaultTitle = computed(() => util.capitalizeFirstLetter(`${t('team', 1)} 
             :end-tabs="[
                 
                 {
-                    title: $t('setting', 2),
+                    title: t('setting', 2),
                     icon: SettingsIcon,
                     id: 'settings'
                 }
@@ -158,13 +159,13 @@ const defaultTitle = computed(() => util.capitalizeFirstLetter(`${t('team', 1)} 
                 </div>
                 <!-- <div class="flex p-1 rounded text-xs items-center gap-1 w-fit font-bold text-gray-dark absolute bottom-2 right-2 font-mono border border-gray bg-gray-light/50">
                     <ScaleIcon class="size-4 stroke-2"></ScaleIcon>
-                    <span>{{ balanceTweened.number.toString().slice(0, 4).replace(".", $t("decimalPoint")) }}%</span>
+                    <span>{{ balanceTweened.number.toString().slice(0, 4).replace(".", t("decimalPoint")) }}%</span>
                 </div> -->
-                <EvalLabel :tooltip="`${$t('team')} ${$t('balance')}`" :icon="ScaleIcon">
-                    {{ balanceTweened.number.toString().slice(0, 4).replace(".", $t("decimalPoint")) }}%
+                <EvalLabel :tooltip="`${t('team')} ${t('balance')}`" :icon="ScaleIcon">
+                    {{ balanceTweened.number.toString().slice(0, 4).replace(".", t("decimalPoint")) }}%
                     <!-- <NumberAnimation :number="balance"></NumberAnimation> -->
                 </EvalLabel>
-                <!-- <EvalLabel :tooltip="`${$t('team')} ${$t('balance')}`" :icon="ScaleIcon" :values="[teams.evaluateBelbin(allStudents)]">
+                <!-- <EvalLabel :tooltip="`${t('team')} ${t('balance')}`" :icon="ScaleIcon" :values="[teams.evaluateBelbin(allStudents)]">
 
                 </EvalLabel> -->
 
@@ -187,25 +188,25 @@ const defaultTitle = computed(() => util.capitalizeFirstLetter(`${t('team', 1)} 
                         <span class=" self-end px-1 rounded-r border-l border-gray bg-white font-mono">{{ amount }}</span>
                     </div>
                 </div>
-                <!-- <EvalLabel :tooltip="`${$t('average')} ${$t('')}`" :icon="CircleSlash2Icon"> -->
-                    <!-- {{ (previousTeamsTally) ? util.average(Object.values(previousTeamsTally)).toString().replace(".", $t("decimalPoint")) : "" }} -->
+                <!-- <EvalLabel :tooltip="`${t('average')} ${t('')}`" :icon="CircleSlash2Icon"> -->
+                    <!-- {{ (previousTeamsTally) ? util.average(Object.values(previousTeamsTally)).toString().replace(".", t("decimalPoint")) : "" }} -->
                 <!-- </EvalLabel> -->
             </template>
             <template #settings>
                 <div class="flex flex-col gap-1">
-                    <!-- <span class="grow uppercase text-xs text-gray">{{ `${$t("custom")} ${$t("member limit")}` }}</span>
+                    <!-- <span class="grow uppercase text-xs text-gray">{{ `${t("custom")} ${t("member limit")}` }}</span>
                     <input type="number" v-model.number="team.customLimit" :placeholder="settings.all.memberLimit.toString()"
                         class="shrink min-w-6 standard"
                     > -->
                     <SettingComponent v-model="team.name"
-                        :title="`${$t('team')}${$t('connectingSpace')}${$t('name')}`"
+                        :title="`${t('team')}${t('connectingSpace')}${t('name')}`"
                         horizontal
                         type="text"
                         :placeholder="defaultTitle"
                     >
 
                     </SettingComponent>
-                    <SettingComponent v-if="team.state != 'packaged'" v-model.number="team.customLimit" type="number" horizontal :title="`${$t('custom')} ${$t('member limit')}`"
+                    <SettingComponent v-if="team.state != 'packaged'" v-model.number="team.customLimit" type="number" horizontal :title="`${t('custom')} ${t('member limit')}`"
                         class="w-full"
                         :placeholder="settings.all.memberLimit.toString()"
                     ></SettingComponent>

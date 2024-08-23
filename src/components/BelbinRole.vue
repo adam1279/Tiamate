@@ -4,7 +4,7 @@ import { computed } from "vue";
 import { Belbin } from "../classes/Belbin";
 import { useUtilitiesStore } from "../stores/useUtilities";
 const util = useUtilitiesStore();
-// const { t } = util;
+const { t } = util;
 const props = defineProps<{
     role: Belbin
 }>();
@@ -22,7 +22,7 @@ const perc = computed(() => {
 </script>
 <template>
     <TooltipItem
-        :text="`${$t(role.role)} ${Math.round(role.percentage*100)}%`"
+        :text="`${t(role.role)} ${Math.round(role.percentage*100)}%`"
         class="
             relative
             flex bg-gradient-to-t

@@ -10,11 +10,14 @@ import { computed, onMounted, ref } from "vue";
 import { useTeamsStore } from "../../stores/useTeams";
 import { usePackagesStore } from "../../stores/usePackages";
 import PackageWidget from "../PackageWidget.vue";
+import { useUtilitiesStore } from "../../stores/useUtilities";
 const props = defineProps<{
     page: IPage,
     currentPage: string
 }>();
 const teams = useTeamsStore();
+const util = useUtilitiesStore();
+const { t } = util;
 const packages = usePackagesStore();
 const unpackagedTeams = computed(() => {
     return teams.all.filter(t => t.state == "unpackaged");
@@ -22,7 +25,7 @@ const unpackagedTeams = computed(() => {
 </script>
 <template>
     <Page :page="page" :current-page="currentPage">
-        <!-- <PageSection :icon="EggIcon" :title="`${$t('unpackaged', 2)} ${$t('team', 2)}`" >
+        <!-- <PageSection :icon="EggIcon" :title="`${t('unpackaged', 2)} ${t('team', 2)}`" >
             <template #options>
                 
             </template>
@@ -30,21 +33,21 @@ const unpackagedTeams = computed(() => {
 
             </Widget>
         </PageSection> -->
-        <PageSection :icon="PackageIcon" :title="$t('package', 2)" class=" overflow-y-hidden">
+        <PageSection :icon="PackageIcon" :title="t('package', 2)" class=" overflow-y-hidden">
             <template #options>
                 <!-- <OptionsDropdown :options="[
                     {
-                        text: `${$t('export')} ${$t('as')} ${$t('spreadsheet')}`,
+                        text: `${t('export')} ${t('as')} ${t('spreadsheet')}`,
                         click: () => {},
                         icon: FileSpreadsheetIcon
                     },
                     {
-                        text: `${$t('export')} ${$t('as')} ${$t('PDF')}`,
+                        text: `${t('export')} ${t('as')} ${t('PDF')}`,
                         click: () => {},
                         icon: FileTextIcon
                     }
                 ]">
-                    <IconButton :icon="FileBoxIcon" :tooltip="`${$t('export')} ${$t('package', 2)}`">
+                    <IconButton :icon="FileBoxIcon" :tooltip="`${t('export')} ${t('package', 2)}`">
 
                     </IconButton>
                 </OptionsDropdown> -->
@@ -58,11 +61,11 @@ const unpackagedTeams = computed(() => {
                 <PackageWidget v-for="(pckge, index) of packages.all" :package="pckge" :index="index"></PackageWidget>
                 <!-- <PackageWidget :index="1"></PackageWidget> -->
                 <span v-if="packages.all.length == 0" class="italic text-gray">
-                    {{ $t('letsbegin', {msg: $t('package', 2)}) }}
+                    {{ t('letsbegin', 1, {msg: t('package', 2)}) }}
                 </span>
             </div>
         </PageSection>
-        <PageSection :title="$t('export2')" :icon="FileBoxIcon">
+        <PageSection :title="t('export2')" :icon="FileBoxIcon">
             <Widget>
                 <div class="flex gap-1 items-center"><span>Ikke færdig endnu </span><SmileIcon class=" stroke-1 size-5"></SmileIcon></div>.
             </Widget>

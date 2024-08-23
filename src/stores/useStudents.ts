@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import { computed, onMounted, ref, watch } from "vue";
 import { useTeamsStore } from "./useTeams";
 import { useUtilitiesStore } from "./useUtilities";
-import { useI18n } from "vue-i18n";
+// import { useI18n } from "vue-i18n";
 import { IStudent, Student } from "../classes/Student";
 import { Team } from "../classes/Team";
 

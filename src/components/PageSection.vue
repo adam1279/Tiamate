@@ -18,6 +18,7 @@ const open = ref(!props.closed);
 const trayOpen = ref(false);
 const scroll = ref(false);
 const util = useUtilitiesStore();
+const { t } = util;
 const checkScroll = (e: Event) => {
     const target = e.target as HTMLDivElement;
     if (target.scrollTop == 0) {
@@ -42,7 +43,7 @@ const checkScroll = (e: Event) => {
             </div>
             <div class="flex flex-row gap-2 items-center pl-5">
                 <slot name="options"></slot>
-                <IconButton v-if="$slots.tray" :icon="trayIcon || SettingsIcon" @click="trayOpen = !trayOpen" :tooltip="trayTooltip || $t('setting', 2)"></IconButton>
+                <IconButton v-if="$slots.tray" :icon="trayIcon || SettingsIcon" @click="trayOpen = !trayOpen" :tooltip="trayTooltip || t('setting', 2)"></IconButton>
             </div>
         </div>
         <Transition leave-from-class="opacity-100 max-h-96" leave-to-class="opacity-0 max-h-0 no-scrollbar" leave-active-class="transition-all no-scrollbar" enter-to-class="opacity-100 max-h-96" enter-active-class="transition-all no-scrollbar" enter-from-class="opacity-0 max-h-0 no-scrollbar">

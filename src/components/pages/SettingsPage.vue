@@ -17,30 +17,30 @@ const settings = useSettingsStore();
 </script>
 <template>
     <Page :page="page" :current-page="currentPage">
-        <PageSection :title="$t('language')" :icon="LanguagesIcon">
+        <PageSection :title="t('language')" :icon="LanguagesIcon">
             <Widget class="grow grid">
-                <span class=" inline-block first-letter:uppercase grow">{{ $t("language") }}</span>
+                <span class=" inline-block first-letter:uppercase grow">{{ t("language") }}</span>
                 <div class="">
                     <OptionsDropdown
                         :options="languages.map(language => (
                             {
-                                text: $t(language),
+                                text: t(language),
                                 value: language
                             }
                         ))"
                         v-model="settings.all.language"
                     >
                         <div class="flex bg-white cursor-pointer capitalize">
-                            {{ $t(settings.all.language) }}
+                            {{ t(settings.all.language) }}
                             <ChevronDownIcon></ChevronDownIcon>
                         </div>
                     </OptionsDropdown>
 
                 </div>
-                <SettingComponent :title="$t('language')"
+                <SettingComponent :title="t('language')"
                     :options="languages.map(language => (
                         {
-                            text: $t(language),
+                            text: t(language),
                             value: language
                         }
                     ))"
@@ -51,10 +51,10 @@ const settings = useSettingsStore();
             </Widget>
 
         </PageSection>
-        <!-- <PageSection :title="`${$t('team')}${$t('connectingSpace')}${$t('setting', 2)}`" :icon="UsersIcon">
+        <!-- <PageSection :title="`${t('team')}${t('connectingSpace')}${t('setting', 2)}`" :icon="UsersIcon">
             <Widget class="grow">
                 <div class="flex">
-                    <span class="first-letter:uppercase">{{ $t('member limit') }}</span>
+                    <span class="first-letter:uppercase">{{ t('member limit') }}</span>
                     <input class="" type="number" v-model.number="settings.all.memberLimit" @focusout="() => {if (typeof settings.all.memberLimit == 'string') settings.all.memberLimit = 6}">
                 </div>
             </Widget>
