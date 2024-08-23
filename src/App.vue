@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, ref } from 'vue';
+import { computed, markRaw, onMounted, ref } from 'vue';
 import Sidebar from './components/Sidebar.vue';
 import { IPage } from './classes';
 import LabPage from './components/pages/LabPage.vue'
@@ -21,7 +21,7 @@ const pages = ref<IPage[]>([
         title: "Home",
         id: "home",
         icon: HomeIcon,
-        component: HomePage,
+        component: markRaw(HomePage),
         main: true
     },
     {
@@ -29,28 +29,28 @@ const pages = ref<IPage[]>([
         id: "students",
         icon: GraduationCapIcon,
         // component: StudentsPage,
-        component: StudentsPage,
+        component: markRaw(StudentsPage),
         main: true
     },
     {
         title: "Lab",
         id: "lab",
         icon: PencilRulerIcon,
-        component: LabPage,
+        component: markRaw(LabPage),
         main: true
     },
     {
         title: "Teams",
         id: "teams",
         icon: UsersIcon,
-        component: TeamsPage,
+        component: markRaw(TeamsPage),
         main: true
     },
     {
         title: "Info",
         id: "info",
         icon: InfoIcon,
-        component: InfoPage,
+        component: markRaw(InfoPage),
         main: true
     },
     // {
@@ -133,7 +133,7 @@ document.addEventListener('mousedown', function(event) {
         </div>
         <div class="flex flex-row bg-gray-dark select-none gap-2 px-2 text-xs text-white font-mono items-center">
             <div class=" p-1" >
-                Info: <span class=" first-letter:uppercase inline-block">{{ $t(util.tooltip) }}</span>
+                Info: <span class=" first-letter:uppercase inline-block">{{ util.tooltip }}</span>
             </div>
             <div class="grow"></div>
             <!-- <div class=" p-1">Made w/ love</div> -->

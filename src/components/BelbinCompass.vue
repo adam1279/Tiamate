@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import TooltipItem from './TooltipItem.vue';
 import { CircleAlertIcon, CogIcon, CrosshairIcon, HeartHandshakeIcon, LightbulbIcon, MegaphoneIcon, MicroscopeIcon, PhoneIcon, RocketIcon, WrenchIcon } from 'lucide-vue-next';
-import { computed, ref } from 'vue';
+import { computed, markRaw, ref } from 'vue';
 import TransitionTemplate from './TransitionTemplate.vue';
 import { Student } from 'src/classes/Student';
 import { Belbin } from '../classes/Belbin';
+import { useUtilitiesStore } from '../stores/useUtilities';
 
 const props = defineProps<{
     students?: Student[],
@@ -15,6 +16,8 @@ const props = defineProps<{
 }>();
 const _3rd = 30;
 const _half = 45;
+const util = useUtilitiesStore();
+const { t } = util;
 // const belbinLib = new Map<Belbin.Role, {angle: number, icon: Object, add?: number}>([
 //     ["Resource Investigator", {
 //         angle: _3rd,
@@ -136,7 +139,7 @@ const topStudent = ref<Student>(null);
         </g>
         <TransitionGroup leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-125" leave-active-class="transition-all" enter-to-class="opacity-100 scale-100" enter-from-class="opacity-0 scale-0" enter-active-class="transition-all" >
             <g v-for="student of allStudents" class=" group" :key="student.id" :id="'id' + ((teamId) ? teamId : '') + student.id" @mouseover="topStudent = student" @mouseleave="topStudent = null" :data-hover="topStudent == student">
-                <TooltipItem v-for="role of student.roles" :text="`${student.name} - ${$t(role.role)} ${Math.round(role.percentage * 100)}%`" svg>
+                <TooltipItem v-for="role of student.roles" :text="`${student.name} - ${t(role.role)} ${Math.round(role.percentage * 100)}%`" svg>
                     <circle :data-preview="previewedStudents.includes(student)" :cx="toCoordinatesRole(role)[0] + ''" :cy="toCoordinatesRole(role)[1] + ''" r="4%" class=" hover:stroke-[2%] group-hover:stroke-white z-10 stroke-[0.7%] group-hover:z-30 fill-gray-dark stroke-gray-dark data-[preview=true]:fill-gray-dark/50 transition-all data-[nohover=true]:pointer-events-none" :data-nohover="topStudent != student && topStudent != null"/>
                 </TooltipItem>
             </g>

@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import { computed, onMounted, ref, watch } from "vue";
 import { useTeamsStore } from "./useTeams";
 import { useUtilitiesStore } from "./useUtilities";
-import { useI18n } from "vue-i18n";
+// import { useI18n } from "vue-i18n";
 import { IStudent, Student } from "../classes/Student";
 import { Team } from "../classes/Team";
 
@@ -12,7 +12,7 @@ export const useStudentsStore = defineStore("students", () => {
     const teams = useTeamsStore();
     const util = useUtilitiesStore();
     onMounted(async () => {
-        all.value = util.xIfTrueThenY((await window.electron.data.get())?.students?.map(student => new Student(student)), []);
+        all.value = (await window.electron.data.get())?.students?.map(student => new Student(student)) || [];
     });
     function get(...ids: string[]) {
         let students: Student[] = [];

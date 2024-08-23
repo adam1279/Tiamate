@@ -7,6 +7,7 @@ import { useSettingsStore } from "./useSettings";
 import { Student } from "../classes/Student";
 import { Team } from "../classes/Team";
 import { Belbin } from "../classes/Belbin";
+import { language } from "../language";
 
 export const useUtilitiesStore = defineStore("utilities", () => {
     /**
@@ -17,9 +18,6 @@ export const useUtilitiesStore = defineStore("utilities", () => {
     const packages = usePackagesStore();
     const settings = useSettingsStore();
     const tooltip = ref<string>("");
-    function xIfTrueThenY(x: any, y: any) {
-        return x ? x : y;
-    }
     function removeArrayItem<T>(array: T[], ...items: T[]) {
         items.forEach(item => {
             const index = array.indexOf(item);
@@ -192,7 +190,7 @@ export const useUtilitiesStore = defineStore("utilities", () => {
         let _tally: { [k: string]: number } = {};
         array.forEach((item) => {
             const key = callback ? String(callback(item)) : (item as string);
-            _tally[key] = xIfTrueThenY(_tally[key], 0) + 1;
+            _tally[key] = (_tally[key] || 0) + 1;
         });
         return _tally;
     }
@@ -223,8 +221,56 @@ export const useUtilitiesStore = defineStore("utilities", () => {
     function capitalizeFirstLetter(string: string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
+    function t(text: string, n: number = 1, messages?: {[k:string]: string}) {
+        let langData: object = language[settings.all.language];
+        const splitText = text.split(".");
+        // console.log(splitText);
+        for (let i = 0; i < splitText.length - 1; i++) {
+            const split = splitText[i]
+            if (split in langData) {
+                langData = langData[split as keyof typeof langData];
+            } else {
+                return "";
+            }
+        }
+        // console.log(langData[splitText[splitText.length - 1] as keyof typeof langData]);
+        const result = langData[splitText[splitText.length - 1] as keyof typeof langData] as string;
+        const split = result.split(" | ");
+        let result2 = split[n - 1] || split[0] || "";
+        if (messages) {
+            for (let [key, message] of Object.entries(messages)) {
+                result2 = result2.replaceAll(`{${key}}`, message);
+            }
+        }
+        return result2;
+        // console.log(text);
+        // const [split, split2] = text.split(".");
+        // console.log(split);
+        // console.log(split2);
+        // let result: object | string = langData[split as keyof typeof langData];
+        // console.log(result);
+        // if (split2 && typeof result == "object") {
+        //     result = result[split2 as keyof typeof result] as string;
+        // }
+        // if ((result as string) in langData) {
+        //     // const result = ((split2 ? [split2] : langData[split as keyof typeof langData]) as string);
+        //     return (result as string).split(" | ")[n - 1];
+        // }
+        // return "";
+    }
+    type SpaceType = "" | "s" | "-";
+    function tm(...texts: ([string, number?] | [string, SpaceType] | [string, number, SpaceType])[]) {
+        let result = "";
+        texts.forEach(text => {
+            const n = (typeof text[1] == "number") ? text[1] : 1;
+            const space = (typeof text[1] == "string") ? text[1] : (typeof text[2] == "string" ? text[2] : " ");
+            console.log([text[0], n]);
+            console.log(t(text[0], n));
+            result += t(text[0], n) + space;
+        });
+        return result;
+    }
     return {
-        xIfTrueThenY,
         removeArrayItem,
         objectMatch,
         genderToColor,
@@ -245,6 +291,8 @@ export const useUtilitiesStore = defineStore("utilities", () => {
         tally,
         average,
         mergeDeep,
-        capitalizeFirstLetter
+        capitalizeFirstLetter,
+        t,
+        tm
     }
 });

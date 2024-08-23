@@ -7,6 +7,9 @@ import {createLucideIcon, Icon, CogIcon, CompassIcon, CopyrightIcon, CrosshairIc
 import IconButton from "../IconButton.vue";
 import { ref } from "vue";
 import { Belbin } from "../../classes/Belbin";
+import { useUtilitiesStore } from "../../stores/useUtilities";
+const util = useUtilitiesStore();
+const { t } = util;
 const props = defineProps<{
     page: _Page,
     currentPage: string
@@ -17,7 +20,7 @@ const props = defineProps<{
         <template #options>
         </template>
         <div class=" overflow-y-auto">
-            <PageSection :title="$t('license', 2)" :icon="CopyrightIcon">
+            <PageSection :title="t('license', 2)" :icon="CopyrightIcon">
                 <Widget class=" flex-col">
                     <h1 class=" font-bold text-gray-dark">Lucide License</h1>
                     <div class=" flex flex-col gap-2 border-l-2 border-tiamate-blue pl-2">
@@ -29,17 +32,17 @@ const props = defineProps<{
             </PageSection>
             <!-- <Icon :icon-node="crosshair2"></Icon> -->
             <!-- <component :is="Crosshair2Icon"></component> -->
-            <PageSection :title="$t('belbin_role', 2)" :icon="CompassIcon">
+            <PageSection :title="t('belbin_role', 2)" :icon="CompassIcon">
                 <div class="grid lg:grid-cols-3 sm:grid-cols-2 gap-3">
                     <Widget class=" flex-row" v-for="role of Belbin.roles">
                         <div class="flex flex-col grow">
                             <div class="flex gap-1 items-start">
-                                <h1 class=" grow font-bold text-gray-dark z-10">{{ $t(role, 1) }}</h1>
+                                <h1 class=" grow font-bold text-gray-dark z-10">{{ t(role, 1) }}</h1>
                                 <component :is="Belbin.data[role].icon" class=" size-8 align-middle text-tiamate-blue stroke-1 shrink-0 float-right"></component>
                             </div>
                             <div class=" flex flex-col border-l-2 border-tiamate-blue pl-2 grow z-10" >
                                 <div class=" grow">
-                                    <p class=" text-pretty ">{{ $t('roleDesc.' + role) }}</p>
+                                    <p class=" text-pretty ">{{ t('roleDesc.' + role) }}</p>
 
                                 </div>
                                 <div class="flex grow min-h-2"></div>
@@ -61,7 +64,7 @@ const props = defineProps<{
                         </div>
                         <div class=" flex flex-col border-l-2 border-tiamate-blue pl-2 grow z-10" >
                             <div class=" grow">
-                                <p class=" text-pretty ">{{ $t('roleDesc.' + role.name) }}</p>
+                                <p class=" text-pretty ">{{ t('roleDesc.' + role.name) }}</p>
 
                             </div>
                             <div class="flex grow min-h-2"></div>

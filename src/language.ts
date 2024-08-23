@@ -90,7 +90,7 @@ const da = {
     gender_distribution: "kønsfordeling | kønsfordelinger",
     "unlock": "lås op",
     "lock": "lås",
-    "welcome": "velkommen",
+    welcome: "velkommen",
     "member limit": "medlemsgrænse | medlemsgrænser",
     da: "dansk",
     en: "english",
@@ -119,7 +119,8 @@ const da = {
     analysis: "analyse | analyser",
     select: "vælg",
     to: "til",
-    seat: "plads | pladser"
+    seat: "plads | pladser",
+    remove: "fjern"
 };
 type LangData = typeof da;
 export const language: Record<Language, Partial<LangData>> = {
@@ -227,7 +228,11 @@ export const language: Record<Language, Partial<LangData>> = {
         delete: "delete",
         "team creation": "team creation",
         to: "to",
-        seat: "seat | seats"
+        seat: "seat | seats",
+        remove: "remove",
+        lock: "lock",
+        unlock: "unlock",
+        welcome: "welcome",
     }
     
 }

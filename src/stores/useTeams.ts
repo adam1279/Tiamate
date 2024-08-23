@@ -18,7 +18,7 @@ export const useTeamsStore = defineStore("teams", () => {
     const settings = useSettingsStore();
     const packages = usePackagesStore();
     onMounted(async () => {
-        all.value = util.xIfTrueThenY((await window.electron.data.get())?.teams?.map(team => new Team(team)), []);
+        all.value = (await window.electron.data.get())?.teams?.map(team => new Team(team)) || [];
     });
     function add(init: Partial<Team> = {}) {
         const team = new Team(init);
@@ -130,7 +130,7 @@ export const useTeamsStore = defineStore("teams", () => {
         return all.value.find(team => team.members.includes(student.id));
     }
     function limitOf(team: Team): number {
-        return util.xIfTrueThenY(team.customLimit, settings.all.memberLimit);
+        return team.customLimit || settings.all.memberLimit;
     }
     function evaluateBelbin(students: Student[]) {
         let belbinSums = Belbin.sums();

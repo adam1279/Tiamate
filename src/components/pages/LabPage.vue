@@ -23,7 +23,7 @@ import { useSettingsStore } from "../../stores/useSettings";
 import gsap from "gsap";
 import SettingComponent from "../SettingComponent.vue";
 import TeamContainer from "../TeamContainer.vue";
-import { Panel, PanelGroup, PanelResizeHandle } from "vue-resizable-panels";
+// import { Panel, PanelGroup, PanelResizeHandle } from "vue-resizable-panels";
 const props = defineProps<{
     page: _Page,
     currentPage: string
@@ -33,6 +33,7 @@ const root = ref<HTMLDivElement | null>(null);
 const students = useStudentsStore();
 const teams = useTeamsStore();
 const util = useUtilitiesStore();
+const { t, tm } = util;
 const settings = useSettingsStore();
 const unassignedStudents = computed(() => {
     // return students.all?.filter(student => student.state == "unassigned");
@@ -108,9 +109,9 @@ const seats = computed(() => teams.query({state: 'proposed'}).reduce((sum, team)
         <!-- Students ################################################################################################## -->
         <PanelGroup direction="vertical">
             <Panel :default-size="30" :min-size="20">
-            <PageSection :icon="GraduationCapIcon" :title="$t('student', 2)" class=" h-full" :overflow-hidden="true" custom @dragover="e => e.preventDefault()" @drop="util.dropStudentBack" :non-collapsible="true">
+            <PageSection :icon="GraduationCapIcon" :title="t('student', 2)" class=" h-full" :overflow-hidden="true" custom @dragover="e => e.preventDefault()" @drop="util.dropStudentBack" :non-collapsible="true">
                 <template #options>
-                    <IconButton :icon="RotateCwIcon" :tooltip="`${$t('reset')} ${$t('student', 2)}`" @click="reload"></IconButton>
+                    <IconButton :icon="RotateCwIcon" :tooltip="`${t('reset')} ${t('student', 2)}`" @click="reload"></IconButton>
                 </template>
                 <div class=" flex grow flex-wrap gap-1 overflow-y-auto select-none drag-none snap-y snap-mandatory">
                     <!-- <TransitionTemplate fade group
@@ -130,7 +131,7 @@ const seats = computed(() => teams.query({state: 'proposed'}).reduce((sum, team)
                     <!-- </TransitionTemplate> -->
             
                     <div v-if="students.all?.length == 0" class=" italic text-gray">
-                        {{ $t("letsbegin", {msg: $t("student", 2)}) }}
+                        {{ t("letsbegin", 1, {msg: t("student", 2)}) }}
                     </div>
                 </div>
             </PageSection></Panel>
@@ -140,28 +141,28 @@ const seats = computed(() => teams.query({state: 'proposed'}).reduce((sum, team)
 
             <!-- Teams ###################################################################################################### -->
             <Panel class=" border-b border-gray">
-            <PageSection :icon="UsersIcon" :title="$t('team', 2)" class=" h-full" :overflow-hidden="true" :non-collapsible="true">
+            <PageSection :icon="UsersIcon" :title="t('team', 2)" class=" h-full" :overflow-hidden="true" :non-collapsible="true">
                 <template #options>
-                    <TooltipItem :text="`${students.all?.length} ${$t('student', 2)} / ${seats} ${$t('seat', 2)}`" class="flex text-xs font-bold items-center gap-1 rounded bg-white/80 p-1 border border-gray text-gray-dark font-mono">
+                    <TooltipItem :text="`${students.all?.length} ${t('student', 2)} / ${seats} ${t('seat', 2)}`" class="flex text-xs font-bold items-center gap-1 rounded bg-white/80 p-1 border border-gray text-gray-dark font-mono">
                         <GraduationCapIcon class=" size-4"></GraduationCapIcon>
                         <span> {{ students.all?.length }}</span>
                         <span>/</span>
                         <ArmchairIcon class=" size-4"></ArmchairIcon>
                         <span>{{ seats }}</span>
                     </TooltipItem>
-                    <IconButton :icon="PackagePlusIcon" :tooltip="`${$t('package_2')} ${$t('team', 2)}`"
+                    <IconButton :icon="PackagePlusIcon" :tooltip="`${t('package_2')} ${t('team', 2)}`"
                         @click="teams.packageProposed"
                     ></IconButton>
             
-                    <IconButton :icon="PlusCircleIcon" :tooltip="`${$t('new')} ${$t('team')}`" @click="teams.add" ></IconButton>
+                    <IconButton :icon="PlusCircleIcon" :tooltip="`${t('new')} ${t('team')}`" @click="teams.add" ></IconButton>
                     <!-- <OptionsDropdown :options="[
                         {
                             icon: Link2Icon,
-                            text: `${$t('unlink')} ${$t('tab', 2)}`,
+                            text: `${t('unlink')} ${t('tab', 2)}`,
                             click: () => {}
                         }
                     ]">
-                        <IconButton :icon="SettingsIcon" :tooltip="$t('setting', 2)"></IconButton>
+                        <IconButton :icon="SettingsIcon" :tooltip="t('setting', 2)"></IconButton>
                     </OptionsDropdown> -->
                 </template>
                 <template #tray>
@@ -169,14 +170,14 @@ const seats = computed(() => teams.query({state: 'proposed'}).reduce((sum, team)
                         <!-- <IconToggle v-model="settings.all.tabsLinked" :states="[
                             {
                                 icon: Link2OffIcon,
-                                tooltip: `${$t('link_2')} ${$t('tab', 2)}`,
+                                tooltip: `${t('link_2')} ${t('tab', 2)}`,
                             },
                             {
                                 icon: Link2Icon,
-                                tooltip: `${$t('unlink')} ${$t('tab', 2)}`,
+                                tooltip: `${t('unlink')} ${t('tab', 2)}`,
                             },
                         ]"></IconToggle> -->
-                        <SettingComponent v-model="settings.all.tabsLinked" :title="`${$t('link_2')} ${$t('tab', 2)}`"
+                        <SettingComponent v-model="settings.all.tabsLinked" :title="`${t('link_2')} ${t('tab', 2)}`"
                             :states="[
                                 {
                                     icon: Unlink2Icon,
@@ -189,7 +190,7 @@ const seats = computed(() => teams.query({state: 'proposed'}).reduce((sum, team)
                         ></SettingComponent>
                         <SettingComponent
                             v-model="settings.all.memberLimit"
-                            :title="`${$t('member limit')}`"
+                            :title="`${t('member limit')}`"
                             type="number"
                             :default-value="settings.allDefault.memberLimit"
                             input-width="w-60"
@@ -197,7 +198,7 @@ const seats = computed(() => teams.query({state: 'proposed'}).reduce((sum, team)
                         ></SettingComponent>
                         <SettingComponent
                             v-model="settings.all.resetOnPackaging"
-                            :title="`${$t('reset')} ${$t('student', 2)} ${$t('on')} ${$t('packaging')}`"
+                            :title="`${t('reset')} ${t('student', 2)} ${t('on')} ${t('packaging')}`"
                             class=" shadow-sm"
                         >
                         </SettingComponent>
@@ -227,23 +228,23 @@ const seats = computed(() => teams.query({state: 'proposed'}).reduce((sum, team)
                         </TeamWidget>
                     </TransitionTemplate>
                     <div v-if="teams.query({state: 'proposed'}).length == 0" class="italic text-gray">
-                        {{ $t("letsbegin", {msg: $t("team", 2)}) }}
+                        {{ t("letsbegin", 1, {msg: t("team", 2)}) }}
                     </div>
                 </TeamContainer>
             </PageSection></Panel>
             <!-- <PanelResizeHandle class="h-1 w-full bg-gray"/> -->
 
             <!-- Automation ################################################################################################### -->
-            <PageSection :icon="SparklesIcon" :title="`${$t('automatic')} ${$t('team creation')}`">
+            <PageSection :icon="SparklesIcon" :title="`${t('automatic')} ${t('team creation')}`">
                 <template #options>
                     <span>{{ trialCount }}</span>
-                    <IconButton :icon="PlayIcon" :tooltip="`${$t('run')} ${$t('automatic')} ${$t('team creation')}`" @click="runAlgorithm"></IconButton>
+                    <IconButton :icon="PlayIcon" :tooltip="`${t('run')} ${t('automatic')} ${t('team creation')}`" @click="runAlgorithm"></IconButton>
                 </template>
                 <div class="flex flex-col grow">
                     <Widget class=" grow items-start grid lg:grid-cols-3 gap-1">
                         <SettingComponent
                             v-model.number="settings.all.automation.trialLimit"
-                            :title="`${$t('trial')}${$t('connectingSpace2')}${$t('limit')}`"
+                            :title="`${t('trial')}${t('connectingSpace2')}${t('limit')}`"
                             class=""
                             type="number"
                             :default-value="settings.allDefault.automation.trialLimit"
@@ -252,16 +253,17 @@ const seats = computed(() => teams.query({state: 'proposed'}).reduce((sum, team)
                         </SettingComponent>
                         <SettingComponent
                             v-model.number="settings.all.automation.maxUnfilledRoles"
-                            :title="`${$t('max')}. # ${$t('unfilled', 2)} ${$t('role', 2)} (ikke færdig)`"
+                            :title="`${t('max')}. # ${tm(['unfilled', 2], ['role', 2])} (ikke færdig)`"
                             type="number"
                             :default-value="settings.allDefault.automation.maxUnfilledRoles"
                             horizontal
                         >
                         </SettingComponent>
+                        <!-- :title="`${t('max')}. # ${t('unfilled', 2)} ${t('role', 2)} (ikke færdig)`" -->
                         <!-- <input type="number" v-model.number="settings.all.automation.trialLimit">
                         <input type="number" v-model.number="settings.all.automation.maxUnfilledRoles"> -->
                         <!-- <div class="flex p-1 rounded bg-gray-light">
-                            <IconButton :icon="PlayIcon" :tooltip="$t('play')" @click="runAlgorithm"></IconButton>
+                            <IconButton :icon="PlayIcon" :tooltip="t('play')" @click="runAlgorithm"></IconButton>
                         </div> -->
                     </Widget>
                 </div>

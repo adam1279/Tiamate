@@ -13,6 +13,7 @@ const props = defineProps<{
     student: Student
 }>();
 const util = useUtilitiesStore();
+const { t } = util;
 const emit = defineEmits(["update", "delete"]);
 // const _student = ref(props.student);
 const localName = ref(props.student.name);
@@ -67,7 +68,7 @@ const editingOrAdding = computed(() => props.student.editing || props.student.ad
                         }]"
                     ></IconToggle>
                 </div>
-                <input v-if="props.student.editing || props.student.adding" :placeholder="`${$t('Name')}...`" class="outline-none w-full standard" v-model="localName">
+                <input v-if="props.student.editing || props.student.adding" :placeholder="`${t('Name')}...`" class="outline-none w-full standard" v-model="localName">
                 <span v-else class="border-b border-b-transparent">{{ props.student.name }}</span>
                 
             </div>
@@ -76,7 +77,7 @@ const editingOrAdding = computed(() => props.student.editing || props.student.ad
             <OptionsDropdown
                 :options="Object.entries(util.genderColor).map(([gender, color]) => {
                     return {
-                        text: $t(gender),
+                        text: t(gender),
                         click: () => {localGender = gender}
                     }
                 })"
@@ -90,14 +91,14 @@ const editingOrAdding = computed(() => props.student.editing || props.student.ad
                 >
                     <div v-if="editingOrAdding" class="bg-[var(--color)] opacity-10 absolute w-full h-full rounded"></div>
                     <div class=" w-full pl-1 text-[color:var(--color)] flex ">
-                        <span v-if="editingOrAdding" class="first-letter:uppercase">{{ localGender ? $t(localGender) : "-" }}</span>
+                        <span v-if="editingOrAdding" class="first-letter:uppercase">{{ localGender ? t(localGender) : "-" }}</span>
                         <ChevronDown v-if="editingOrAdding" class="stroke-1"></ChevronDown>
                     </div>
 
                 </div>
             </OptionsDropdown>
             <div v-else class="flex">
-                <span :style="`--color: ${util.genderToColor(student.gender)}`" class="first-letter:uppercase text-[color:var(--color)]">{{ student.gender ? $t(student.gender) : "-" }}</span>
+                <span :style="`--color: ${util.genderToColor(student.gender)}`" class="first-letter:uppercase text-[color:var(--color)]">{{ student.gender ? t(student.gender) : "-" }}</span>
 
             </div>
 
@@ -123,25 +124,25 @@ const editingOrAdding = computed(() => props.student.editing || props.student.ad
                 <IconButton :icon="CircleCheckIcon" tooltip="Confirm" color="green" @click="confirm"></IconButton>
             </div>
             <!-- <OptionsButton v-else>
-                <OptionsItem :icon="EditIcon" @click="edit">{{ $t("Edit") }}</OptionsItem>
+                <OptionsItem :icon="EditIcon" @click="edit">{{ t("Edit") }}</OptionsItem>
                 <OptionsItem :icon="TrashIcon" red @click="$emit('delete')">
-                    {{ $t("Delete") }}
+                    {{ t("Delete") }}
                 </OptionsItem>
             </OptionsButton> -->
             <OptionsDropdown v-else :options="[
                 {
-                    text: $t('edit'),
+                    text: t('edit'),
                     icon: EditIcon,
                     click: () => {edit()}
                 },
                 {
-                    text: $t('delete'),
+                    text: t('delete'),
                     icon: TrashIcon,
                     click: () => $emit('delete'),
                     red: true
                 }
             ]">
-                <IconButton :icon="EllipsisVerticalIcon" :tooltip="$t('option', 2)"></IconButton>
+                <IconButton :icon="EllipsisVerticalIcon" :tooltip="t('option', 2)"></IconButton>
             </OptionsDropdown>
         </td>
     </tr>

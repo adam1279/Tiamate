@@ -11,10 +11,13 @@ import { useSettingsStore } from '../../stores/useSettings';
 import PageSection from '../PageSection.vue';
 import TeamWidget from '../TeamWidget.vue';
 import { useTeamsStore } from '../../stores/useTeams';
+import { useUtilitiesStore } from '../../stores/useUtilities';
 const props = defineProps<{
     page: IPage,
     currentPage: string
 }>();
+const util = useUtilitiesStore();
+const { t } = util;
 const students = useStudentsStore();
 const settings = useSettingsStore();
 const teams = useTeamsStore();
@@ -39,25 +42,25 @@ function addStudent() {
 </script>
 <template>
     <Page :page="page" :current-page="currentPage" class=" overflow-hidden">
-        <PageSection :icon="GraduationCapIcon" :title="$t('student', 2)" class=" overflow-hidden">
+        <PageSection :icon="GraduationCapIcon" :title="t('student', 2)" class=" overflow-hidden">
             <template #options>
-                <IconButton v-if="selectedStudents.length > 0" :icon="TrashIcon" :tooltip="`${$t('delete')} ${$t('selected', 2)}`" :bubble="selectedStudents.length.toString()" bubble-background="gray-light" @click="students.deleteStudent(...selectedStudents)"></IconButton>
+                <IconButton v-if="selectedStudents.length > 0" :icon="TrashIcon" :tooltip="`${t('delete')} ${t('selected', 2)}`" :bubble="selectedStudents.length.toString()" bubble-background="gray-light" @click="students.deleteStudent(...selectedStudents)"></IconButton>
                 <IconButton
                     :icon="PlusCircleIcon"
-                    :tooltip="`${$t('add')} ${$t('student')}`"
+                    :tooltip="`${t('add')} ${t('student')}`"
                     @click="addStudent"
                 ></IconButton>
-                <IconButton :icon="ImportIcon" :tooltip="`${$t('import')} ${$t('filled-out')} spreadsheet${$t('connectingSpace3')}${$t('template')}`" @click="importTemplate"></IconButton>
-                <IconButton :icon="FileSpreadsheetIcon" :tooltip="`Download spreadsheet${$t('connectingSpace3')}${$t('template')}`" @click="downloadTemplate"></IconButton>
+                <IconButton :icon="ImportIcon" :tooltip="`${t('import')} ${t('filled-out')} spreadsheet${t('connectingSpace3')}${t('template')}`" @click="importTemplate"></IconButton>
+                <IconButton :icon="FileSpreadsheetIcon" :tooltip="`Download spreadsheet${t('connectingSpace3')}${t('template')}`" @click="downloadTemplate"></IconButton>
             </template>
             <div class="flex flex-col grow overflow-y-auto" ref="studentsSection">
                 <Widget class="flex grow">
                     <table class=" w-full">
                         <tr>
-                            <th>{{ $t("name") }}</th>
-                            <th>{{ $t("gender") }}</th>
-                            <th>{{ $t("belbin_role", 2) }}</th>
-                            <th>{{ $t("previous") }} {{$t("team", 2) }}</th>
+                            <th>{{ t("name") }}</th>
+                            <th>{{ t("gender") }}</th>
+                            <th>{{ t("belbin_role", 2) }}</th>
+                            <th>{{ t("previous") }} {{t("team", 2) }}</th>
                         </tr>
                         <TransitionGroup>
                             <StudentTr v-for="student of students.all"
@@ -70,7 +73,7 @@ function addStudent() {
                             <td class="" colspan="5">
                                 <div :data-disabled="editingOrAdding" class="flex justify-center p-1 text-gray-dark hover:bg-gray/10 transition-colors rounded-md mx-auto px-10 w-fit cursor-pointer data-[disabled=true]:pointer-events-none data-[disabled=true]:text-gray/50 border border-gray shadow-sm items-center text-sm" @click="addStudent" ref="addStudentRow">
                                     <PlusIcon class="" :size="20"></PlusIcon>
-                                    <span class=" first-letter:uppercase inline-block">{{ $t("add") }} {{ $t("student") }}</span>
+                                    <span class=" first-letter:uppercase inline-block">{{ t("add") }} {{ t("student") }}</span>
                                 </div>
                             </td>
                         </tr>
@@ -78,7 +81,7 @@ function addStudent() {
                 </Widget>
             </div>
         </PageSection>
-        <PageSection :icon="HistoryIcon" :title="`${$t('previous', 2)} ${$t('team', 2)}`" closed>
+        <PageSection :icon="HistoryIcon" :title="`${t('previous', 2)} ${t('team', 2)}`" closed>
             <div>
                 <TeamWidget
                     v-for="(previousTeam, index) of teams.query({state: 'previous'})"
@@ -88,7 +91,7 @@ function addStudent() {
                 ></TeamWidget>
             </div>
         </PageSection>
-        <PageSection :icon="BarChart3Icon" :title="$t('analysis')" closed>
+        <PageSection :icon="BarChart3Icon" :title="t('analysis')" closed>
 
         </PageSection>
     </Page>

@@ -13,12 +13,13 @@ const props = defineProps<{
 }>();
 const students = useStudentsStore();
 const util = useUtilitiesStore();
+const { t, tm } = util;
 </script>
 <template>
     <Page :page="page" :current-page="currentPage">
         <template #options>
         </template>
-        <PageSection :title="$t(`welcome`)" :icon="HandIcon">
+        <PageSection :title="t(`welcome`)" :icon="HandIcon">
             <!-- <Widget>
                 <IconButton :icon="Squircle" tooltip="Love"></IconButton>
             </Widget> -->
@@ -34,6 +35,8 @@ const util = useUtilitiesStore();
                 </Widget>
             </div> -->
             <span>Hey!</span>
+            <span>{{ t("member", 2) }}</span>
+            <span>{{ tm(['unfilled', 2], ['role', 2]) }}</span>
         </PageSection>
         <!-- <button @click="saveExcel">Save Excel</button> -->
     </Page>

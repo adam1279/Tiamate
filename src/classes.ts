@@ -4,11 +4,12 @@ import { ISettings, Language } from "./stores/useSettings";
 import { IStudent } from "./classes/Student";
 import { ITeam } from "./classes/Team";
 import { IPackage } from "./classes/Package";
+import { LucideIcon } from "lucide-vue-next";
 
 export interface IPage {
     title: string,
     id: string,
-    icon: Component,
+    icon: LucideIcon,
     component: Component,
     main?: boolean
 };

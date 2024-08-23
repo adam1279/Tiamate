@@ -21,5 +21,9 @@ export default defineConfig((env) => {
       preserveSymlinks: true,
     },
     clearScreen: false,
+    // define: {
+    //   // __INTLIFY_JIT_COMPILATION__: true,
+    //   // __INTLIFY_DROP_MESSAGE_COMPILER__: true
+    // }
   } as UserConfig;
 });
