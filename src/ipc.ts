@@ -1,6 +1,6 @@
 import { ipcRenderer } from "electron";
 import { Component } from "vue";
-import { ISettings, Language } from "./stores/useSettings";
+import { ExportFileType, ISettings, Language } from "./stores/useSettings";
 import { IStudent } from "./classes/Student";
 import { ITeam } from "./classes/Team";
 import { IPackage } from "./classes/Package";
@@ -45,7 +45,9 @@ export const ipcKeys: IpcType = {
     printToPDF: () => ipcRenderer.invoke("printToPDF"),
     downloadTemplate: (language: Language) => ipcRenderer.invoke("downloadTemplate", language),
     importTemplate: (language: Language) => ipcRenderer.invoke("importTemplate", language),
-    globalUpdate: (jsonData: string) => ipcRenderer.invoke("globalUpdate", jsonData)
+    globalUpdate: (jsonData: string) => ipcRenderer.invoke("globalUpdate", jsonData),
+    downloadExport: (jsonData?: string) => ipcRenderer.invoke("downloadExport", jsonData),
+    openUrl: (url: string) => ipcRenderer.invoke("openUrl", url)
     // BelbinIcons: () => BelbinIcons
 };
 console.log(typeof ipcKeys);
@@ -69,7 +71,9 @@ export interface ipcInterface {
     printToPDF: () => Promise<void>,
     downloadTemplate: (language: Language) => Promise<void>,
     importTemplate: (language: Language) => Promise<IStudent[]>,
-    globalUpdate: (jsonData: string) => Promise<void>
+    globalUpdate: (jsonData: string) => Promise<void>,
+    downloadExport: (jsonData?: string) => Promise<boolean>,
+    openUrl: (url: string) => Promise<void>
 }
 
 

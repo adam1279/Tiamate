@@ -24,8 +24,27 @@ module.exports = {
       fontFamily: {
         "sans": "Montserrat",
         "mono": "Noto Sans Mono"
+      },
+      textShadow: {
+        sm: '0 1px 2px var(--tw-shadow-color)',
+        DEFAULT: '0 2px 4px var(--tw-shadow-color)',
+        lg: '0 8px 16px var(--tw-shadow-color)',
+        border: '-1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black, 1px 1px 0 var(--tw-shadow-color)'
+      },
+      keyframes: {
+        huerotate: {
+          "0%": {
+              filter: "hue-rotate(0deg)"
+          },
+          "100%": {
+              filter: "hue-rotate(360deg)"
+          }
+        }
+      },
+      animation: {
+        huerotate: "huerotate 1s ease-in-out infinite"
       }
-    },
+    }
   },
   plugins: [
     plugin(function ({addUtilities}) {
@@ -57,6 +76,17 @@ module.exports = {
         ':root': extractColorVars(theme('colors')),
       });
     },
+    require("@designbycode/tailwindcss-text-stroke"),
+    plugin(function ({ matchUtilities, theme }) {
+      matchUtilities(
+        {
+          'text-shadow': (value) => ({
+            textShadow: value,
+          }),
+        },
+        { values: theme('textShadow') }
+      )
+    }),
   ],
   safelist: [
     {
@@ -93,4 +123,3 @@ module.exports = {
     }
   ]
 }
-

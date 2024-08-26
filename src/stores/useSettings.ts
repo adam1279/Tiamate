@@ -8,6 +8,8 @@ export interface ISetting<T> {
 }
 export const languages = ["da", "en"] as const;
 export type Language = typeof languages[number];
+export const exportFileTypes = ["pdf", "xlsx"] as const;
+export type ExportFileType = typeof exportFileTypes[number];
 export const defaultSettings = {
     memberLimit: 5,
     language: "da" as Language,
@@ -18,21 +20,43 @@ export const defaultSettings = {
         trialLimit: 1000,
         maxUnfilledRoles: 2
     },
-    resetOnPackaging: true
+    resetOnPackaging: true,
+    export: {
+        fileType: "xlsx" as ExportFileType,
+        openFile: false,
+        openInFolder: false,
+        includeCompass: true,
+        includeStats: true,
+        portrait: false
+    }
 };
 export type ISettings = typeof defaultSettings;
 export const useSettingsStore = defineStore("settings", () => {
     // const { t, locale } = useI18n();
     const all = ref({...defaultSettings, automation: {...defaultSettings.automation}});
     const allDefault = ref(defaultSettings);
+    const mounted = ref(false);
     const util = useUtilitiesStore();
     const { t } = util;
-    onMounted(async () => {
+    async function init() {
         let savedSettings = (await window.electron.data.get())?.settings;
         if (savedSettings) {
-            savedSettings.automation = Object.assign(all.value.automation, savedSettings.automation);
+            savedSettings.automation = Object.assign(all.value.automation, savedSettings.automation || {});
+            savedSettings.export = Object.assign(all.value.export, savedSettings.export || {});
             Object.assign(all.value, savedSettings);
         }
+        // if (savedSettings) {
+        //     const [automation, _export] = (["automation", "export"] as (keyof ISettings)[]).map(subObject => {
+        //         return Object.assign(all.value[subObject], savedSettings[subObject]);
+        //     });
+        //     Object.assign(all.value, savedSettings);
+        // }
+        return all.value;
+    }
+    onMounted(async () => {
+        await init();
+        mounted.value = true;
+        console.log("useSettings mounted");
         // locale.value = all.value.language;
     });
     // watch(() => all.value.language, (newLanguage, oldLanguage) => {
@@ -52,6 +76,8 @@ export const useSettingsStore = defineStore("settings", () => {
     // };
     return {
         all,
-        allDefault
+        allDefault,
+        init,
+        mounted
     };
 });

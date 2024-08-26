@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { IPage as _Page } from "src/classes";
+import { IPage as _Page } from "src/ipc";
 import Page from "../Page.vue";
 import Widget from "../Widget.vue";
 import PageSection from "../PageSection.vue";
@@ -39,5 +39,6 @@ const { t, tm } = util;
             <span>{{ tm(['unfilled', 2], ['role', 2]) }}</span>
         </PageSection>
         <!-- <button @click="saveExcel">Save Excel</button> -->
+        
     </Page>
 </template>

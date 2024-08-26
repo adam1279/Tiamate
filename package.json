@@ -41,6 +41,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@designbycode/tailwindcss-text-stroke": "^1.2.1",
     "@lucide/lab": "^0.1.2",
     "ansi-regex": "^6.0.1",
     "computed-style-to-inline-style": "^4.0.0",

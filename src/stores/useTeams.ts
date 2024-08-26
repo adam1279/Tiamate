@@ -13,12 +13,20 @@ import { usePackagesStore } from "./usePackages";
 
 export const useTeamsStore = defineStore("teams", () => {
     const all = ref<Team[]>([]);
+    const mounted = ref(false);
     const students = useStudentsStore();
     const util = useUtilitiesStore();
+    const { t } = util;
     const settings = useSettingsStore();
     const packages = usePackagesStore();
-    onMounted(async () => {
+    async function init() {
         all.value = (await window.electron.data.get())?.teams?.map(team => new Team(team)) || [];
+        return all.value;
+    }
+    onMounted(async () => {
+        await init();
+        mounted.value = true;
+        console.log("useTeams mounted.");
     });
     function add(init: Partial<Team> = {}) {
         const team = new Team(init);
@@ -28,7 +36,7 @@ export const useTeamsStore = defineStore("teams", () => {
     // function removeStudent(team: ITeam, ...students: IStudent[]) {
 
     // }
-    function query(...queryInfos: Partial<ITeam>[]): Team[] {
+    function query(...queryInfos: Partial<Team>[]): Team[] {
         return util.query(all.value, ...queryInfos);
     }
     /**Clears student(s) from all teams. */
@@ -136,9 +144,11 @@ export const useTeamsStore = defineStore("teams", () => {
         let belbinSums = Belbin.sums();
         const idealDistribution = Belbin.sums(1/9);
         students.forEach(student => {
-            student.roles.forEach(role => {
-                belbinSums[role.role] += role.percentage;
-            });
+            if (student) {
+                student.roles.forEach(role => {
+                    belbinSums[role.role] += role.percentage;
+                });
+            }
         });
         if (Object.values(belbinSums).every(sum => sum == 0)) return 0;
         // Normalize the team's role distribution
@@ -184,6 +194,20 @@ export const useTeamsStore = defineStore("teams", () => {
         if (settings.all.resetOnPackaging) students.all.forEach(student => student.state = "unassigned");
         packages.add(packageTeams);
     }
+    function nameOf(team: Team) {
+        const { t } = useUtilitiesStore();
+        console.log(query({state: team.state}));
+        console.log(query({state: team.state}).indexOf(team));
+        return team?.name || `${util.capitalizeFirstLetter(t("team"))} ${indexOf(team) + 1}`;
+    }
+    function indexOf(team: Team) {
+        switch (team.state) {
+            case "proposed":
+                return query({state: "proposed"}).indexOf(team);
+            case "packaged":
+                return packages.all.find(pack => pack.teams.includes(team.id))?.teams.indexOf(team.id) || 0;
+        }
+    }
     return {
         all,
         // removeStudent,
@@ -198,6 +222,10 @@ export const useTeamsStore = defineStore("teams", () => {
         limitOf,
         evaluateBelbin,
         ofPackage,
-        packageProposed
+        packageProposed,
+        nameOf,
+        init,
+        mounted,
+        indexOf
     };
 });

@@ -59,6 +59,9 @@
         @apply xl:grid-cols-4;
         @apply lg:grid-cols-3;
     }
+    .logo {
+        transition: filter 1s;
+    }
 }
 @tailwind components;
 @tailwind utilities;

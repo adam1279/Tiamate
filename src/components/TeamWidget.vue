@@ -26,14 +26,32 @@ import NumberAnimation from './NumberAnimation.vue';
 // const { t } = useI18n();
 const props = defineProps<{
     team: Team,
-    index: number,
-    currentTab: string
+    // currentTab: string
 }>();
+const currentTab = defineModel<string>("currentTab")
+const localCurrentTab = ref<string>("members");
 const teams = useTeamsStore();
 const students = useStudentsStore();
 const util = useUtilitiesStore();
-const { t } = util;
+const { t, tm } = util;
 const settings = useSettingsStore();
+watch(currentTab, () => {
+    update();
+});
+watch(() => settings.all.tabsLinked, () => {
+    update();
+})
+function update() {
+    if (settings.all.tabsLinked) {
+        localCurrentTab.value = currentTab.value;
+    }
+}
+// watch(localCurrentTab, () => {
+//     if (settings.all.tabsLinked) {
+//         console.log("localCurrentTab");
+//         currentTab.value = currentTab.value;
+//     }
+// })
 const assignedStudents = computed(() => students.ofTeam(props.team));
 const previewedStudents = computed(() => props.team?.state != "packaged" ? students.query({previewing: true}) : []);
 const allStudents = computed(() => assignedStudents.value.concat(previewedStudents.value));
@@ -60,9 +78,14 @@ function updateBalance() {
 }
 watch(balance, updateBalance);
 onMounted(() => {
+    console.log(props.team);
     updateBalance();
 });
-const previousTeamsTally = computed(() => util.tally(allStudents.value.flatMap(student => student.previousTeams)))
+const previousTeamsTally = computed(async () => {
+    // await teams.init();
+    // console.log("popop");
+    return util.tally(allStudents.value.flatMap(student => student.previousTeams));
+})
 const previousTeamsTallySorted = computed(() => {
     return Object.entries(previousTeamsTally.value).sort((a, b) => {
         if (a[1] > b[1]) return -1;
@@ -71,16 +94,17 @@ const previousTeamsTallySorted = computed(() => {
         if (a[0] < b[0]) return -1;
     });
 })
-const defaultTitle = computed(() => util.capitalizeFirstLetter(`${t('team', 1)} ${props.index + 1}`));
+// const defaultTitle = computed(() => util.capitalizeFirstLetter(`${t('team', 1)} ${props.index + 1}`));
 </script>
 <template>
         
     <!-- <Widget class="flex-col gap-1 w-64"> -->
-    <Widget class="flex-col gap-1 h-[21rem] overflow-hidden">
+    <Widget class="flex-col gap-1 h-[21rem] overflow-hidden" v-if="team">
+        <!-- {{ team.state }} -->
         <div class="flex">
             <div class="flex gap-1">
                 <span class=" inline-block font-bold text-gray-dark">
-                    {{ team.name && team.name != '' ? team.name : defaultTitle }}
+                    {{ /*team.name && team.name != '' ? team.name : defaultTitle*/ teams.nameOf(team) }}
                 </span>
                 <!-- <span class=" text-gray text-ellipsis shrink">#{{ team.id }}</span> -->
             </div>
@@ -114,9 +138,10 @@ const defaultTitle = computed(() => util.capitalizeFirstLetter(`${t('team', 1)} 
                 <IconButton v-if="team.state != 'packaged'" :icon="TrashIcon" tooltip="delete" color="red" @click="teams.deleteTeam(team)"></IconButton>
             </div>
         </div>
+        <!-- {{ localCurrentTab }} -->
         <!-- <PercentageBar :sections="genderMakeup" :limit="6" :amount="allStudents.length"></PercentageBar> -->
         <MemberSlotBar :members="allStudents" :limit="teams.limitOf(team)" class="shrink-0"></MemberSlotBar>
-        <TabNav :data-inactive="team.locked" class=" data-[inactive=true]:opacity-50 data-[inactive=true]:grayscale grow" :current-tab="currentTab" @tab-change="tab => $emit('tabChange', tab)"
+        <TabNav :data-inactive="team.locked" class=" data-[inactive=true]:opacity-50 data-[inactive=true]:grayscale grow" v-model:current-tab="localCurrentTab" @tab-change="tab => { currentTab = localCurrentTab}"
             :tabs="[
                 {
                     title: t('member', 2),
@@ -143,6 +168,8 @@ const defaultTitle = computed(() => util.capitalizeFirstLetter(`${t('team', 1)} 
                 }
             ]"
         >
+        <!-- @tab-change="tab => $emit('tabChange', tab)" -->
+        <!-- @tab-change="tab => { if (settings.all.tabsLinked) currentTab = tab}" -->
             <template #members>
                 <div class="flex flex-col gap-1">
                     <TransitionTemplate group fade>
@@ -161,7 +188,7 @@ const defaultTitle = computed(() => util.capitalizeFirstLetter(`${t('team', 1)} 
                     <ScaleIcon class="size-4 stroke-2"></ScaleIcon>
                     <span>{{ balanceTweened.number.toString().slice(0, 4).replace(".", t("decimalPoint")) }}%</span>
                 </div> -->
-                <EvalLabel :tooltip="`${t('team')} ${t('balance')}`" :icon="ScaleIcon">
+                <EvalLabel :tooltip="`${tm(['team', ''], ['balance'])} ${t('balance')}`" :icon="ScaleIcon">
                     {{ balanceTweened.number.toString().slice(0, 4).replace(".", t("decimalPoint")) }}%
                     <!-- <NumberAnimation :number="balance"></NumberAnimation> -->
                 </EvalLabel>
@@ -202,7 +229,7 @@ const defaultTitle = computed(() => util.capitalizeFirstLetter(`${t('team', 1)} 
                         :title="`${t('team')}${t('connectingSpace')}${t('name')}`"
                         horizontal
                         type="text"
-                        :placeholder="defaultTitle"
+                        :placeholder="teams.nameOf(team)"
                     >
 
                     </SettingComponent>

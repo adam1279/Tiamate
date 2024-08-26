@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {IPage} from "../classes";
+import {IPage} from "../ipc";
 import { useUtilitiesStore } from "../stores/useUtilities";
 const util = useUtilitiesStore();
 const { t } = util;

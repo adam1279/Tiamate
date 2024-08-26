@@ -120,7 +120,25 @@ const da = {
     select: "vælg",
     to: "til",
     seat: "plads | pladser",
-    remove: "fjern"
+    remove: "fjern",
+    selected: "valgt | valgte",
+    file: "fil | filer",
+    enable: "aktiver",
+    disable: "deaktiver",
+    spreadsheet: "spreadsheet",
+    type: "type | typer",
+    in: "i",
+    default: "default",
+    app: "program | programmer",
+    open: "åbn",
+    open2: "åben | åbne",
+    folder: "mappe | mapper",
+    average: "gennemsnitlig | gennemsnitlige",
+    number_of: "antal",
+    include: "inkluder",
+    stat: "nøgletal",
+    source: "kilde | kilder",
+    link: "link | links"
 };
 type LangData = typeof da;
 export const language: Record<Language, Partial<LangData>> = {
@@ -233,6 +251,25 @@ export const language: Record<Language, Partial<LangData>> = {
         lock: "lock",
         unlock: "unlock",
         welcome: "welcome",
+        selected: "selected",
+        file: "file | files",
+        download: "download",
+        enable: "enable",
+        disable: "disable",
+        spreadsheet: "spreadsheet",
+        type: "type | types",
+        in: "in",
+        default: "default",
+        app: "app | apps",
+        open: "open",
+        open2: "open",
+        folder: "folder | folders",
+        average: "average",
+        number_of: "number of",
+        include: "include",
+        stat: "stat | stats",
+        source: "source | sources",
+        link: "link | links"
     }
     
 }

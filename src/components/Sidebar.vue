@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { IPage } from 'src/classes';
+import { IPage } from 'src/ipc';
 import { languages, useSettingsStore } from '../stores/useSettings';
 import { computed } from 'vue';
-import { GlobeIcon } from 'lucide-vue-next';
+import { GithubIcon, GlobeIcon } from 'lucide-vue-next';
 import { useUtilitiesStore } from '../stores/useUtilities';
+import TooltipItem from './TooltipItem.vue';
 const props = defineProps<{
     deployed: boolean,
     pages: IPage[],
@@ -17,16 +18,22 @@ const mainPages = computed(() => {
 });
 </script>
 <template>
-    <div :data-deployed="deployed" class="flex flex-col bg-gray-dark data-[deployed=true]:min-w-40 data-[deployed=true]:gap-3 data-[deployed=true]:p-3 select-none">
-        <div v-if="deployed" class="flex flex-col p-3 gap-2 select-none">
-            <img class=" h-24 mx-auto logo drag-none" src="/src/icons/Egg_logo_white.png">
+    <div :data-deployed="deployed" class="group/sidebar flex flex-col bg-gray-dark data-[deployed=true]:min-w-40 data-[deployed=true]:gap-3 data-[deployed=true]:p-3 select-none">
+        
+        <div v-if="deployed" :data-loading="util.loading" class="flex flex-col p-3 gap-2 select-none text-white group/logo-area data-[loading=true]:animate-huerotate">
+            <TooltipItem text="GitHub (https://github.com/adam1279/Tiamate)" class="flex flex-col relative" @click="util.openUrl('https://github.com/adam1279/Tiamate')">
+                <img class=" h-24 mx-auto drag-none group-hover/logo-area:opacity-50 transition-opacity" src="/src/icons/Egg_logo_white.png">
+                <div class=" absolute flex left-0 right-0 top-1 bottom-0 justify-center items-center opacity-0 transition-all hover:opacity-100 group-hover/logo-area:opacity-100 cursor-pointer hover:scale-110 group">
+                    <GithubIcon class=" size-7 opacity-50 group-hover:opacity-100 transition-opacity"></GithubIcon>
+                </div>
+            </TooltipItem>
             <span class="text-white font-bold mx-auto">Tiamate</span>
             <div class="flex-col flex">
                 <span class="text-white text-xs mx-auto italic">{{ t("by") }}</span>
                 <span class="text-white italic text-xs mx-auto text-center">@adamthegolem</span>
             </div>
         </div>
-        <div v-for="page of mainPages" class=" flex flex-row text-white bg-transparent" @click="$emit('pageSelect', page.id)" >
+        <div v-for="page of mainPages" class="peer/page flex flex-row text-white bg-transparent" @click="$emit('pageSelect', page.id)" :data-current="currentPage == page.id">
             <!-- <div v-if="deployed" class="flex flex-row p-2 gap-2 border-y-2 border-transparent text-sm rounded data-[current=true]:border-b-white data-[current=true]:bg-white/5 hover:bg-white/20 transition-colors grow" :data-current="currentPage == page.id">
                 <component :is="page.icon" size="20"></component>
                 <span>{{ page.title }}</span>
@@ -38,14 +45,14 @@ const mainPages = computed(() => {
                     <span>{{ t('page.'+page.id) }}</span>
 
                 </div>
-                <div v-else class=" hover:bg-white/20 p-2 transition-colors border-2 border-transparent data-[current=true]:border-l-white data-[current=true]:bg-white/5 cursor-pointer data-[current=true]:cursor-default" :data-current="currentPage == page.id">
+                <TooltipItem :text="t('page.'+page.id)" v-else class=" hover:bg-white/20 p-2 transition-colors border-2 border-transparent data-[current=true]:border-l-white data-[current=true]:bg-white/5 cursor-pointer data-[current=true]:cursor-default" :data-current="currentPage == page.id">
                     <component :is="page.icon" :size="20"></component>
-                </div>
+                </TooltipItem>
 
             <!-- </Transition> -->
         </div>
         
-        <div v-if="deployed" class="flex items-center cursor-pointer p-2 border border-white rounded-full text-xs mx-auto mt-auto mb-3 hover:bg-white/10 transition-colors" @click="settings.all.language = settings.all.language == 'da' ? 'en' : 'da'">
+        <div v-if="deployed" class=" flex order items-center cursor-pointer p-2 border border-white rounded-full text-xs mx-auto mt-auto mb-3 hover:bg-white/10 transition-colors" @click="settings.all.language = settings.all.language == 'da' ? 'en' : 'da'">
             <GlobeIcon class="size-4 stroke-white"></GlobeIcon>
             <div class=" flex items-center h-full divide-white divide-x">
                 <span :data-current="settings.all.language == lang" v-for="lang of languages"
@@ -57,19 +64,6 @@ const mainPages = computed(() => {
         </div>
     </div>
 </template>
-<style>
-.logo {
-    transition: filter 1s;
-}
-.logo:hover {
-    filter: hue-rotate(360deg);
-}
-@keyframes huerotate {
-    0% {
-        filter: hue-rotate(0deg);
-    }
-    100% {
-        filter: hue-rotate(360deg);
-    }
-}
+<style lang="postcss">
+
 </style>

@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { useStudentsStore } from "./useStudents";
-import { ref, watch } from "vue";
+import { computed, ref, watch } from "vue";
 import { useTeamsStore } from "./useTeams";
 import { usePackagesStore } from "./usePackages";
 import { useSettingsStore } from "./useSettings";
@@ -107,10 +107,6 @@ export const useUtilitiesStore = defineStore("utilities", () => {
         draggedStudent.value.state = "unassigned";
         draggedStudent.value = undefined;
     }
-    watch(students, globalUpdate, { deep: true });
-    watch(teams, globalUpdate, { deep: true });
-    watch(packages, globalUpdate, { deep: true });
-    watch(settings, globalUpdate, { deep: true });
     function normalizedStandardDeviation(data: number[]): number {
         // Step 1: Calculate the mean of the dataset
         const mean = data.reduce((acc, val) => acc + val, 0) / data.length;
@@ -235,6 +231,7 @@ export const useUtilitiesStore = defineStore("utilities", () => {
         }
         // console.log(langData[splitText[splitText.length - 1] as keyof typeof langData]);
         const result = langData[splitText[splitText.length - 1] as keyof typeof langData] as string;
+        if (!result) return "";
         const split = result.split(" | ");
         let result2 = split[n - 1] || split[0] || "";
         if (messages) {
@@ -258,17 +255,32 @@ export const useUtilitiesStore = defineStore("utilities", () => {
         // }
         // return "";
     }
+    const loading = ref(false);
     type SpaceType = "" | "s" | "-";
+    const spaceData: Record<SpaceType, string> = {
+        "": "connectingSpace",
+        "s": "connectingSpace2",
+        "-": "connectingSpace3"
+    };
     function tm(...texts: ([string, number?] | [string, SpaceType] | [string, number, SpaceType])[]) {
         let result = "";
         texts.forEach(text => {
             const n = (typeof text[1] == "number") ? text[1] : 1;
-            const space = (typeof text[1] == "string") ? text[1] : (typeof text[2] == "string" ? text[2] : " ");
-            console.log([text[0], n]);
-            console.log(t(text[0], n));
+            const space = (typeof text[1] == "string") ? t(spaceData[text[1]]) : (typeof text[2] == "string" ? t(spaceData[text[2]]) : " ");
+            // console.log([text[0], n]);
+            // console.log(t(text[0], n));
             result += t(text[0], n) + space;
         });
         return result;
+    }
+    const mounted = computed((): boolean => {
+        return [students, teams, packages, settings].every(item => item.mounted)
+    });
+    function percentageToString(perc: number) {
+        return `${Math.round(perc*1000)/10}%`.replace(".", t("decimalPoint"));
+    }
+    async function openUrl(url: string) {
+        return window.electron.openUrl(url);
     }
     return {
         removeArrayItem,
@@ -293,6 +305,10 @@ export const useUtilitiesStore = defineStore("utilities", () => {
         mergeDeep,
         capitalizeFirstLetter,
         t,
-        tm
+        tm,
+        mounted,
+        percentageToString,
+        loading,
+        openUrl
     }
 });

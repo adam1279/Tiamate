@@ -1,4 +1,4 @@
-import { Data, IStudent, Student, ipcInterface } from "src/classes";
+import { ipcInterface } from "src/ipc";
 
 declare global {
     interface Window {

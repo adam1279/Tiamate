@@ -8,11 +8,18 @@ import { Team } from "../classes/Team";
 
 export const useStudentsStore = defineStore("students", () => {
     // const { t } = useI18n();
-    const all = ref<Student[]>();
+    const all = ref<Student[]>([]);
+    const mounted = ref(false);
     const teams = useTeamsStore();
     const util = useUtilitiesStore();
-    onMounted(async () => {
+    async function init() {
         all.value = (await window.electron.data.get())?.students?.map(student => new Student(student)) || [];
+        return all.value;
+    }
+    onMounted(async () => {
+        await init();
+        mounted.value = true;
+        console.log("useStudents mounted.");
     });
     function get(...ids: string[]) {
         let students: Student[] = [];
@@ -50,7 +57,7 @@ export const useStudentsStore = defineStore("students", () => {
         const students: Student[] = [];
         if (all.value) {
             teams.forEach(team => {
-                students.push(...team.members.map(id => all.value.find(student => student.id == id)));
+                if (team) students.push(...team.members.map(id => all.value.find(student => student.id == id)));
             });
         }
         return students;
@@ -86,6 +93,8 @@ export const useStudentsStore = defineStore("students", () => {
         // previewing,
         query,
         unassign,
-        previousTeamsInCommon
+        previousTeamsInCommon,
+        init,
+        mounted
     };
 });

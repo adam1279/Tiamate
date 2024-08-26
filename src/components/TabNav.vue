@@ -10,18 +10,19 @@ interface Tab {
 const props = defineProps<{
     tabs: [Tab, ...Tab[]],
     endTabs?: [Tab, ...Tab[]],
-    currentTab?: string
+    // currentTab?: string
     // tabs: Tab[]
 }>();
 const emit = defineEmits(['tabChange']);
-const currentTab = ref("");
-onMounted(() => {
-    currentTab.value = (props.currentTab) ? props.currentTab : props.tabs[0].id;
-});
-watch(() => props.currentTab, (n, o) => {
-    if (n != o) currentTab.value = props.currentTab;
-    if (n == undefined) currentTab.value = o;
-});
+// const currentTab = ref("");
+const currentTab = defineModel<string>("currentTab");
+// onMounted(() => {
+//     currentTab.value = (props.currentTab) ? props.currentTab : props.tabs[0].id;
+// });
+// watch(() => props.currentTab, (n, o) => {
+//     if (n != o) currentTab.value = props.currentTab;
+//     if (n == undefined) currentTab.value = o;
+// });
 function changeTab(tab: string) {
     currentTab.value = tab;
     emit('tabChange', tab);

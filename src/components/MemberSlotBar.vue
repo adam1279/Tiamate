@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Student } from '../stores/useStudents';
+import { Student } from '../classes/Student';
 import { useUtilitiesStore } from '../stores/useUtilities';
 import { computed } from 'vue';
 const util = useUtilitiesStore();
@@ -11,7 +11,7 @@ interface Slot {
     member?: Student
 }
 const orderedMembers = computed(() => {
-    const groupedByGender = util.groupBy(props.members.slice(0, props.limit), member => member.gender);
+    const groupedByGender = util.groupBy(props.members.slice(0, props.limit), member => member?.gender);
     let _orderedMembers: Student[] = [];
     Object.values(groupedByGender).forEach(members => {
         _orderedMembers.push(...members.sort((a) => a.previewing ? 1 : -1));

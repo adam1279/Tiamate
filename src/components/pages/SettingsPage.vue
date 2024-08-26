@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { IPage as _Page } from "src/classes";
+import { IPage as _Page } from "src/ipc";
 import Page from "../Page.vue"
 import { onMounted, ref } from "vue";
 import OptionsDropdown from "../OptionsDropdown.vue";

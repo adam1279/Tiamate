@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Data, IPage as _Page } from "src/classes";
+import { Data, IPage as _Page } from "src/ipc";
 import Page from "../Page.vue";
 import IconButton from "../IconButton.vue";
 import { ArmchairIcon, BotIcon, BotOffIcon, BrainCogIcon, FlaskConicalIcon, GraduationCapIcon, GripVerticalIcon, Import, Link2Icon, Link2OffIcon, PackageIcon, PackagePlusIcon, PlayIcon, PlusCircleIcon, PlusIcon, RotateCwIcon, SettingsIcon, SparklesIcon, SquareDotIcon, Unlink2Icon, UsersIcon, ViewIcon } from "lucide-vue-next";
@@ -55,7 +55,7 @@ function reload() {
     // students.all.forEach(student => student.state = "unassigned");
     const reloadStudents = students.ofTeam(...teams.query({state: "proposed", locked: false}));
     students.unassign(...reloadStudents);
-    reloadStudents.forEach(student => student.previewing = false);
+    students.all.forEach(student => student.previewing = false);
 }
 const trialCount = ref(0);
 const animatedTrialCount = reactive({number: 0});
@@ -111,6 +111,36 @@ const seats = computed(() => teams.query({state: 'proposed'}).reduce((sum, team)
             <Panel :default-size="30" :min-size="20">
             <PageSection :icon="GraduationCapIcon" :title="t('student', 2)" class=" h-full" :overflow-hidden="true" custom @dragover="e => e.preventDefault()" @drop="util.dropStudentBack" :non-collapsible="true">
                 <template #options>
+                    <!-- <IconToggle
+                        :states="[
+                            {
+                                icon: SquareDotIcon,
+                                click: () => {
+                                    students.all.forEach(student => student.previewing = true)
+                                }
+                            },
+                            {
+                                icon: ViewIcon,
+                                click: () => {
+                                    students.all.forEach(student => student.previewing = false)
+                                }
+                            }
+                        ]"
+                    ></IconToggle> -->
+                    <IconButton
+                        v-if="students.query({previewing: true}).length == 0"
+                        :icon="SquareDotIcon"
+                        :tooltip="tm(['enable'], ['preview'])"
+                        @click="students.all.forEach(student => student.previewing = true)"
+                    ></IconButton>
+                    <IconButton
+                        v-else
+                        :icon="ViewIcon"
+                        :tooltip="tm(['disable'], ['preview'])"
+                        :bubble="students.query({previewing: true}).length.toString()"
+                        bubble-background="gray-light"
+                        @click="students.all.forEach(student => student.previewing = false)"
+                    ></IconButton>
                     <IconButton :icon="RotateCwIcon" :tooltip="`${t('reset')} ${t('student', 2)}`" @click="reload"></IconButton>
                 </template>
                 <div class=" flex grow flex-wrap gap-1 overflow-y-auto select-none drag-none snap-y snap-mandatory">
@@ -210,21 +240,23 @@ const seats = computed(() => teams.query({state: 'proposed'}).reduce((sum, team)
                     </TeamWidget>
                 </TransitionGroup> -->
                 <!-- <div class=" min-h-72 flex-wrap flex flex-row gap-3"> -->
+                <!-- {{ currentTab }} -->
                 <TeamContainer class="">
                     <TransitionTemplate group fade>
                         <TeamWidget :index="index"
                             :team="team"
                             v-for="(team, index) of teams.query({state: 'proposed'})"
                             :key="team.id"
-                            :current-tab="(settings.all.tabsLinked) ? currentTab : undefined"
-                            @tab-change="tab => currentTab = tab"
+                            v-model:current-tab="currentTab"
                             @delete="teams.deleteTeam(team)"
                             @drop="util.dropStudent(team)"
-                            @dragover="e => e.preventDefault()"
+                            @dragover="(e: DragEvent) => e.preventDefault()"
                             :data-full="team.full && util.draggedStudent != undefined"
                             class=" data-[full=true]:cursor-no-drop"
                         >
             
+                        <!-- :current-tab="(settings.all.tabsLinked) ? currentTab : undefined"
+                            @tab-change="tab => currentTab = tab" -->
                         </TeamWidget>
                     </TransitionTemplate>
                     <div v-if="teams.query({state: 'proposed'}).length == 0" class="italic text-gray">

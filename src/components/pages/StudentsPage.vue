@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { IPage } from 'src/classes';
+import { IPage } from 'src/ipc';
 import { useStudentsStore } from '../../stores/useStudents';
 import Page from '../Page.vue';
 import { BarChart3Icon, FileSpreadsheetIcon, GraduationCapIcon, HistoryIcon, ImportIcon, PlusCircleIcon, PlusIcon, TrashIcon } from 'lucide-vue-next';

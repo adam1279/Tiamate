@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { computed, markRaw, onMounted, ref } from 'vue';
+import { computed, markRaw, onMounted, ref, watch } from 'vue';
 import Sidebar from './components/Sidebar.vue';
-import { IPage } from './classes';
+import { IPage } from './ipc';
 import LabPage from './components/pages/LabPage.vue'
 import HomePage from './components/pages/HomePage.vue';
 import TitleBarButton from './components/TitleBarButton.vue';
@@ -61,12 +61,17 @@ const pages = ref<IPage[]>([
     //     main: true
     // }
 ]);
+const util = useUtilitiesStore();
 const students = useStudentsStore();
 const teams = useTeamsStore();
 const packages = usePackagesStore();
 const settings = useSettingsStore();
-const util = useUtilitiesStore();
 const currentPage = ref("home");
+
+watch(() => students.all, util.globalUpdate, { deep: true });
+watch(() => teams.all, util.globalUpdate, { deep: true });
+watch(() => packages.all, util.globalUpdate, { deep: true });
+watch(() => settings.all, util.globalUpdate, { deep: true });
 function closeWindow() {
     window.electron.closeWindow();
 }
@@ -113,7 +118,7 @@ document.addEventListener('mousedown', function(event) {
 }, false);
 </script>
 <template>
-    <div class="flex flex-col bottom-0 top-0 left-0 right-0 absolute">
+    <div class="flex flex-col bottom-0 top-0 left-0 right-0 absolute" v-if="util.mounted">
         <div class="flex flex-row bg-gray-darker">
             <TitleBarButton @click="sidebarDeployed = !sidebarDeployed">
                 <SidebarCloseIcon v-if="sidebarDeployed" :size="18" :stroke-width="1"></SidebarCloseIcon>

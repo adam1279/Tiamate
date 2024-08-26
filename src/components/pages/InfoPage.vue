@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { IPage as _Page } from "src/classes";
+import { IPage as _Page } from "src/ipc";
 import Page from "../Page.vue";
 import Widget from "../Widget.vue";
 import PageSection from "../PageSection.vue";
@@ -8,6 +8,8 @@ import IconButton from "../IconButton.vue";
 import { ref } from "vue";
 import { Belbin } from "../../classes/Belbin";
 import { useUtilitiesStore } from "../../stores/useUtilities";
+import TooltipItem from "../TooltipItem.vue";
+import ExternalLink from "../ExternalLink.vue";
 const util = useUtilitiesStore();
 const { t } = util;
 const props = defineProps<{
@@ -27,6 +29,7 @@ const props = defineProps<{
                         <p>Copyright (c) for portions of Lucide are held by Cole Bemis 2013-2022 as part of Feather (MIT). All other copyright (c) for Lucide are held by Lucide Contributors 2022.</p>
                         <p>Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted, provided that the above copyright notice and this permission notice appear in all copies.</p>
                         <p>THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.</p>
+                        <ExternalLink href="https://lucide.dev/license"></ExternalLink>
                     </div>
                 </Widget>
             </PageSection>
@@ -46,7 +49,7 @@ const props = defineProps<{
 
                                 </div>
                                 <div class="flex grow min-h-2"></div>
-                                <a href="https://www.belbin.com/about/belbin-team-roles" class=" text-sm text-tiamate-blue">belbin.com/about/...</a>
+                                <ExternalLink :href="Belbin.url.href" :text="`${Belbin.url.hostname}/...`" :tooltip-prefix="t('source')"></ExternalLink>
                             </div>
 
                         </div>

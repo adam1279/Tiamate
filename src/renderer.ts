@@ -30,9 +30,13 @@ import './index.css';
 
 import { createApp } from "vue";
 import App from "./App.vue";
+import Print from './Print.vue';
 import { createI18n } from 'vue-i18n';
 import { createPinia } from 'pinia';
 import { language } from './language';
+import { Panel, PanelGroup, PanelResizeHandle } from "vue-resizable-panels";
+// const print = window.process?.argv?.includes("tiamate-print");
+const print = !!(new URLSearchParams(window.location.search)).get("print");
 const i18n = createI18n({
     legacy: false,
     locale: "da",
@@ -40,7 +44,10 @@ const i18n = createI18n({
     messages: language
 });
 const pinia = createPinia();
-const app = createApp(App);
+const app = createApp(print ? Print : App);
 app.use(i18n);
 app.use(pinia);
+app.component("Panel", Panel);
+app.component("PanelGroup", PanelGroup);
+app.component("PanelResizeHandle", PanelResizeHandle);
 app.mount("#app");

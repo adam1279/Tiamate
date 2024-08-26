@@ -54,6 +54,7 @@ export class Belbin {
             add: -90
         }
     }
+    public static url = new URL("https://www.belbin.com/about/belbin-team-roles");
     //     {
     //         name: "Resource Investigator",
     //         icon: PhoneIcon

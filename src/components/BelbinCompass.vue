@@ -138,10 +138,12 @@ const topStudent = ref<Student>(null);
             <component :is="belbin.icon" class=" text-gray" :size="10" :stroke-width="1"></component>
         </g>
         <TransitionGroup leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-125" leave-active-class="transition-all" enter-to-class="opacity-100 scale-100" enter-from-class="opacity-0 scale-0" enter-active-class="transition-all" >
-            <g v-for="student of allStudents" class=" group" :key="student.id" :id="'id' + ((teamId) ? teamId : '') + student.id" @mouseover="topStudent = student" @mouseleave="topStudent = null" :data-hover="topStudent == student">
-                <TooltipItem v-for="role of student.roles" :text="`${student.name} - ${t(role.role)} ${Math.round(role.percentage * 100)}%`" svg>
-                    <circle :data-preview="previewedStudents.includes(student)" :cx="toCoordinatesRole(role)[0] + ''" :cy="toCoordinatesRole(role)[1] + ''" r="4%" class=" hover:stroke-[2%] group-hover:stroke-white z-10 stroke-[0.7%] group-hover:z-30 fill-gray-dark stroke-gray-dark data-[preview=true]:fill-gray-dark/50 transition-all data-[nohover=true]:pointer-events-none" :data-nohover="topStudent != student && topStudent != null"/>
-                </TooltipItem>
+            <g v-for="student of allStudents" :key="student?.id">
+                <g v-if="student" class=" group" :id="'id' + ((teamId) ? teamId : '') + student.id" @mouseover="topStudent = student" @mouseleave="topStudent = null" :data-hover="topStudent == student">
+                    <TooltipItem v-for="role of student.roles" :text="`${student.name} - ${t(role.role)} ${Math.round(role.percentage * 100)}%`" svg>
+                        <circle v-if="role && previewedStudents" :data-preview="previewedStudents.includes(student)" :cx="toCoordinatesRole(role)[0] + ''" :cy="toCoordinatesRole(role)[1] + ''" r="4%" class=" hover:stroke-[2%] group-hover:stroke-white z-10 stroke-[0.7%] group-hover:z-30 fill-gray-dark stroke-gray-dark data-[preview=true]:fill-gray-dark/50 transition-all data-[nohover=true]:pointer-events-none" :data-nohover="topStudent != student && topStudent != null"/>
+                    </TooltipItem>
+                </g>
             </g>
         </TransitionGroup>
         <!-- <g>
