@@ -14,11 +14,11 @@ export default defineConfig((env) => {
     mode,
     base: './',
     build: {
-      outDir: `.vite/renderer/${name}`,
+      outDir: path.join(__dirname, `.vite/renderer/${name}`),
       assetsDir: "static/assets",
       rollupOptions: {
         input: {
-          [name]: `src/${name}/index.html`
+          [name]: path.resolve(__dirname, `src/${name}/index.html`)
         }
       }
       // outDir: `.vite/renderer/`,

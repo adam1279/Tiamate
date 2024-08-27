@@ -34,7 +34,7 @@ const slots = computed(() => {
             class=" h-full bg-gray-light grow rounded-full overflow-hidden"
         >
             <div class="h-full w-0 data-[active=true]:w-full transition-all bg-[var(--color)] data-[previewing=true]:opacity-50"
-                :style="`--color: ${util.genderToColor(slot.member?.gender)}`"
+                :style="`--color: ${util.genderToColor(slot.member?.gender || '')}`"
                 :data-active="!!slot.member"
                 :data-previewing="slot.member?.previewing"
             ></div>
