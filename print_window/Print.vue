@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import { computed, onMounted } from 'vue';
-import BelbinCompass from '../components/BelbinCompass.vue';
-import PackageWidget from '../components/PackageWidget.vue';
-import { usePackagesStore } from '../stores/usePackages';
-import { useStudentsStore } from '../stores/useStudents';
-import { useTeamsStore } from '../stores/useTeams';
-import { useUtilitiesStore } from '../stores/useUtilities';
-import TeamWidget from '../components/TeamWidget.vue';
-import PrintTeam from '../components/PrintTeam.vue';
-import { useSettingsStore } from '../stores/useSettings';
+import BelbinCompass from '../src/components/BelbinCompass.vue';
+import PackageWidget from '../src/components/PackageWidget.vue';
+import { usePackagesStore } from '../src/stores/usePackages';
+import { useStudentsStore } from '../src/stores/useStudents';
+import { useTeamsStore } from '../src/stores/useTeams';
+import { useUtilitiesStore } from '../src/stores/useUtilities';
+import TeamWidget from '../src/components/TeamWidget.vue';
+import PrintTeam from '../src/components/PrintTeam.vue';
+import { useSettingsStore } from '../src/stores/useSettings';
 import { HistoryIcon, ScaleIcon } from 'lucide-vue-next';
-import { Team } from '../classes/Team';
-import PrintFooter from '../components/PrintFooter.vue';
+import { Team } from '../src/classes/Team';
+import PrintFooter from '../src/components/PrintFooter.vue';
 // import { useUtilitiesStore } from './stores/useUtilities';
 const util = useUtilitiesStore();
 const { t, tm } = util;
@@ -83,7 +83,7 @@ const pages = computed(() => {
                 <TeamWidget :team="team" current-tab="members"></TeamWidget>
             </div> -->
             <span class=" font-bold text-xl ">{{ packages.nameOf(page.package) }}</span>
-            <div :data-portrait="!!settings.all.export.portrait" class=" data-[portrait=false]:grid-cols-2 data-[portrait=false]:grid-rows-3 data-[portrait=true]:grid-cols-3 data-[portrait=true]:grid-rows-2 grid gap-3 grow">
+            <div :data-portrait="!!settings.all.export.portrait" class=" grid-cols-2 grid-rows-3 data-[portrait=true]:grid-cols-3 data-[portrait=true]:grid-rows-2 grid gap-3 grow">
                 <PrintTeam v-for="team of page.teams" :team="team" :stats="stats" class=""></PrintTeam>
             </div>
             <PrintFooter :page-number="index + 1" :page-count="pages.length" :stats="stats"></PrintFooter>

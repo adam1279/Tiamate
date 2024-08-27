@@ -8,9 +8,8 @@ export default defineConfig((env) => {
   const forgeEnv = env as ConfigEnv<'renderer'>;
   const { root, mode, forgeConfigSelf } = forgeEnv;
   const name = forgeConfigSelf.name ?? '';
-
   return {
-    root: path.join(__dirname, "src", name),
+    root: path.join(__dirname, name),
     mode,
     base: './',
     build: {
@@ -18,7 +17,7 @@ export default defineConfig((env) => {
       assetsDir: "static/assets",
       rollupOptions: {
         input: {
-          [name]: `src/${name}/index.html`
+          [name]: path.resolve(__dirname, `${name}/index.html`)
         }
       }
       // outDir: `.vite/renderer/`,

@@ -27,13 +27,13 @@
  */
 
 // import './index.css';
-import "../../assets/style.css";
+import "@assets/style.css";
 import { createApp } from "vue";
-import App from "../App.vue";
+import App from "../src/App.vue";
 import Print from '../print_window/Print.vue';
 import { createI18n } from 'vue-i18n';
 import { createPinia } from 'pinia';
-import { language } from '../language';
+import { language } from '../src/language';
 import { Panel, PanelGroup, PanelResizeHandle } from "vue-resizable-panels";
 // const print = window.process?.argv?.includes("tiamate-print");
 // const print = !!(new URLSearchParams(window.location.search)).get("print");
