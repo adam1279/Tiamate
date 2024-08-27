@@ -3,6 +3,7 @@ import { defineConfig } from 'vite';
 import { pluginExposeRenderer } from './vite.base.config';
 import VuePlugin from "@vitejs/plugin-vue";
 import path from "path";
+
 // https://vitejs.dev/config
 export default defineConfig((env) => {
   const forgeEnv = env as ConfigEnv<'renderer'>;
@@ -16,7 +17,6 @@ export default defineConfig((env) => {
     build: {
       outDir: `.vite/renderer/${name}`,
       assetsDir: "static/assets"
-      // outDir: `.vite/renderer/`,
     },
     plugins: [pluginExposeRenderer(name), VuePlugin()],
     resolve: {

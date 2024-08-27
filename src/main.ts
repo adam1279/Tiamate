@@ -23,7 +23,10 @@ if (require('electron-squirrel-startup')) {
 	app.quit();
 }
 let mainWindow: BrowserWindow;
-const createWindow = (construct?: Partial<Electron.BrowserWindowConstructorOptions>, search: string = "") => {
+// const createWindow = (construct?: Partial<Electron.BrowserWindowConstructorOptions>, search: string = "") => {
+const windowNames = ["main", "print"] as const;
+type WindowName = typeof windowNames[number];
+const createWindow = (name: WindowName, construct?: Partial<Electron.BrowserWindowConstructorOptions>) => {
 	// Create the browser window.
 	const params: Electron.BrowserWindowConstructorOptions = {
 		minWidth: 800,
@@ -38,13 +41,29 @@ const createWindow = (construct?: Partial<Electron.BrowserWindowConstructorOptio
 	};
 	Object.assign(params, construct);
 	const window = new BrowserWindow(params);
+	let _url: string;
+	let _name: string;
+	switch (name) {
+		case 'main':
+			_url = MAIN_WINDOW_VITE_DEV_SERVER_URL;
+			_name = MAIN_WINDOW_VITE_NAME;
+			// _name = "";
+			break;
+		case 'print':
+			_url = PRINT_WINDOW_VITE_DEV_SERVER_URL;
+			_name = `${PRINT_WINDOW_VITE_NAME}`;
+			break;
+	}
 	// and load the index.html of the app.
 	if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
 		console.log(MAIN_WINDOW_VITE_DEV_SERVER_URL);
 		console.log(MAIN_WINDOW_VITE_NAME);
-		window.loadURL(`${MAIN_WINDOW_VITE_DEV_SERVER_URL}${search}`);
+		// console.log(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html${search}`));
+		// window.loadURL(`${MAIN_WINDOW_VITE_DEV_SERVER_URL}${search}`);
+		window.loadURL(_url);
 	} else {
-		window.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html${search}`));
+		// window.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
+		window.loadFile(path.join(__dirname, `../renderer/${_name}/index.html`));
 	}
 
 	// Open the DevTools.
@@ -292,7 +311,7 @@ export const ipcFunctions: {
 						break;
 					}
 				case 'pdf':
-					const printWindow = createWindow({show: false, title: "Tiamate Packages"}, '?print=true');
+					const printWindow = createWindow("print", {show: true, title: "Print Tiamate Packages"});
 					ret = await new Promise<boolean>((resolve, reject) => {
 						printWindow.webContents.on("did-finish-load", () => {
 							setTimeout(async () => {
@@ -316,11 +335,11 @@ export const ipcFunctions: {
 									console.log(`Failed to write PDF to ${saveDialog.filePath}: `, error);
 									resolve(false);
 								});
-								// const printData = await printWindow.webContents.printToPDF({});
+								const printData = await printWindow.webContents.printToPDF({});
 							}, 1000);
 						});
 					});
-					printWindow.close();
+					// printWindow.close();
 					break;
 			}
 			if (ret && openFile) shell.openPath(saveDialog.filePath);
@@ -350,9 +369,11 @@ app.on('ready', async () => {
 	for (let ipcKey of Object.keys(ipcFunctions)) {
 		ipcMain.handle(ipcKey, ipcFunctions[ipcKey]);
 	}
-	mainWindow = createWindow({title: "Tiamate"});
+	mainWindow = createWindow("main", {title: "Tiamate"});
 	mainWindow.maximize();
-
+	mainWindow.on("closed", () => {
+		app.quit();
+	})
 });
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
@@ -370,7 +391,7 @@ app.on('activate', () => {
 	// On OS X it's common to re-create a window in the app when the
 	// dock icon is clicked and there are no other windows open.
 	if (BrowserWindow.getAllWindows().length === 0) {
-		createWindow();
+		mainWindow = createWindow("main", {title: "Tiamate"});
 	}
 });
 

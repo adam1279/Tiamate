@@ -37,18 +37,18 @@
     }
     @font-face {
         font-family: "Montserrat";
-        src: url(./src/fonts/Montserrat/Montserrat-VariableFont_wght.ttf);
+        src: url(./fonts/Montserrat/Montserrat-VariableFont_wght.ttf);
         font-style: normal;
         
     }
     @font-face {
         font-family: "Montserrat";
-        src: url(./src/fonts/Montserrat/Montserrat-Italic-VariableFont_wght.ttf);
+        src: url(./fonts/Montserrat/Montserrat-Italic-VariableFont_wght.ttf);
         font-style: italic;
     }
     @font-face {
         font-family: "Noto Sans Mono";
-        src: url("./src/fonts/NotoSansMono-VariableFont_wdth,wght.ttf");
+        src: url("./fonts/NotoSansMono-VariableFont_wdth,wght.ttf");
         font-style: normal;
     }
     div.team-container {

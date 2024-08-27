@@ -26,26 +26,26 @@
  * ```
  */
 
-import './index.css';
-
+// import './index.css';
+import "../../assets/style.css";
 import { createApp } from "vue";
-import App from "./App.vue";
-import Print from './Print.vue';
+import App from "../App.vue";
+import Print from '../print_window/Print.vue';
 import { createI18n } from 'vue-i18n';
 import { createPinia } from 'pinia';
-import { language } from './language';
+import { language } from '../language';
 import { Panel, PanelGroup, PanelResizeHandle } from "vue-resizable-panels";
 // const print = window.process?.argv?.includes("tiamate-print");
-const print = !!(new URLSearchParams(window.location.search)).get("print");
-const i18n = createI18n({
-    legacy: false,
-    locale: "da",
-    fallbackLocale: "da",
-    messages: language
-});
+// const print = !!(new URLSearchParams(window.location.search)).get("print");
+// const i18n = createI18n({
+//     legacy: false,
+//     locale: "da",
+//     fallbackLocale: "da",
+//     messages: language
+// });
 const pinia = createPinia();
-const app = createApp(print ? Print : App);
-app.use(i18n);
+const app = createApp(App);
+// app.use(i18n);
 app.use(pinia);
 app.component("Panel", Panel);
 app.component("PanelGroup", PanelGroup);
