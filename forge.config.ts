@@ -14,6 +14,7 @@ const config: ForgeConfig = {
   },
   rebuildConfig: {},
   makers: [new MakerSquirrel({}), new MakerZIP({}, ['darwin']), new MakerRpm({}), new MakerDeb({})],
+  // makers: [new MakerZIP({}, ['darwin']), new MakerRpm({}), new MakerDeb({})],
   plugins: [
     new VitePlugin({
       // `build` can specify multiple entry builds, which can be Main process, Preload scripts, Worker process, etc.
@@ -36,7 +37,7 @@ const config: ForgeConfig = {
         },
         {
           name: "print_window",
-          config: "vite.print_window.config.ts"
+          config: "vite.renderer.config.ts"
         }
       ],
     }),

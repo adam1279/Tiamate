@@ -15,7 +15,12 @@ export default defineConfig((env) => {
     base: './',
     build: {
       outDir: `.vite/renderer/${name}`,
-      assetsDir: "static/assets"
+      assetsDir: "static/assets",
+      rollupOptions: {
+        input: {
+          [name]: `src/${name}/index.html`
+        }
+      }
       // outDir: `.vite/renderer/`,
     },
     plugins: [pluginExposeRenderer(name), VuePlugin()],

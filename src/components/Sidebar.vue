@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { IPage } from 'src/ipc';
+import { IPage } from '../ipc';
 import { languages, useSettingsStore } from '../stores/useSettings';
 import { computed } from 'vue';
 import { GithubIcon, GlobeIcon } from 'lucide-vue-next';
