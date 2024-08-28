@@ -3,6 +3,7 @@ import { defineConfig } from 'vite';
 import { pluginExposeRenderer } from './vite.base.config';
 import VuePlugin from "@vitejs/plugin-vue";
 import path from "path";
+
 // https://vitejs.dev/config
 export default defineConfig((env) => {
   const forgeEnv = env as ConfigEnv<'renderer'>;
@@ -14,14 +15,8 @@ export default defineConfig((env) => {
     mode,
     base: './',
     build: {
-      outDir: path.join(__dirname, `.vite/renderer/${name}`),
-      assetsDir: "static/assets",
-      rollupOptions: {
-        input: {
-          [name]: path.resolve(__dirname, `src/${name}/index.html`)
-        }
-      }
-      // outDir: `.vite/renderer/`,
+      outDir: `.vite/renderer/${name}`,
+      assetsDir: "static/assets"
     },
     plugins: [pluginExposeRenderer(name), VuePlugin()],
     resolve: {

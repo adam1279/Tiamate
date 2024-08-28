@@ -1,16 +1,17 @@
 <script setup lang="ts">
 import { computed, onMounted } from 'vue';
-import BelbinCompass from './components/BelbinCompass.vue';
-import PackageWidget from './components/PackageWidget.vue';
-import { usePackagesStore } from './stores/usePackages';
-import { useStudentsStore } from './stores/useStudents';
-import { useTeamsStore } from './stores/useTeams';
-import { useUtilitiesStore } from './stores/useUtilities';
-import TeamWidget from './components/TeamWidget.vue';
-import PrintTeam from './components/PrintTeam.vue';
-import { useSettingsStore } from './stores/useSettings';
+import BelbinCompass from '../components/BelbinCompass.vue';
+import PackageWidget from '../components/PackageWidget.vue';
+import { usePackagesStore } from '../stores/usePackages';
+import { useStudentsStore } from '../stores/useStudents';
+import { useTeamsStore } from '../stores/useTeams';
+import { useUtilitiesStore } from '../stores/useUtilities';
+import TeamWidget from '../components/TeamWidget.vue';
+import PrintTeam from '../components/PrintTeam.vue';
+import { useSettingsStore } from '../stores/useSettings';
 import { HistoryIcon, ScaleIcon } from 'lucide-vue-next';
-import { Team } from './classes/Team';
+import { Team } from '../classes/Team';
+import PrintFooter from '../components/PrintFooter.vue';
 // import { useUtilitiesStore } from './stores/useUtilities';
 const util = useUtilitiesStore();
 const { t, tm } = util;
@@ -85,22 +86,7 @@ const pages = computed(() => {
             <div :data-portrait="!!settings.all.export.portrait" class=" data-[portrait=false]:grid-cols-2 data-[portrait=false]:grid-rows-3 data-[portrait=true]:grid-cols-3 data-[portrait=true]:grid-rows-2 grid gap-3 grow">
                 <PrintTeam v-for="team of page.teams" :team="team" :stats="stats" class=""></PrintTeam>
             </div>
-            <div class="flex w-full items-center text-sm text-gray-dark gap-8 mt-8">
-                <a class="flex items-center gap-1 font-semibold" href="https://github.com/adam1279/Tiamate">
-                    <img src="/src/icons/Egg_logo_black.svg" class=" h-7">
-                    <span>Tiamate</span>
-                </a>
-                <div v-if="settings.all.export.includeStats" class="flex gap-6">
-                    <div class="flex items-center gap-1" v-for="stat of stats">
-                        <component :is="stat.icon" class=" size-4"></component>
-                        <span class=" first-letter:uppercase">{{ stat.desc() }}</span>
-                    </div>
-                </div>
-                <div class="grow"></div>
-                <div class="flex items-center ">
-                    <span>{{ index + 1 }} / {{ pages.length }}</span>
-                </div>
-            </div>
+            <PrintFooter :page-number="index + 1" :page-count="pages.length" :stats="stats"></PrintFooter>
         </div>
     </div>
 </template>

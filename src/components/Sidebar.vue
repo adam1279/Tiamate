@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { IPage } from 'src/ipc';
+import { IPage } from '../ipc';
 import { languages, useSettingsStore } from '../stores/useSettings';
 import { computed } from 'vue';
 import { GithubIcon, GlobeIcon } from 'lucide-vue-next';
@@ -22,7 +22,8 @@ const mainPages = computed(() => {
         
         <div v-if="deployed" :data-loading="util.loading" class="flex flex-col p-3 gap-2 select-none text-white group/logo-area data-[loading=true]:animate-huerotate">
             <TooltipItem text="GitHub (https://github.com/adam1279/Tiamate)" class="flex flex-col relative" @click="util.openUrl('https://github.com/adam1279/Tiamate')">
-                <img class=" h-24 mx-auto drag-none group-hover/logo-area:opacity-50 transition-opacity" src="/src/icons/Egg_logo_white.png">
+                <!-- <img class=" h-24 mx-auto drag-none group-hover/logo-area:opacity-50 transition-opacity" src="../icons/Egg_logo_white.png"> -->
+                <img class=" h-24 mx-auto drag-none group-hover/logo-area:opacity-50 transition-opacity" src="@assets/images/Egg_logo_white.svg">
                 <div class=" absolute flex left-0 right-0 top-1 bottom-0 justify-center items-center opacity-0 transition-all hover:opacity-100 group-hover/logo-area:opacity-100 cursor-pointer hover:scale-110 group">
                     <GithubIcon class=" size-7 opacity-50 group-hover:opacity-100 transition-opacity"></GithubIcon>
                 </div>
