@@ -28,6 +28,7 @@ const windowNames = ["main", "print"] as const;
 type WindowName = typeof windowNames[number];
 const createWindow = (name: WindowName, construct?: Partial<Electron.BrowserWindowConstructorOptions>) => {
 	// Create the browser window.
+	const { show, ...constructRest } = construct || {show: false};
 	const params: Electron.BrowserWindowConstructorOptions = {
 		minWidth: 800,
 		minHeight: 600,
@@ -38,8 +39,9 @@ const createWindow = (name: WindowName, construct?: Partial<Electron.BrowserWind
 		},
 		frame: false,
 		icon: 'src/icons/icon.ico',
+		show: false
 	};
-	Object.assign(params, construct);
+	Object.assign(params, constructRest);
 	const window = new BrowserWindow(params);
 	let _url: string;
 	let _name: string;
@@ -65,7 +67,7 @@ const createWindow = (name: WindowName, construct?: Partial<Electron.BrowserWind
 		// window.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html`));
 		window.loadFile(path.join(__dirname, `../renderer/${_name}/index.html`));
 	}
-
+	if (show) window.show();
 	// Open the DevTools.
 	// mainWindow.webContents.openDevTools();
 
@@ -311,7 +313,7 @@ export const ipcFunctions: {
 						break;
 					}
 				case 'pdf':
-					const printWindow = createWindow("print", {show: true, title: "Print Tiamate Packages"});
+					const printWindow = createWindow("print", {show: false, title: "Print Tiamate Packages"});
 					ret = await new Promise<boolean>((resolve, reject) => {
 						printWindow.webContents.on("did-finish-load", () => {
 							setTimeout(async () => {
@@ -339,7 +341,7 @@ export const ipcFunctions: {
 							}, 1000);
 						});
 					});
-					// printWindow.close();
+					printWindow.close();
 					break;
 			}
 			if (ret && openFile) shell.openPath(saveDialog.filePath);
