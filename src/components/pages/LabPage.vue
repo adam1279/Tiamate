@@ -23,6 +23,7 @@ import { useSettingsStore } from "../../stores/useSettings";
 import gsap from "gsap";
 import SettingComponent from "../SettingComponent.vue";
 import TeamContainer from "../TeamContainer.vue";
+import { Belbin } from "../../classes/Belbin";
 // import { Panel, PanelGroup, PanelResizeHandle } from "vue-resizable-panels";
 const props = defineProps<{
     page: _Page,
@@ -50,10 +51,12 @@ function print() {
 const currentTab = ref('members');
 const tabsLinked = ref(true);
 
-function reload() {
+function reload(full?: boolean) {
     // data.value.students.forEach(student => window.electron.data.assign("students", student.id));
     // students.all.forEach(student => student.state = "unassigned");
+    if (full) exemptions.value = [];
     const reloadStudents = students.ofTeam(...teams.query({state: "proposed", locked: false}));
+    util.removeArrayItem(reloadStudents, ...exemptions.value);
     students.unassign(...reloadStudents);
     students.all.forEach(student => student.previewing = false);
 }
@@ -62,6 +65,7 @@ const animatedTrialCount = reactive({number: 0});
 // watch(trialCount, () => {
 //     gsap.to(animatedTrialCount, {duration: .5, number: Number(trialCount.value) || 0})
 // });
+const exemptions = ref<Student[]>([]);
 function runAlgorithm() {
     const _runAlgorithm = () => {
         // students.query({state: "unassigned"}).sort(() => Math.random() - 0.5).forEach(student => {
@@ -77,11 +81,18 @@ function runAlgorithm() {
                 const bestFor = teams.bestFor(student);
                 if (bestFor) {
                     teams.assignStudent(bestFor, student);
+                    let ok = true;
+                    ok = teams.query({state: "proposed", full: true}).every(team => {
+                        const teamStudents = students.ofTeam(team);
+                        const allRoles = teamStudents.flatMap(student => student.roles.map(role => role.role));
+                        const missingRoles = Belbin.roles.filter(role => !allRoles.includes(role));
+                        const belbinEval = teams.evaluateBelbin(teamStudents);
+                        return missingRoles.length <= settings.all.automation.maxUnfilledRoles && belbinEval >= settings.all.automation.minBalance;
+                    });
+                    if (ok) continue;
                 }
-                else {
-                    reload();
-                    break;
-                }
+                reload();
+                break;
             }
             trialCount.value++;
             if (students.query({state: "unassigned"}).length == 0 || trialCount.value == settings.all.automation.trialLimit) {
@@ -99,9 +110,13 @@ function runAlgorithm() {
         reload();
         trialCount.value = 0;
         setTimeout(_runAlgorithm, 500);
-    } else _runAlgorithm();
+    } else {
+        exemptions.value = students.query({state: "assigned"});
+        _runAlgorithm();
+    }
 }
 const seats = computed(() => teams.query({state: 'proposed'}).reduce((sum, team) => sum += teams.limitOf(team), 0));
+const decimalNumber = ref(0.8);
 </script>
 <template>
     <Page :page="page" :current-page="currentPage">
@@ -131,7 +146,7 @@ const seats = computed(() => teams.query({state: 'proposed'}).reduce((sum, team)
                         v-if="students.query({previewing: true}).length == 0"
                         :icon="SquareDotIcon"
                         :tooltip="tm(['enable'], ['preview'])"
-                        @click="students.all.forEach(student => student.previewing = true)"
+                        @click="students.query({state: 'unassigned'}).forEach(student => student.previewing = true)"
                     ></IconButton>
                     <IconButton
                         v-else
@@ -141,7 +156,7 @@ const seats = computed(() => teams.query({state: 'proposed'}).reduce((sum, team)
                         bubble-background="gray-light"
                         @click="students.all.forEach(student => student.previewing = false)"
                     ></IconButton>
-                    <IconButton :icon="RotateCwIcon" :tooltip="`${t('reset')} ${t('student', 2)}`" @click="reload"></IconButton>
+                    <IconButton :icon="RotateCwIcon" :tooltip="`${t('reset')} ${t('student', 2)}`" @click="reload(true)"></IconButton>
                 </template>
                 <div class=" flex grow flex-wrap gap-1 overflow-y-auto select-none drag-none snap-y snap-mandatory">
                     <!-- <TransitionTemplate fade group
@@ -273,7 +288,7 @@ const seats = computed(() => teams.query({state: 'proposed'}).reduce((sum, team)
                     <IconButton :icon="PlayIcon" :tooltip="`${t('run')} ${t('automatic')} ${t('team creation')}`" @click="runAlgorithm"></IconButton>
                 </template>
                 <div class="flex flex-col grow">
-                    <Widget class=" grow items-start grid lg:grid-cols-3 gap-1">
+                    <Widget class=" grow items-start grid lg:grid-cols-3 gap-2">
                         <SettingComponent
                             v-model.number="settings.all.automation.trialLimit"
                             :title="`${t('trial')}${t('connectingSpace2')}${t('limit')}`"
@@ -285,7 +300,7 @@ const seats = computed(() => teams.query({state: 'proposed'}).reduce((sum, team)
                         </SettingComponent>
                         <SettingComponent
                             v-model.number="settings.all.automation.maxUnfilledRoles"
-                            :title="`${t('max')}. # ${tm(['unfilled', 2], ['role', 2])} (ikke færdig)`"
+                            :title="`${t('max')}. # ${tm(['unfilled', 2], ['role', 2])}`"
                             type="number"
                             :default-value="settings.allDefault.automation.maxUnfilledRoles"
                             horizontal
@@ -297,6 +312,30 @@ const seats = computed(() => teams.query({state: 'proposed'}).reduce((sum, team)
                         <!-- <div class="flex p-1 rounded bg-gray-light">
                             <IconButton :icon="PlayIcon" :tooltip="t('play')" @click="runAlgorithm"></IconButton>
                         </div> -->
+                        <SettingComponent
+                            v-model.number="settings.all.automation.minBalance"
+                            :title="`Min. ${tm(['team', ''], ['balance'])}`"
+                            :percentage="true"
+                            :horizontal="true"
+                            :default-value="settings.allDefault.automation.minBalance"
+                        >
+                        </SettingComponent>
+                        <SettingComponent
+                            v-model.number="settings.all.automation.belbinWeight"
+                            :title="tm(['weight'], ['of'], ['team', ''], ['balance'])"
+                            :horizontal="true"
+                            :percentage="true"
+                            :default-value="settings.allDefault.automation.belbinWeight"
+                        >
+                        </SettingComponent>
+                        <SettingComponent
+                            v-model.number="settings.all.automation.previousTeamWeight"
+                            :title="tm(['weight'], ['of'], ['previous', 2], ['team', 2])"
+                            :horizontal="true"
+                            :percentage="true"
+                            :default-value="settings.allDefault.automation.previousTeamWeight"
+                        >
+                        </SettingComponent>
                     </Widget>
                 </div>
             </PageSection>

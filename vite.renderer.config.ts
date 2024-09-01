@@ -31,6 +31,9 @@ export default defineConfig((env) => {
       }
     },
     clearScreen: false,
+    // optimizeDeps: {
+    //   exclude: ["electron"]
+    // }
     // define: {
     //   // __INTLIFY_JIT_COMPILATION__: true,
     //   // __INTLIFY_DROP_MESSAGE_COMPILER__: true

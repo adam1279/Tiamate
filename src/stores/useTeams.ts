@@ -111,7 +111,7 @@ export const useTeamsStore = defineStore("teams", () => {
             // assignStudent(team, student);
             // const allStudents = students.ofTeam(team).concat(students.query({previewing: true}));
             // belbinScore *= evaluateBelbin(students.ofTeam(team).concat([student]));
-            score += belbinScore;
+            score += belbinScore * settings.all.automation.belbinWeight;
             // score += evaluateBelbin(allStudents);
             const existingPreviousTeams = studentsOfTeam.flatMap(student => student.previousTeams);
             let previousTeamScore = 1;
@@ -119,7 +119,7 @@ export const useTeamsStore = defineStore("teams", () => {
                 const matches = existingPreviousTeams.filter(existingPreviousTeam => existingPreviousTeam == subjectPreviousTeam);
                 previousTeamScore -= 1/10*matches.length;
             });
-            score += previousTeamScore;
+            score += previousTeamScore * settings.all.automation.previousTeamWeight;
             // Check if better than last.
             if (score > bestScore) {
                 bestScore = score;
@@ -187,7 +187,7 @@ export const useTeamsStore = defineStore("teams", () => {
         const originalTeams = query({state: 'proposed'});
         const packageTeams: Team[] = [];
         originalTeams.forEach(originalTeam => {
-            const {id, previewMembers, locked, state, members, ...rest} = originalTeam;
+            const {id, locked, state, members, ...rest} = originalTeam;
             packageTeams.push(add({state: "packaged", members: [...members], ...rest}));
             if (settings.all.resetOnPackaging) originalTeam.members = [];
         });

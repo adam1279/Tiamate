@@ -9,7 +9,7 @@ import { useUtilitiesStore } from '../stores/useUtilities';
 import TeamWidget from '../components/TeamWidget.vue';
 import PrintTeam from '../components/PrintTeam.vue';
 import { useSettingsStore } from '../stores/useSettings';
-import { HistoryIcon, ScaleIcon } from 'lucide-vue-next';
+import { HistoryIcon, Loader2Icon, ScaleIcon } from 'lucide-vue-next';
 import { Team } from '../classes/Team';
 import PrintFooter from '../components/PrintFooter.vue';
 // import { useUtilitiesStore } from './stores/useUtilities';
@@ -67,7 +67,13 @@ const pages = computed(() => {
     <!-- <PackageWidget v-for="pack of packages.all" :package="pack">
 
     </PackageWidget> -->
-    <div v-if="util.mounted">
+    <!-- <div class=" print:hidden items-center fixed top-0 bottom-0 left-0 right-0 bg-white z-30">
+        <div class="flex gap-1 text-lg text-center grow">
+            <span>Printing...</span>
+            <Loader2Icon class=" animate-spin"></Loader2Icon>
+        </div>
+    </div> -->
+    <div v-if="util.mounted" class=" ">
         <!-- <span>{{ packages.all }}</span> -->
         <div
             v-for="(page, index) of pages"

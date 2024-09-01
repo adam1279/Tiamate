@@ -18,7 +18,9 @@ export const defaultSettings = {
     automation: {
         minBalance: 0.65,
         trialLimit: 1000,
-        maxUnfilledRoles: 2
+        maxUnfilledRoles: 2,
+        belbinWeight: 1,
+        previousTeamWeight: 1
     },
     resetOnPackaging: true,
     export: {

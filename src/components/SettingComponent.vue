@@ -23,7 +23,8 @@ const props = defineProps<{
     placeholder?: string,
     states?: [State, State],
     inputWidth?: string,
-    defaultValue?: any
+    defaultValue?: any,
+    percentage?: boolean
 }>();
 const _states = computed(() => {
     if (props.states) return props.states;
@@ -35,7 +36,33 @@ const _states = computed(() => {
             icon: CheckSquareIcon
         }
     ] as [State, State];
-})
+});
+const computedValue = computed({
+    get() {
+        if (props.percentage && typeof value.value == "number") {
+            console.log(value.value);
+            return `${Math.round(value.value * 100)}%`.replace(".", t("decimalPoint"));
+        }
+        return value.value;
+    },
+    set(newValue) {
+        if (props.percentage && typeof value.value == "number" && typeof newValue == "string") {
+            value.value = (Math.round(Number(newValue.replace("%", "").replace(",", "."))) / 100);
+            // console.log(newValue);
+            // console.log((Number(newValue.replace("%", "").replace(",", "."))) / 100);
+        }
+        else value.value = newValue;
+    }
+});
+const computedType = computed(() => {
+    if (typeof computedValue.value == "number") return "number";
+    if (typeof computedValue.value == "string") return "text";
+    return props.type;
+});
+const computedDefaultValue = computed(() => {
+    if (props.percentage) return `${Math.round(props.defaultValue * 100)}%`.replace(".", t("decimalPoint"));
+    return props.defaultValue;
+});
 </script>
 <template>
 
@@ -60,8 +87,8 @@ const _states = computed(() => {
                 </IconToggle>
             </div>
             <div class="flex min-h-full w-full items-center" v-else>
-                <input :data-horizontal="horizontal" :type="type" v-model="value" class=" rounded data-[horizontal=false]:rounded-l-none w-full min-h-full min-w-10 bg-transparent grow flex" :placeholder="placeholder">
-                <IconButton v-if="value != defaultValue" :tooltip="`${t('reset')} ${t('to')} ${defaultValue || placeholder}`" :icon="RotateCcwIcon" size="size-4" class="px-1 text-gray" @click="value = defaultValue"></IconButton>
+                <input :data-horizontal="horizontal" :type="computedType" v-model="computedValue" class=" rounded data-[horizontal=false]:rounded-l-none w-full min-h-full min-w-10 bg-transparent grow flex" :placeholder="placeholder">
+                <IconButton v-if="value != defaultValue" :tooltip="`${t('reset')} ${t('to')} ${computedDefaultValue || placeholder}`" :icon="RotateCcwIcon" size="size-4" class="px-1 text-gray" @click="value = defaultValue"></IconButton>
             </div>
         </div>
     </div>

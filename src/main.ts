@@ -57,7 +57,7 @@ const createWindow = (name: WindowName, construct?: Partial<Electron.BrowserWind
 			break;
 	}
 	// and load the index.html of the app.
-	if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
+	if (_url) {
 		console.log(MAIN_WINDOW_VITE_DEV_SERVER_URL);
 		console.log(MAIN_WINDOW_VITE_NAME);
 		// console.log(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/index.html${search}`));
@@ -89,6 +89,7 @@ const createWindow = (name: WindowName, construct?: Partial<Electron.BrowserWind
 let data: Partial<Data>;
 let dataString: string = "";
 const dataFilePath = path.join(app.getPath("userData"), "data.json");
+const globalUpdatePromises: Promise<void>[] = [];
 export const ipcFunctions: {
 	[K: string]: (event: Electron.IpcMainInvokeEvent, ...args: any[]) => any
 } = {
@@ -242,11 +243,22 @@ export const ipcFunctions: {
 		}
 	},
 	globalUpdate: async (e, jsonData: string) => {
+		await globalUpdatePromises[0];
 		dataString = jsonData;
+		let ok = true;
+		try {
+			JSON.parse(jsonData);
+		} catch (error) {
+			ok = false;
+		}
 		// data = JSON.parse(dataString);
 		// console.log(dataString);
 		// const appData = app.getPath("appData");
-		fs.promises.writeFile(dataFilePath, dataString);
+		if (ok) {
+			const globalUpdatePromise = fs.promises.writeFile(dataFilePath, jsonData);
+			globalUpdatePromises.unshift(globalUpdatePromise);
+		}
+
 		// data = JSON.parse((await fs.promises.readFile(path.join(app.getPath("appData"), "data.json"))).toString("utf-8"));
 	},
 	downloadExport: async (e, jsonData?: string) => {
@@ -337,7 +349,7 @@ export const ipcFunctions: {
 									console.log(`Failed to write PDF to ${saveDialog.filePath}: `, error);
 									resolve(false);
 								});
-								const printData = await printWindow.webContents.printToPDF({});
+								// const printData = await printWindow.webContents.printToPDF({});
 							}, 1000);
 						});
 					});

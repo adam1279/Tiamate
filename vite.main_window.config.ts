@@ -11,12 +11,17 @@ export default defineConfig((env) => {
   const name = forgeConfigSelf.name ?? '';
 
   return {
-    root: path.join(__dirname, "src", name),
+    root,
     mode,
     base: './',
     build: {
-      outDir: `.vite/renderer/${name}`,
-      assetsDir: "static/assets"
+      outDir: path.join(__dirname, `.vite/renderer/${name}`),
+      assetsDir: "static/assets",
+      rollupOptions: {
+        input: {
+          [name]: path.resolve(__dirname, `index.html`)
+        }
+      }
     },
     plugins: [pluginExposeRenderer(name), VuePlugin()],
     resolve: {

@@ -34,8 +34,8 @@ const { includeCompass, includeStats, portrait } = settings.all.export;
                 </div>
             </div>
         </div>
-        <div :data-portrait="!!portrait" class="flex data-[portrait=false]:h-full data-[portrait=true]:w-full aspect-square items-center justify-center">
-            <BelbinCompass v-if="includeCompass" :diameter="170" :students="students.ofTeam(team)" :previewed-students="[]" :include-icons="true"></BelbinCompass>
+        <div v-if="includeCompass" :data-portrait="!!portrait" class="flex data-[portrait=false]:h-full data-[portrait=true]:w-full aspect-square items-center justify-center">
+            <BelbinCompass :diameter="170" :students="students.ofTeam(team)" :previewed-students="[]" :include-icons="true"></BelbinCompass>
         </div>
     </div>
 </template>

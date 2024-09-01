@@ -188,7 +188,7 @@ const previousTeamsTallySorted = computed(() => {
                     <ScaleIcon class="size-4 stroke-2"></ScaleIcon>
                     <span>{{ balanceTweened.number.toString().slice(0, 4).replace(".", t("decimalPoint")) }}%</span>
                 </div> -->
-                <EvalLabel :tooltip="`${tm(['team', ''], ['balance'])} ${t('balance')}`" :icon="ScaleIcon">
+                <EvalLabel :tooltip="`${tm(['team', ''], ['balance'])}`" :icon="ScaleIcon">
                     {{ balanceTweened.number.toString().slice(0, 4).replace(".", t("decimalPoint")) }}%
                     <!-- <NumberAnimation :number="balance"></NumberAnimation> -->
                 </EvalLabel>

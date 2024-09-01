@@ -55,13 +55,15 @@ export const useUtilitiesStore = defineStore("utilities", () => {
         }, {} as Record<K, T[]>);
     }
     function globalUpdate() {
-        console.log("global update");
-        window.electron.globalUpdate(JSON.stringify({
-            students: students.all,
-            teams: teams.all,
-            packages: packages.all,
-            settings: settings.all
-        }));
+        if (mounted) {
+            console.log("global update");
+            window.electron.globalUpdate(JSON.stringify({
+                students: students.all,
+                teams: teams.all,
+                packages: packages.all,
+                settings: settings.all
+            }));
+        }
     }
     function query<T, IT extends T>(all: T[] | undefined, ...queryInfos: Partial<IT>[]) {
         const _query: T[] = queryInfos.reduce((pile, queryInfo) => pile = pile.concat(all?.filter(i => objectMatch(queryInfo, i))), []);
@@ -271,7 +273,7 @@ export const useUtilitiesStore = defineStore("utilities", () => {
             // console.log(t(text[0], n));
             result += t(text[0], n) + space;
         });
-        return result;
+        return result.slice(0, result.length - 1);
     }
     const mounted = computed((): boolean => {
         return [students, teams, packages, settings].every(item => item.mounted)

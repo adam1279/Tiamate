@@ -3,7 +3,7 @@ import { Student } from "./Student";
 export class Team {
     public name?: string;
     public members: string[] = [];
-    public previewMembers: string[] = [];
+    // public previewMembers: string[] = [];
     public id: string;
     public state: Team.State = "proposed";
     public customLimit?: number;

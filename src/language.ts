@@ -138,7 +138,10 @@ const da = {
     include: "inkluder",
     stat: "nøgletal",
     source: "kilde | kilder",
-    link: "link | links"
+    link: "link | links",
+    based: "baseret",
+    weight: "vægt",
+    of: "af"
 };
 type LangData = typeof da;
 export const language: Record<Language, Partial<LangData>> = {
@@ -269,7 +272,10 @@ export const language: Record<Language, Partial<LangData>> = {
         include: "include",
         stat: "stat | stats",
         source: "source | sources",
-        link: "link | links"
+        link: "link | links",
+        based: "based",
+        weight: "weight | weights",
+        of: "of"
     }
     
 }

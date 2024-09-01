@@ -81,7 +81,7 @@ function addStudent() {
                 </Widget>
             </div>
         </PageSection>
-        <PageSection :icon="HistoryIcon" :title="`${t('previous', 2)} ${t('team', 2)}`" closed>
+        <!-- <PageSection :icon="HistoryIcon" :title="`${t('previous', 2)} ${t('team', 2)}`" closed>
             <div>
                 <TeamWidget
                     v-for="(previousTeam, index) of teams.query({state: 'previous'})"
@@ -93,6 +93,6 @@ function addStudent() {
         </PageSection>
         <PageSection :icon="BarChart3Icon" :title="t('analysis')" closed>
 
-        </PageSection>
+        </PageSection> -->
     </Page>
 </template>

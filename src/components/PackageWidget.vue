@@ -34,12 +34,13 @@ onMounted(() => {
             <IconToggle v-model="package.selected" :states="[{icon: SquareIcon}, {icon: SquareCheckBigIcon}]"></IconToggle>
             <IconButton :icon="TrashIcon" :tooltip="t('delete')" color="red" @click="packages.deletePackage(props.package)"></IconButton>
         </div>
-        <TeamContainer class=" p-3 rounded-xl bg-gray-light border-gray border shadow-inner grow gap-3">
+        <TeamContainer class=" border-4 border-gray-dark rounded-[0.9rem] !gap-[4px] bg-gray-dark shadow-inner grow">
             <TeamWidget
                 v-if="teams"
                 v-for="team of packTeams"
                 :team="team"
                 v-model:current-tab="currentTab"
+                class="border-transparent"
             ></TeamWidget>
         </TeamContainer>
     </Widget>

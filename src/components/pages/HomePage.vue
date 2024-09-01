@@ -7,6 +7,7 @@ import {HandIcon, Squircle} from "lucide-vue-next"
 import IconButton from "../IconButton.vue";
 import { useStudentsStore } from "../../stores/useStudents";
 import { useUtilitiesStore } from "../../stores/useUtilities";
+import { useSettingsStore } from "../../stores/useSettings";
 const props = defineProps<{
     page: _Page,
     currentPage: string
@@ -14,6 +15,7 @@ const props = defineProps<{
 const students = useStudentsStore();
 const util = useUtilitiesStore();
 const { t, tm } = util;
+const settings = useSettingsStore();
 </script>
 <template>
     <Page :page="page" :current-page="currentPage">
@@ -34,9 +36,23 @@ const { t, tm } = util;
                     </table>
                 </Widget>
             </div> -->
-            <span>Hey!</span>
-            <span>{{ t("member", 2) }}</span>
-            <span>{{ tm(['unfilled', 2], ['role', 2]) }}</span>
+            <Widget class="w-full flex-col">
+                <span class=" font-bold text-gray-dark">Hey!</span>
+                <div class="flex flex-col *:*:first-letter:uppercase *:first-letter:uppercase">
+                    <p>Velkommen til Tiamate!</p>
+                    <p>Her kan grupper dannes ud fra følgende parametre:</p>
+                    <ul class=" list-disc indent-4 list-inside my-2">
+                        <li>{{ t("gender_distribution") }}</li>
+                        <li>{{ tm(["team", ""], ["balance"]) }} ({{ tm(["based"], ["on", 2], ["belbin_role", 2]) }})</li>
+                        <li>{{ tm(["previous", 2], ["team", 2]) }}</li>
+                    </ul>
+                    <p>Grupperingen kan faciliteres manuelt eller automatisk med programmets algoritme.</p>
+                    <br>
+                    <p>I bunden af programmet vises supplerende info om elementer, når musen svæver over disse.</p>
+                </div>
+            </Widget>
+            <!-- <span>{{ t("member", 2) }}</span> -->
+            <!-- <span>{{ tm(['unfilled', 2], ['role', 2]) }}</span> -->
         </PageSection>
         <!-- <button @click="saveExcel">Save Excel</button> -->
         
