@@ -1,8 +1,8 @@
 {
-  "name": "tiamate.2",
+  "name": "tiamate",
   "productName": "Tiamate",
-  "version": "1.0.0",
-  "description": "My Electron application description",
+  "version": "1.0.1",
+  "description": "A very specialized app to make team creation easier (specifically for students using Belbin roles).",
   "main": ".vite/build/main.js",
   "scripts": {
     "start": "electron-forge start",
