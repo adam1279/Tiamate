@@ -99,7 +99,7 @@ const previousTeamsTallySorted = computed(() => {
 <template>
         
     <!-- <Widget class="flex-col gap-1 w-64"> -->
-    <Widget class="flex-col gap-1 h-[21rem] overflow-hidden" v-if="team">
+    <Widget class="flex-col gap-1 h-[21rem] overflow-hidden" v-if="team" v-bind="$attrs">
         <!-- {{ team.state }} -->
         <div class="flex">
             <div class="flex gap-1">

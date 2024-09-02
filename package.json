@@ -1,7 +1,7 @@
 {
   "name": "tiamate",
   "productName": "Tiamate",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "A very specialized app to make team creation easier (specifically for students using Belbin roles).",
   "main": ".vite/build/main.js",
   "scripts": {

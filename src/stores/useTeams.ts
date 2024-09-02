@@ -134,8 +134,8 @@ export const useTeamsStore = defineStore("teams", () => {
     }, {
         deep: true
     });
-    function teamOf(student: Student): Team | undefined {
-        return all.value.find(team => team.members.includes(student.id));
+    function teamOf(student: Student, ...teamQueries: Partial<Team>[]): Team | undefined {
+        return query(...teamQueries).find(team => team.members.includes(student.id));
     }
     function limitOf(team: Team): number {
         return team.customLimit || settings.all.memberLimit;

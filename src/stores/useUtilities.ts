@@ -75,7 +75,7 @@ export const useUtilitiesStore = defineStore("utilities", () => {
         // console.log(student);
         setTimeout(() => {
             draggedStudent.value = student;
-            draggedStudentOrigin.value = teams.teamOf(student);
+            draggedStudentOrigin.value = teams.teamOf(student, {state: "proposed"});
             draggedStudent.value.previewing = false;
             draggedStudent.value.state = "moving";
             teams.clearStudent(draggedStudent.value);
@@ -89,7 +89,11 @@ export const useUtilitiesStore = defineStore("utilities", () => {
         setTimeout(() => {
             if (draggedStudent.value != undefined) {
                 console.log("end");
-                if (draggedStudentOrigin.value == undefined) dropStudentBack();
+                console.log(draggedStudentOrigin.value);
+                if (draggedStudentOrigin.value == undefined) {
+                    console.log("Origin undefined");
+                    dropStudentBack();
+                }
                 else dropStudent(draggedStudentOrigin.value);
                 draggedStudent.value = undefined;
                 draggedStudentOrigin.value = undefined;
