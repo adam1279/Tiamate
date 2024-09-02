@@ -366,7 +366,13 @@ export const ipcFunctions: {
 	}
 };
 async function getData() {
-	const fileString = (await fs.promises.readFile(dataFilePath)).toString("utf-8");
+	let fileString;
+	if (fs.existsSync(dataFilePath)) {
+		fileString = (await fs.promises.readFile(dataFilePath)).toString("utf-8");
+	} else {
+		fileString = "{}"
+		await fs.promises.writeFile(dataFilePath, fileString);
+	}
 	if (fileString[0] == "{" && fileString[fileString.length - 1] == "}") {
 		return JSON.parse(fileString) as Partial<Data>;
 	}
